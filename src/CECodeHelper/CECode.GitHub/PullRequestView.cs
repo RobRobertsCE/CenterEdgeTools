@@ -1,0 +1,110 @@
+﻿using Octokit;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using CECode.BranchHelper;
+
+namespace CECode.GitHub
+{
+    public class PullRequestView
+    {
+        public int Id { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset Updated { get; set; }
+        public RepoBranch RepoBranch { get; set; }
+        public string RepoName { get; set; }
+        public string Title { get; set; }
+        public bool HasBuildScriptChange { get; set; }
+        public string JiraIssueNumber
+        {
+            get
+            {
+                if (JiraIssues.Count > 0)
+                {
+                    return JiraIssueNumbers.FirstOrDefault().ToString();
+                }
+                else
+                {
+                    return "-";
+                }
+            }
+        }
+      
+        public string Branch { get; set; }
+        public Version Version { get; set; }
+        public ItemState State { get; set; }
+        public int ChangedFileCount { get; set; }
+        public IList<string> Files { get; set; }
+        public bool? Mergeable { get; set; }
+        public bool Merged { get; set; }
+        public bool PatchesCreated { get; set; }
+        public bool JiraUpdated { get; set; }
+        public bool HasDbUpgrade { get; set; }
+        public bool DbScriptsApplied { get; set; }
+        public bool NeedsDevAttention { get; set; }
+        public string Developer { get; set; }
+        public object Tag { get; set; }
+        public int CommitCount { get; set; }
+        public IList<GitHubCommit> Commits { get; set; }
+        public IList<string> FilesChanged { get; set; }
+        public IList<string> AssembliesChanged { get; set; }
+
+        private IList<string> _jiraIssues;
+        public IList<string> JiraIssues
+        {
+            get
+            {
+                return _jiraIssues;
+            }
+            set
+            {
+                _jiraIssues = value;
+                //JiraIssueNumbers = new List<int>();
+                //if (JiraIssues.Count > 0)
+                //{
+                //    foreach (var issue in JiraIssues)
+                //    {
+                //        try
+                //        {
+                //            var issueKey = issue.Key.Value;
+                //            var issueNumberBuffer = issueKey.Replace("ADVANTAGE-", "").Replace("WEB-", "");
+                //            var issueNumber = Int32.Parse(issueNumberBuffer);
+                //            JiraIssueNumbers.Add(issueNumber);
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            Console.WriteLine(ex.ToString());
+                //            throw;
+                //        }
+                //    }
+                //}
+            }
+        }
+
+        public IList<int> JiraIssueNumbers
+        {
+            get
+            {
+                return JiraIssues.Select(i => Convert.ToInt32(i.Split('-')[1])).ToList();
+            }
+        }
+            
+        public string JiraIssueKeyList
+        {
+            get
+            {
+                return String.Join(", ", JiraIssues);
+            }
+        }
+
+        public PullRequestView()
+        {
+            Files = new List<string>();
+            AssembliesChanged = new List<string>();
+            JiraIssues = new List<string>();
+            Version = new Version(0, 0);
+            Commits = new List<GitHubCommit>();
+        }
+    }
+}

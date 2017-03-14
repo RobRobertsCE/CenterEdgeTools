@@ -1,0 +1,161 @@
+﻿using CECodeHelper.Properties;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace CECodeHelper
+{
+    public partial class SettingsDialog : Form
+    {
+        IList<string> _repoNames;
+        IList<string> _activeRepoNames;
+
+        public SettingsDialog()
+        {
+            InitializeComponent();
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (SettingsAreValid())
+                {
+                    SaveSettings();
+                    this.DialogResult = DialogResult.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        bool SettingsAreValid()
+        {
+            var result = true;
+            try
+            {
+                if (String.IsNullOrEmpty(txtGitHubOwner.Text))
+                {
+                    MessageBox.Show(this, "GitHub Repo Owner can not be blank", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    result = false;
+                }
+                if (String.IsNullOrEmpty(txtGitHubUser.Text))
+                {
+                    MessageBox.Show(this, "GitHub User Name can not be blank", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    result = false;
+                }
+                if (String.IsNullOrEmpty(txtGitHubToken.Text))
+                {
+                    MessageBox.Show(this, "GitHub Token can not be blank", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    result = false;
+                }
+                if (String.IsNullOrEmpty(txtJiraURL.Text))
+                {
+                    MessageBox.Show(this, "JIRA URL can not be blank", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    result = false;
+                }
+                if (String.IsNullOrEmpty(txtJiraUser.Text))
+                {
+                    MessageBox.Show(this, "JIRA User Name can not be blank", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    result = false;
+                }
+                if (String.IsNullOrEmpty(txtJiraPassword.Text))
+                {
+                    MessageBox.Show(this, "JIRA Password can not be blank", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    result = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine(ex.ToString());
+                result = false;
+            }
+            return result;
+        }
+
+        void SaveSettings()
+        {         
+            _activeRepoNames.Clear();
+
+            foreach (var item in lstRepos.CheckedItems )
+            {
+                _activeRepoNames.Add(item.ToString());
+            }
+            Settings.Default.ActiveRepoList = JsonConvert.SerializeObject(_activeRepoNames);
+
+
+            Properties.Settings.Default.Save();
+        }
+
+        void LoadSettings()
+        {          
+            _repoNames = JsonConvert.DeserializeObject<List<string>>(Settings.Default.RepoList);
+            _activeRepoNames = JsonConvert.DeserializeObject<List<string>>(Settings.Default.ActiveRepoList);
+
+            LoadRepoList();            
+        }
+
+        void LoadRepoList()
+        {
+            lstRepos.Items.Clear();
+
+            foreach (var repoName in _repoNames)
+            {
+                var idx = lstRepos.Items.Add(repoName);
+                if (_activeRepoNames.Contains(repoName))
+                {
+                    lstRepos.SetItemChecked(idx, true);
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+        }
+
+        private void SettingsDialog_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                LoadSettings();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void txtAddRepo_TextChanged(object sender, EventArgs e)
+        {
+            btnAddRepo.Enabled = (txtAddRepo.Text.Trim() != String.Empty);
+        }
+
+        private void lstRepos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnRemoveRepo.Enabled = (lstRepos.SelectedItems.Count>0);
+        }
+
+        private void btnAddRepo_Click(object sender, EventArgs e)
+        {
+            var repoToAdd = txtAddRepo.Text.Trim();
+            _repoNames.Add(repoToAdd);
+            _activeRepoNames.Add(repoToAdd);
+            LoadRepoList();
+        }
+
+        private void btnRemoveRepo_Click(object sender, EventArgs e)
+        {
+            var repoToRemove = lstRepos.SelectedItems[0].ToString();
+            _repoNames.Remove(repoToRemove);
+            _activeRepoNames.Remove(repoToRemove);
+            LoadRepoList();
+        }
+    }
+}

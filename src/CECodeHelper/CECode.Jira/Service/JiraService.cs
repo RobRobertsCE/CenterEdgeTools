@@ -53,6 +53,12 @@ namespace CECode.Jira.Service
             return JiraItemAdapter.Translate(issueList);
         }
 
+        public IList<JiraItem> GetByJql(string jql)
+        {
+            var issueList = _jira.GetIssuesFromJql(jql, 100, 0);
+            return JiraItemAdapter.Translate(issueList);
+        }
+
         public IList<string> GetProjects()
         {
             IList<string> projects = new List<string>();

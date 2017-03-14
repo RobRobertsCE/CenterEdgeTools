@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CECodeHelper.Properties {
+namespace CECode.BranchHelper.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CECodeHelper.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CECodeHelper.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CECode.BranchHelper.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,42 @@ namespace CECodeHelper.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4.
+        /// </summary>
+        internal static string SprintCountPerVersion {
+            get {
+                return ResourceManager.GetString("SprintCountPerVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 14.
+        /// </summary>
+        internal static string SprintLengthDays {
+            get {
+                return ResourceManager.GetString("SprintLengthDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2/23/2016.
+        /// </summary>
+        internal static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 16.3.
+        /// </summary>
+        internal static string StartVersion {
+            get {
+                return ResourceManager.GetString("StartVersion", resourceCulture);
             }
         }
     }
