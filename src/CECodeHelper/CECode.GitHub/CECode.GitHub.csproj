@@ -46,8 +46,6 @@
     <Compile Include="GitHubService.cs" />
     <Compile Include="IGitHubService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PullRequestAssembyHelper.cs" />
-    <Compile Include="PullRequestView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

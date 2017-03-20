@@ -1,17 +1,18 @@
-﻿using System;
+﻿using System.Collections.Generic;
+
 namespace CECode.Business.Services
 {
     public interface ICEJiraService
     {
-        System.Collections.Generic.IList<CECode.Business.CEJiraIssue> GetAMSIssues();
-        System.Collections.Generic.IList<CECode.Business.CEJiraIssue> GetByJql(string jql);
-        System.Collections.Generic.IList<string> GetFilters();
-        CECode.Business.CEJiraIssue GetItem(string key);
-        System.Collections.Generic.IList<CECode.Business.CEJiraIssue> GetOpenItems(System.Collections.Generic.IList<string> projects);
-        System.Collections.Generic.IList<string> GetPriorities();
-        System.Collections.Generic.IList<string> GetProjects();
-        System.Collections.Generic.IList<CECode.Business.CEJiraIssue> GetRAndDIssues();
-        System.Collections.Generic.IList<string> GetStatuses();
-        System.Collections.Generic.IList<string> GetTypes();
+        IList<CEJiraIssue> GetAMSIssues();
+        IList<CEJiraIssue> GetByJql(string jql);
+        IList<string> GetFilters();
+        CEJiraIssue GetItem(string key);
+        IList<CEJiraIssue> GetOpenItems(IList<string> projects);
+        IList<string> GetPriorities();
+        IList<string> GetProjects();
+        IList<CEJiraIssue> GetRAndDIssues();
+        IList<string> GetStatuses();
+        IList<string> GetTypes();
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CECode.TeamCity
 {
-    public class TeamCityService : CECode.TeamCity.ITeamCityService
+    public class TeamCityService : ITeamCityService
     {
         private readonly string _user;
         private readonly string _password;

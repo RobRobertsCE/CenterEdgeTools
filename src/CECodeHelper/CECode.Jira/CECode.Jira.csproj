@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IJiraListItem.cs" />
     <Compile Include="JiraDevelopment.cs" />
     <Compile Include="JiraIssueType.cs" />
     <Compile Include="JiraItem.cs" />
@@ -54,7 +53,6 @@
     <Compile Include="JiraStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\IJiraService.cs" />
-    <Compile Include="Service\JiraItemRequest.cs" />
     <Compile Include="Service\JiraService.cs" />
   </ItemGroup>
   <ItemGroup>

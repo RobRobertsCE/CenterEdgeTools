@@ -1,17 +1,20 @@
 ﻿using System;
+using CECode.Jira;
+using System.Collections.Generic;
+
 namespace CECode.Business
 {
     public interface ICEJiraIssue
     {
-        System.Collections.Generic.IList<string> AffectsVersions { get; set; }
+        IList<string> AffectsVersions { get; set; }
         string AssignedTo { get; set; }
         DateTime? Created { get; set; }
-        System.Collections.Generic.IList<string> FixVersions { get; set; }
+        IList<string> FixVersions { get; set; }
         string ItemNumber { get; set; }
-        CECode.Jira.JiraStatus ItemStatus { get; set; }
-        CECode.Jira.JiraIssueType ItemType { get; set; }
+        JiraStatus ItemStatus { get; set; }
+        JiraIssueType ItemType { get; set; }
         string Key { get; set; }
-        CECode.Jira.JiraPriority Priority { get; set; }
+        JiraPriority Priority { get; set; }
         string ProjectName { get; set; }
         string Sprint { get; set; }
         string Summary { get; set; }

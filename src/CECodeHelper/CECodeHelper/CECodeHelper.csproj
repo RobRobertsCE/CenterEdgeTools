@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Advantage\PatchHelper.cs" />
+    <Compile Include="Advantage\PullRequestAssembyHelper.cs" />
+    <Compile Include="Advantage\PullRequestView.cs" />
     <Compile Include="Advantage\VersionExtensions.cs" />
     <Compile Include="DbVersionLibrary\Constants.cs" />
     <Compile Include="DbVersionLibrary\DbBuildVersion.cs" />

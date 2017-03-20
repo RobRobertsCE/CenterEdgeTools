@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CECode.Business;
 using CECode.GitHub;
 
 namespace CECode.Business.Services
@@ -130,21 +129,6 @@ namespace CECode.Business.Services
                     CommentCount = pullRequest.Comments,
                     CommitCount = pullRequest.Commits
                 };
-
-                //foreach (var commit in pullRequest.Commits)
-                //{
-                //    var ceCommit = new CECommit()
-                //    {
-                //        Repo = repositoryName,
-                //        Branch = branchName,
-                //        Sha = commit.Sha,
-                //        Message = commit.Commit.Message,
-                //        Files = commit.Files.Select(f => f.Filename).ToList()
-                //    };
-
-                //    cePullRequest.Commits.Add(ceCommit);
-                //}
-
                 result.Add(cePullRequest);
             }
 
@@ -187,8 +171,7 @@ namespace CECode.Business.Services
                     Base = pullRequestDetails.Base.Sha,
                     HeadRef = pullRequestDetails.Head.Ref,
                     BaseRef = pullRequestDetails.Base.Ref,
-
-                    MergeCommitSha = "?",
+                    
                     IsLocked = pullRequestDetails.Locked,
                     IsMerged = pullRequestDetails.Merged,
                     IsMergeable = pullRequestDetails.Mergeable,
@@ -199,15 +182,12 @@ namespace CECode.Business.Services
 
                     CommentCount = item.Comments,
                     CommitCount = pullRequestDetails.Commits
-                    //MergeCommitSha	!
-                    // do not have commit details, need to make a new call for each . (Commit count? head/base counting back from each?
                 };
                 if (cePullRequest.CommitCount > 0)
                 {
                     var commitSha = cePullRequest.Head;
                     for (int commitIdx = 0; commitIdx < cePullRequest.CommitCount; commitIdx++)
                     {
-                        // get the commit details.
                         var commit = await _service.GetPullRequestCommits(repositoryName, commitSha);
                         var ceCommit = new CECommit()
                         {
@@ -221,27 +201,8 @@ namespace CECode.Business.Services
                         commitSha = commit.Commit.Tree.Sha;
                     }
                 }
-                /*
-   
-
-    */
-                //foreach (var commit in pullRequest.Commits)
-                //{
-                //    var ceCommit = new CECommit()
-                //    {
-                //        Repo = repositoryName,
-                //        Branch = branchName,
-                //        Sha = commit.Sha,
-                //        Message = commit.Commit.Message,
-                //        Files = commit.Files.Select(f => f.Filename).ToList()
-                //    };
-
-                //    cePullRequest.Commits.Add(ceCommit);
-                //}
-
                 result.Add(cePullRequest);
             }
-
             return result;
         }
 
@@ -273,21 +234,6 @@ namespace CECode.Business.Services
                     CommentCount = item.PullRequest.Comments,
                     CommitCount = item.PullRequest.Commits
                 };
-
-                //foreach (var commit in pullRequest.Commits)
-                //{
-                //    var ceCommit = new CECommit()
-                //    {
-                //        Repo = repositoryName,
-                //        Branch = branchName,
-                //        Sha = commit.Sha,
-                //        Message = commit.Commit.Message,
-                //        Files = commit.Files.Select(f => f.Filename).ToList()
-                //    };
-
-                //    cePullRequest.Commits.Add(ceCommit);
-                //}
-
                 result.Add(cePullRequest);
             }
 

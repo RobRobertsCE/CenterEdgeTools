@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CECode.Jira;
 
 namespace CECode.Business
 {
-    public class CEJiraIssue : CECode.Business.ICEJiraIssue
+    public class CEJiraIssue : ICEJiraIssue
     {
         public string ItemNumber { get; set; }
 
