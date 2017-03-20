@@ -108,7 +108,7 @@ namespace CECodeHelper.Forms
                 commit = (GitHubCommit)trvBranch.SelectedNode.Tag;
                 sha = commit.Sha;
             }
-            
+
             txtBranchCheck.Clear();
             DisplayCommitInBranchStatus(sha, "master");
             DisplayCommitInBranchStatus(sha, "beta");
@@ -117,15 +117,49 @@ namespace CECodeHelper.Forms
 
         async void DisplayCommitInBranchStatus(string sha, string branchName)
         {
-            var result = await _gitHubService.CheckCommitInBranch("Advantage", "master", sha);
+            var result = await _gitHubService.CheckCommitInBranch("Advantage", branchName, sha);
             var statusMessage = String.Format("Commit {0} is {1}in branch {2} [{3}]", sha.Substring(0, 8), CompareStatusIsTrue(result.Status) ? "" : "NOT ", branchName, result.Status);
             Console.WriteLine(statusMessage);
             txtBranchCheck.AppendText(statusMessage + "\r\n");
         }
 
+        async Task<bool> CommitIsInBranch(string branchName, string sha)
+        {
+            var result = await _gitHubService.CheckCommitInBranch("Advantage", branchName, sha);
+            return CompareStatusIsTrue(result.Status);
+        }
+
         bool CompareStatusIsTrue(string status)
         {
             return (status == "identical" || status == "behind");
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            try
+            {
+                var rootNode = trvBranch.Nodes[0];
+                var mainBranches = new List<string>() { "master", "beta", "develop" };
+                foreach (TreeNode branchNode in rootNode.Nodes)
+                {
+                    var branch = (Branch)branchNode.Tag;
+                    string sha = branch.Commit.Sha;
+
+                    foreach (var mainBranch in mainBranches)
+                    {
+                        var isInBranch = await CommitIsInBranch(mainBranch, sha);
+                        var statusMessage = String.Format("Feature branch '{0}' is {1}in main branch '{2}' [{3}]", branch.Name, isInBranch ? "" : "NOT ", mainBranch, sha.Substring(0, 8));
+                        sb.AppendLine(statusMessage);
+                    }
+                }
+                Console.WriteLine("Writing report...");
+                System.IO.File.WriteAllText(@"C:\GitHubFeaturebranches\FeatureBranchReport.txt", sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }

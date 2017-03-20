@@ -125,7 +125,7 @@ namespace CECode.Business.Services
                     Number = pullRequest.Number,
                     Title = pullRequest.Title,
                     Status = pullRequest.State.ToString(),
-                    IsOnHold = pullRequest.Locked,
+                    IsLocked = pullRequest.Locked,
                     IsMerged = pullRequest.Merged,
                     CommentCount = pullRequest.Comments,
                     CommitCount = pullRequest.Commits
@@ -164,22 +164,67 @@ namespace CECode.Business.Services
                 var cePullRequest = new CEPullRequest()
                 {
                     Repo = repositoryName,
-                    Id = item.PullRequest.Id,
-                    Number = item.PullRequest.Number,
-                    Title = item.PullRequest.Title,
-                    Status = item.State.ToString(),
-                    IsOnHold = item.PullRequest.Locked,
-                    IsMerged = item.PullRequest.Merged,
-                    CommentCount = item.PullRequest.Comments,
-                    CommitCount = item.PullRequest.Commits
+                    Id = pullRequestDetails.Id,
+                    Number = pullRequestDetails.Number,
+                    Sha = pullRequestDetails.Base.Sha,
+                    Branch = pullRequestDetails.Base.Ref,
+                    Title = pullRequestDetails.Title,
+                    Status = pullRequestDetails.State.ToString(),
+                    CreatedAt = pullRequestDetails.CreatedAt.UtcDateTime,
+                    UpdatedAt = pullRequestDetails.UpdatedAt.UtcDateTime,
+                    ClosedAt = pullRequestDetails.ClosedAt?.UtcDateTime,
+
+                    ChangedFiles = pullRequestDetails.ChangedFiles,
+                    Additions = pullRequestDetails.Additions,
+                    Deletions = pullRequestDetails.Deletions,
+
+                    Url = pullRequestDetails.Url.AbsolutePath,
+                    PatchUrl = pullRequestDetails.PatchUrl.AbsolutePath,
+                    DiffUrl = pullRequestDetails.DiffUrl.AbsolutePath,
+                    HtmlUrl = pullRequestDetails.HtmlUrl.AbsolutePath,
+
+                    Head = pullRequestDetails.Head.Sha,
+                    Base = pullRequestDetails.Base.Sha,
+                    HeadRef = pullRequestDetails.Head.Ref,
+                    BaseRef = pullRequestDetails.Base.Ref,
+
+                    MergeCommitSha = "?",
+                    IsLocked = pullRequestDetails.Locked,
+                    IsMerged = pullRequestDetails.Merged,
+                    IsMergeable = pullRequestDetails.Mergeable,
+                    MergedAt = pullRequestDetails.MergedAt?.UtcDateTime,
+                    MergedBy = pullRequestDetails.MergedBy.Name,
+
+                    User = pullRequestDetails.User.Name,
+
+                    CommentCount = item.Comments,
+                    CommitCount = pullRequestDetails.Commits
                     //MergeCommitSha	!
                     // do not have commit details, need to make a new call for each . (Commit count? head/base counting back from each?
                 };
+                if (cePullRequest.CommitCount > 0)
+                {
+                    var commitSha = cePullRequest.Head;
+                    for (int commitIdx = 0; commitIdx < cePullRequest.CommitCount; commitIdx++)
+                    {
+                        // get the commit details.
+                        var commit = await _service.GetPullRequestCommits(repositoryName, commitSha);
+                        var ceCommit = new CECommit()
+                        {
+                            Repo = repositoryName,
+                            Branch = cePullRequest.HeadRef,
+                            Sha = commit.Sha,
+                            Message = commit.Commit.Message,
+                            Files = commit.Files.Select(f => f.Filename).ToList()
+                        };
+                        cePullRequest.Commits.Add(ceCommit);
+                        commitSha = commit.Commit.Tree.Sha;
+                    }
+                }
+                /*
+   
 
-
-
-
-
+    */
                 //foreach (var commit in pullRequest.Commits)
                 //{
                 //    var ceCommit = new CECommit()
@@ -223,7 +268,7 @@ namespace CECode.Business.Services
                     Number = item.PullRequest.Number,
                     Title = item.PullRequest.Title,
                     Status = item.PullRequest.State.ToString(),
-                    IsOnHold = item.PullRequest.Locked,
+                    IsLocked = item.PullRequest.Locked,
                     IsMerged = item.PullRequest.Merged,
                     CommentCount = item.PullRequest.Comments,
                     CommitCount = item.PullRequest.Commits

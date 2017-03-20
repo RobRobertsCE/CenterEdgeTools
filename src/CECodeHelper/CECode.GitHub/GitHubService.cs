@@ -150,7 +150,6 @@ namespace CECode.GitHub
 
         private async Task<CompareResult> CheckCommit(string repositoryName, string branchName, string headCommit)
         {
-
             CompareResult result = await Client.Repository.Commit.Compare(_owner, repositoryName, branchName, headCommit);
 
             return result;

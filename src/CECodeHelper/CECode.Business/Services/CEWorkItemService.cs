@@ -52,12 +52,7 @@ namespace CECode.Business.Services
             var pullRequestTask = await GetPullRequestsByJiraIssue(gitHubRepositoryName, jiraIssueNumber);
 
             workItem.PullRequests = pullRequestTask;
-
-            foreach (var pullRequest in workItem.PullRequests)
-            {
-                pullRequest.Commits = await GetCommitsByPullRequest(gitHubRepositoryName, pullRequest.Sha);
-            }
-
+            
             return workItem;
         }
         #endregion

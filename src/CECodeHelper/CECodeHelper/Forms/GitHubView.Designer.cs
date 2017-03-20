@@ -29,24 +29,36 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnGetBranch = new System.Windows.Forms.Button();
             this.trvBranch = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.btnGetBranch = new System.Windows.Forms.Button();
             this.pnlCommit = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.txtBranchCheck = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.pnlCommit.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.btnGetBranch);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1170, 48);
             this.panel1.TabIndex = 0;
+            // 
+            // btnGetBranch
+            // 
+            this.btnGetBranch.Location = new System.Drawing.Point(8, 8);
+            this.btnGetBranch.Name = "btnGetBranch";
+            this.btnGetBranch.Size = new System.Drawing.Size(88, 32);
+            this.btnGetBranch.TabIndex = 0;
+            this.btnGetBranch.Text = "Load";
+            this.btnGetBranch.UseVisualStyleBackColor = true;
+            this.btnGetBranch.Click += new System.EventHandler(this.btnGetBranch_Click);
             // 
             // trvBranch
             // 
@@ -66,16 +78,6 @@
             this.splitter1.TabIndex = 2;
             this.splitter1.TabStop = false;
             // 
-            // btnGetBranch
-            // 
-            this.btnGetBranch.Location = new System.Drawing.Point(8, 8);
-            this.btnGetBranch.Name = "btnGetBranch";
-            this.btnGetBranch.Size = new System.Drawing.Size(88, 32);
-            this.btnGetBranch.TabIndex = 0;
-            this.btnGetBranch.Text = "Load";
-            this.btnGetBranch.UseVisualStyleBackColor = true;
-            this.btnGetBranch.Click += new System.EventHandler(this.btnGetBranch_Click);
-            // 
             // pnlCommit
             // 
             this.pnlCommit.Controls.Add(this.txtBranchCheck);
@@ -86,16 +88,6 @@
             this.pnlCommit.Size = new System.Drawing.Size(879, 152);
             this.pnlCommit.TabIndex = 3;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(24, 24);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(72, 24);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // txtBranchCheck
             // 
             this.txtBranchCheck.Location = new System.Drawing.Point(32, 56);
@@ -104,6 +96,26 @@
             this.txtBranchCheck.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtBranchCheck.Size = new System.Drawing.Size(336, 80);
             this.txtBranchCheck.TabIndex = 1;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(32, 24);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(120, 24);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Check Merge Status";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(104, 8);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(88, 32);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "Report";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // GitHubView
             // 
@@ -132,5 +144,6 @@
         private System.Windows.Forms.Panel pnlCommit;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox txtBranchCheck;
+        private System.Windows.Forms.Button button2;
     }
 }

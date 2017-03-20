@@ -14,11 +14,35 @@ namespace CECode.Business
         public string Repo { get; set; }
         public string Branch { get; set; }
         public string Title { get; set; }
-        
+        public string Body { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? ClosedAt { get; set; }
+
+        public string Head { get; set; }
+        public string Base { get; set; }
+        public string HeadRef { get; set; }
+        public string BaseRef { get; set; }
+        public string MergeCommitSha { get; set; }
+
         public string Status { get; set; }
-        public bool IsOnHold { get; set; }
+        public bool IsLocked { get; set; }
+        public bool? IsMergeable { get; set; }
         public bool IsMerged { get; set; }
         public bool IsReviewed { get; set; }
+        public DateTime? MergedAt { get; set; }
+        public string MergedBy { get; set; }
+
+        public int Additions { get; set; }
+        public int Deletions { get; set; }
+        public int ChangedFiles { get; set; }
+
+        public string PatchUrl { get; set; }
+        public string DiffUrl { get; set; }
+        public string HtmlUrl { get; set; }
+        public string Url { get; set; }
+        
+        public string User { get; set; }
 
         public int CommentCount { get; set; }
         public int CommitCount { get; set; }
