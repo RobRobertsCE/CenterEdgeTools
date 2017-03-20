@@ -53,7 +53,7 @@ namespace CECodeHelper
                 var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
                 _gitHubService = new CEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
 
-                var teamCityProfile = AccountProfileHelper.GetGitHubAccountInfo();
+                var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
                 _teamCityService = new CETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
 
                 _service = new CEWorkItemService(_jiraService, _gitHubService, _teamCityService);
@@ -276,5 +276,84 @@ namespace CECodeHelper
             }
         }
 
+        private void btnTeamCity_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var builds = _teamCityService.GetRunningBuilds();
+
+                dgvTeamCity.DataSource = builds;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var builds = _teamCityService.GetBuilds();
+
+                dgvTeamCity.DataSource = builds;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var build = _teamCityService.GetAdvantageBuild();
+
+                dgvTeamCity.DataSource = new List<CEBuild>() { build };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var builds = _teamCityService.GetPatchBuilds();
+
+                dgvTeamCity.DataSource = builds;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void btnAdvantagePatches_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var build = _teamCityService.GetAdvantagePatches();
+
+                dgvTeamCity.DataSource = new List<CEBuild>() { build };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
     }
 }

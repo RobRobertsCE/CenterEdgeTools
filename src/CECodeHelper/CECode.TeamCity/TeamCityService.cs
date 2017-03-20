@@ -13,6 +13,12 @@ namespace CECode.TeamCity
         private readonly string _user;
         private readonly string _password;
 
+        private byte[] GetCredentials()
+        {
+            // return UTF8Encoding.UTF8.GetBytes("rroberts:hel-j205");
+            return UTF8Encoding.UTF8.GetBytes(String.Format("{0}:{1}", _user, _password));
+        }
+
         public TeamCityService(string user, string password)
         {
             _user = user;
@@ -21,7 +27,7 @@ namespace CECode.TeamCity
 
         public IList<RunningBuild.Build> GetRunningBuilds()
         {
-            List<RunningBuild.Build> results = null;
+            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
 
             HttpClient client = new HttpClient();
             var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any";
@@ -44,11 +50,15 @@ namespace CECode.TeamCity
                 // TODO: Check result status
                 if (null != responseData.Result)
                 {
-                    results = responseData.Result.build;
-
-                    foreach (var runningBuild in results)
+                    if (responseData.Result.count > 0)
                     {
-                        Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
+
+                        results = responseData.Result.build;
+
+                        foreach (var runningBuild in results)
+                        {
+                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
+                        }
                     }
                 }
             }
@@ -60,7 +70,12 @@ namespace CECode.TeamCity
 
             return results;
         }
+
         public IList<Build> GetBuilds()
+        {
+            return GetBuilds(String.Empty);
+        }
+        public IList<Build> GetBuilds(string buildType)
         {
             List<Build> results = null;
 
@@ -80,7 +95,11 @@ namespace CECode.TeamCity
             //var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds/running:false?count=10,start=0";
             */
 
-            var url = Build.GetListUrl() + "?" + "buildType:Advantage_Build";
+            var url = Build.GetListUrl();
+            if (!String.IsNullOrEmpty(buildType))
+            {
+                url += "?" + String.Format("buildType:{0}", buildType);
+            }
             client.BaseAddress = new Uri(url);
 
 
@@ -88,7 +107,7 @@ namespace CECode.TeamCity
             client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
 
-            byte[] cred = UTF8Encoding.UTF8.GetBytes("rroberts:hel-j205");
+            byte[] cred = GetCredentials();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
 
             // List data response.
@@ -135,7 +154,7 @@ namespace CECode.TeamCity
             client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
 
-            byte[] cred = UTF8Encoding.UTF8.GetBytes("rroberts:hel-j205");
+            byte[] cred = GetCredentials();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
 
             // List data response.
@@ -151,15 +170,14 @@ namespace CECode.TeamCity
                 {
                     foreach (var d in results)
                     {
-                        //if (true == d.@default)
-                        //{
-                        //    Console.WriteLine(d.name + " (default)");
-                        //}
-                        //else
-                        //{
-                        //    Console.WriteLine(d.name);
-                        //}
-
+                        if (true == d.@default)
+                        {
+                            Console.WriteLine(d.name + " (default)");
+                        }
+                        else
+                        {
+                            Console.WriteLine(d.name);
+                        }
                     }
                 }
             }
@@ -189,7 +207,7 @@ namespace CECode.TeamCity
             client.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json"));
 
-            byte[] cred = UTF8Encoding.UTF8.GetBytes("rroberts:hel-j205");
+            byte[] cred = GetCredentials();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
 
             // List data response.
@@ -253,6 +271,67 @@ namespace CECode.TeamCity
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(Build.GetListUrl() + "/" + "buildType:Advantage_Build");
+
+            // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+            byte[] cred = GetCredentials();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
+
+            // List data response.
+            HttpResponseMessage response = client.GetAsync("").Result;  // Blocking call!
+            if (response.IsSuccessStatusCode)
+            {
+                // Parse the response body. Blocking!
+                var responseData = response.Content.ReadAsAsync<Build>();
+                var dataObject = responseData.Result;
+                return dataObject;
+            }
+            else
+            {
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                return null;
+            }
+        }
+
+        public Build GetAdvantagePatches()
+        {
+            HttpClient client = new HttpClient();
+            //         public static string BuildsUrlSuffix = @"https://teamcity.pfestore.com/httpAuth/app/rest/builds";
+            // client.BaseAddress = new Uri(Build.GetListUrl() + "/" + "buildType:Advantage_Patches");
+
+            client.BaseAddress = new Uri("https://teamcity.pfestore.com/httpAuth/app/rest/buildTypes/id:Advantage_Patches/builds/running:false");
+
+
+            // Add an Accept header for JSON format.
+            client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+            byte[] cred = GetCredentials();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
+
+            // List data response.
+            HttpResponseMessage response = client.GetAsync("").Result;  // Blocking call!
+            if (response.IsSuccessStatusCode)
+            {
+                var contentString = response.Content.ReadAsStringAsync();
+                // Parse the response body. Blocking!
+                var responseData = response.Content.ReadAsAsync<Build>();
+                var dataObject = responseData.Result;
+                return dataObject;
+            }
+            else
+            {
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                return null;
+            }
+        }
+
+        public Build GetBuild(string buildType)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(Build.GetListUrl() + "/" + String.Format("buildType:{0}", buildType));
 
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(

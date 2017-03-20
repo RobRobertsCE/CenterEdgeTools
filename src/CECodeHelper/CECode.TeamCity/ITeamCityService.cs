@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace CECode.TeamCity
 {
     public interface ITeamCityService
     {
         Build GetAdvantageBuild();
-        System.Collections.Generic.IList<TeamCityService.Branch> GetBranches();
+        Build GetAdvantagePatches();
+        IList<TeamCityService.Branch> GetBranches();
         BuildDetails GetBuildDetails(Build build);
-        System.Collections.Generic.IList<Build> GetBuilds();
-        System.Collections.Generic.IList<RunningBuild.Build> GetRunningBuilds();
+        IList<Build> GetBuilds();
+        IList<Build> GetBuilds(string buildType);
+        Build GetBuild(string buildType);
+        IList<RunningBuild.Build> GetRunningBuilds();
     }
 }

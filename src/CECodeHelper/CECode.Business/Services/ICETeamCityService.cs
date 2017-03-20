@@ -1,8 +1,17 @@
-﻿using System;
+﻿using System.Collections.Generic;
+
 namespace CECode.Business.Services
 {
     public interface ICETeamCityService
     {
-        System.Collections.Generic.IList<CECode.Business.CEBuild> GetRunningBuilds();
+        IList<CEBuild> GetRunningBuilds();
+        IList<CEBuild> GetBuilds();
+        IList<CEBuild> GetPatchBuilds();
+        CEBuild GetAdvantageBuild();
+        CEBuild GetAdvantagePatches();
+
+        //IList<TeamCityService.Branch> GetBranches();
+
+        //BuildDetails GetBuildDetails(Build build);
     }
 }
