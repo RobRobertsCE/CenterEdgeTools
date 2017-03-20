@@ -1,24 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace CECode.TeamCity
 {
-    public class TeamCityService : CECode.TeamCity.ITeamCityService
+    public class TeamCity
     {
-        private readonly string _user;
-        private readonly string _password;
-
-        public TeamCityService(string user, string password)
-        {
-            _user = user;
-            _password = password;
-        }
-
         public IList<RunningBuild.Build> GetRunningBuilds()
         {
             List<RunningBuild.Build> results = null;
@@ -119,7 +111,7 @@ namespace CECode.TeamCity
 
         public IList<Branch> GetBranches()
         {
-            List<Branch> results = null;
+            List< Branch> results = null;
 
             HttpClient client = new HttpClient();
 
@@ -144,7 +136,7 @@ namespace CECode.TeamCity
             {
                 // Parse the response body. Blocking!
                 var responseData = response.Content.ReadAsAsync<RootObject>();
-
+          
                 results = responseData.Result.branch;
 
                 if (null != results)
@@ -248,6 +240,8 @@ namespace CECode.TeamCity
         {
             public List<Branch> branch { get; set; }
         }
+
+
 
         public Build GetAdvantageBuild()
         {

@@ -1,62 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Atlassian.Jira;
 
 namespace CECode.Jira.Service
 {
-    // project = ADVANTAGE ORDER BY Rank ASC
-
-    // project in (WEB, ADVANTAGE, AAC, MOBILETIK, MOBILEINV) AND status in (Open, "In Progress", Closed, QA, "QA Approved") AND (cf[11200] = "R&D" OR type = Epic) ORDER BY Rank ASC
-
-    // Date value '03/10/2017' for field 'Updated' is invalid. Valid formats include: 'yyyy/MM/dd HH:mm', 'yyyy-MM-dd HH:mm', 'yyyy/MM/dd', 'yyyy-MM-dd', or a period format e.g. '-5d', '4w 2d'.
-    // works: project = ADVANTAGE AND updated > "2017-03-10 12:00" ORDER BY Rank ASC
-
-    public class JiraService
+    public class JiraService : IJiraService
     {
+        #region fields
         private Atlassian.Jira.Jira _jira;
+        #endregion
 
+        #region ctor
         public JiraService(string url, string userName, string password)
         {
             _jira = Atlassian.Jira.Jira.CreateRestClient(url, userName, password);
         }
+        #endregion
 
-        public JiraItem GetItem(string key)
+        #region public methods
+        public Issue GetIssue(string key)
         {
-            var issueList = _jira.GetIssue(key);
-            return JiraItemAdapter.Translate(issueList);
+            return _jira.GetIssue(key);
         }
 
-        public IList<JiraItem> GetOpenItems()
-        {
-            var issueList = _jira.GetIssuesFromJql("project in (ADVANTAGE, WEB) AND issuetype in standardIssueTypes()", 100, 0);
-            return JiraItemAdapter.Translate(issueList);
-        }
-
-        public IList<JiraItem> GetOpenItems(IList<string> projects)
+        public IList<Issue> GetOpenIssues(IList<string> projects)
         {
             var projectList = String.Join(",", projects);
-            var issueList = _jira.GetIssuesFromJql("project in (" + projectList + ") AND issuetype in standardIssueTypes()", 100, 0);
-            return JiraItemAdapter.Translate(issueList);
+            return _jira.GetIssuesFromJql("project in (" + projectList + ") AND issuetype in standardIssueTypes()", 100, 0).ToList();
         }
 
-        public IList<JiraItem> GetRAndDIssues()
+        public IList<Issue> GetRAndDIssues()
         {
-            var issueList = _jira.GetIssuesFromJql("project in (WEB, ADVANTAGE, AAC, MOBILETIK, MOBILEINV) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"R&D\" OR type = Epic) ORDER BY Rank ASC", 100, 0);
-            return JiraItemAdapter.Translate(issueList);
+            return _jira.GetIssuesFromJql("project in (WEB, ADVANTAGE, AAC, MOBILETIK, MOBILEINV) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"R&D\" OR type = Epic) ORDER BY Rank ASC", 100, 0).ToList();
+         }
+
+        public IList<Issue> GetAMSIssues()
+        {
+            // var issueList = _jira.GetIssuesFromJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) AND (Updated > -1d) ORDER BY Rank ASC", 100, 0);
+            return _jira.GetIssuesFromJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) ORDER BY Rank ASC", 100, 0).ToList();            
         }
 
-        public IList<JiraItem> GetAMSIssues()
+        public IList<Issue> GetByJql(string jql)
         {
-            var issueList = _jira.GetIssuesFromJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) AND (Updated > #03/10/2017#) ORDER BY Rank ASC", 100, 0);
-            return JiraItemAdapter.Translate(issueList);
-        }
-
-        public IList<JiraItem> GetByJql(string jql)
-        {
-            var issueList = _jira.GetIssuesFromJql(jql, 100, 0);
-            return JiraItemAdapter.Translate(issueList);
+            return _jira.GetIssuesFromJql(jql, 100, 0).ToList();
         }
 
         public IList<string> GetProjects()
@@ -121,7 +108,9 @@ namespace CECode.Jira.Service
             }
             return filterNames;
         }
+        #endregion
 
+        #region private methods
         private void DisplayStrings(string title, IList<string> items)
         {
             Console.WriteLine(title);
@@ -132,5 +121,6 @@ namespace CECode.Jira.Service
             }
             Console.WriteLine();
         }
+        #endregion
     }
 }

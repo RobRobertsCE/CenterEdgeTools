@@ -53,6 +53,7 @@
     <Compile Include="JiraPriority.cs" />
     <Compile Include="JiraStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\IJiraService.cs" />
     <Compile Include="Service\JiraItemRequest.cs" />
     <Compile Include="Service\JiraService.cs" />
   </ItemGroup>

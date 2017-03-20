@@ -30,11 +30,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Atlassian.Jira">
+      <HintPath>..\..\..\bin\Atlassian.Jira.dll</HintPath>
+    </Reference>
+    <Reference Include="Octokit">
+      <HintPath>..\packages\Octokit.0.24.0\lib\net45\Octokit.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net451\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,10 +49,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CEBuild.cs" />
+    <Compile Include="CECommit.cs" />
+    <Compile Include="CEWorkItem.cs" />
+    <Compile Include="ICECommit.cs" />
+    <Compile Include="ICEJiraIssue.cs" />
+    <Compile Include="ICEPullRequest.cs" />
+    <Compile Include="Services\CEGitHubService.cs" />
+    <Compile Include="CEJiraIssue.cs" />
+    <Compile Include="Services\CEJiraService.cs" />
+    <Compile Include="CEBranch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CEPullRequest.cs" />
+    <Compile Include="Services\CETeamCityService.cs" />
+    <Compile Include="Services\CEWorkItemService.cs" />
+    <Compile Include="Services\ICEGitHubService.cs" />
+    <Compile Include="Services\ICEJiraService.cs" />
+    <Compile Include="Services\ICETeamCityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CECode.Authentication\CECode.Authentication.csproj">
+      <Project>{ac4e4b9f-7b15-49e2-a370-3a076a47712b}</Project>
+      <Name>CECode.Authentication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.GitHub\CECode.GitHub.csproj">
+      <Project>{38ace417-197e-4c4b-94ae-9d6d984e81c2}</Project>
+      <Name>CECode.GitHub</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.Jira\CECode.Jira.csproj">
+      <Project>{cee65c50-3a50-4f8a-8eb4-b5f1c2270174}</Project>
+      <Name>CECode.Jira</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.TeamCity\CECode.TeamCity.csproj">
+      <Project>{4ba81a75-6f5a-434f-b3b0-76a4c5d8ec77}</Project>
+      <Name>CECode.TeamCity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

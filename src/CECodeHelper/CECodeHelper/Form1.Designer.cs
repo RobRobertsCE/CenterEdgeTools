@@ -41,6 +41,9 @@
             this.dgvGitHub = new System.Windows.Forms.DataGridView();
             this.dgvTeamCity = new System.Windows.Forms.DataGridView();
             this.btnPullRequest = new System.Windows.Forms.Button();
+            this.btnGitHubView = new System.Windows.Forms.Button();
+            this.btnCEWorkItem = new System.Windows.Forms.Button();
+            this.txtJiraKey = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvJira)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGitHub)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTeamCity)).BeginInit();
@@ -162,11 +165,42 @@
             this.btnPullRequest.UseVisualStyleBackColor = true;
             this.btnPullRequest.Click += new System.EventHandler(this.btnPullRequest_Click);
             // 
+            // btnGitHubView
+            // 
+            this.btnGitHubView.Location = new System.Drawing.Point(416, 120);
+            this.btnGitHubView.Name = "btnGitHubView";
+            this.btnGitHubView.Size = new System.Drawing.Size(96, 24);
+            this.btnGitHubView.TabIndex = 13;
+            this.btnGitHubView.Text = "GitHub View";
+            this.btnGitHubView.UseVisualStyleBackColor = true;
+            this.btnGitHubView.Click += new System.EventHandler(this.btnGitHubView_Click);
+            // 
+            // btnCEWorkItem
+            // 
+            this.btnCEWorkItem.Location = new System.Drawing.Point(592, 120);
+            this.btnCEWorkItem.Name = "btnCEWorkItem";
+            this.btnCEWorkItem.Size = new System.Drawing.Size(120, 24);
+            this.btnCEWorkItem.TabIndex = 14;
+            this.btnCEWorkItem.Text = "CEWorkItem";
+            this.btnCEWorkItem.UseVisualStyleBackColor = true;
+            this.btnCEWorkItem.Click += new System.EventHandler(this.btnCEWorkItem_Click);
+            // 
+            // txtJiraKey
+            // 
+            this.txtJiraKey.Location = new System.Drawing.Point(720, 120);
+            this.txtJiraKey.Name = "txtJiraKey";
+            this.txtJiraKey.Size = new System.Drawing.Size(192, 20);
+            this.txtJiraKey.TabIndex = 15;
+            this.txtJiraKey.Text = "9035";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1089, 579);
+            this.Controls.Add(this.txtJiraKey);
+            this.Controls.Add(this.btnCEWorkItem);
+            this.Controls.Add(this.btnGitHubView);
             this.Controls.Add(this.btnPullRequest);
             this.Controls.Add(this.dgvTeamCity);
             this.Controls.Add(this.dgvGitHub);
@@ -207,5 +241,8 @@
         private System.Windows.Forms.DataGridView dgvGitHub;
         private System.Windows.Forms.DataGridView dgvTeamCity;
         private System.Windows.Forms.Button btnPullRequest;
+        private System.Windows.Forms.Button btnGitHubView;
+        private System.Windows.Forms.Button btnCEWorkItem;
+        private System.Windows.Forms.TextBox txtJiraKey;
     }
 }

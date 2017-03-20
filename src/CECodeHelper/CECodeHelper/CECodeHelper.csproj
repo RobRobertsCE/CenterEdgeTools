@@ -89,6 +89,12 @@
     <Compile Include="Forms\DbVersionDialog.Designer.cs">
       <DependentUpon>DbVersionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GitHubView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GitHubView.Designer.cs">
+      <DependentUpon>GitHubView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PatchFileEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DbVersionDialog.resx">
       <DependentUpon>DbVersionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GitHubView.resx">
+      <DependentUpon>GitHubView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PatchFileEditor.resx">
       <DependentUpon>PatchFileEditor.cs</DependentUpon>
