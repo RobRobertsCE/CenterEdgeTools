@@ -8,30 +8,30 @@ namespace CECode.Business.Services
     /// <summary>
     /// Adapter class for GitHubService
     /// </summary>
-    public class CEGitHubService : ICEGitHubService
+    internal class CEGitHubService : ICEGitHubService
     {
         #region fields
         private IGitHubService _service;
         #endregion
 
         #region ctor
-        public CEGitHubService(string user, string token, string owner)
+        internal CEGitHubService(string user, string token, string owner)
         {
             _service = new GitHubService(user, token, owner);
         }
-        public CEGitHubService(IGitHubService service)
+        internal CEGitHubService(IGitHubService service)
         {
             _service = service;
         }
         #endregion
 
         #region public methods
-        public async Task<IList<CEBranch>> GetBranches(string repositoryName)
+        public async Task<IList<ICEBranch>> GetBranches(string repositoryName)
         {
             return await GetBranchesInternal(repositoryName);
         }
 
-        public async Task<IList<CECommit>> GetCommits(string repoName, string branchName)
+        public async Task<IList<ICECommit>> GetCommits(string repoName, string branchName)
         {
             return await GetCommitsInternal(repoName, branchName);
         }
@@ -41,17 +41,17 @@ namespace CECode.Business.Services
             return await GetPullRequestCommitsInternal(repositoryName, sha);
         }
 
-        public async Task<IList<CEPullRequest>> GetPullRequests(string repoName, string branchName)
+        public async Task<IList<ICEPullRequest>> GetPullRequests(string repoName, string branchName)
         {
             return await GetPullRequestsInternal(repoName, branchName);
         }
 
-        public async Task<IList<CEPullRequest>> SearchPullRequests(IList<string> repoNames)
+        public async Task<IList<ICEPullRequest>> SearchPullRequests(IList<string> repoNames)
         {
             return await GetPullRequestsInternal(repoNames);
         }
 
-        public async Task<IList<CEPullRequest>> SearchPullRequests(string repoName, string jiraIssueKey)
+        public async Task<IList<ICEPullRequest>> SearchPullRequests(string repoName, string jiraIssueKey)
         {
             return await GetPullRequestsByJiraKeyInternal(repoName, jiraIssueKey);
         }
@@ -63,9 +63,9 @@ namespace CECode.Business.Services
         #endregion
 
         #region private methods
-        private async Task<IList<CEBranch>> GetBranchesInternal(string repositoryName)
+        private async Task<IList<ICEBranch>> GetBranchesInternal(string repositoryName)
         {
-            IList<CEBranch> result = new List<CEBranch>();
+            var result = new List<ICEBranch>();
 
             var gitHubBranches = await _service.GetBranches(repositoryName);
 
@@ -84,9 +84,9 @@ namespace CECode.Business.Services
             return result;
         }
 
-        private async Task<IList<CECommit>> GetCommitsInternal(string repositoryName, string branchName)
+        private async Task<IList<ICECommit>> GetCommitsInternal(string repositoryName, string branchName)
         {
-            IList<CECommit> result = new List<CECommit>();
+            var result = new List<ICECommit>();
 
             var commits = await _service.GetCommits(repositoryName, branchName);
 
@@ -107,9 +107,9 @@ namespace CECode.Business.Services
             return result;
         }
 
-        private async Task<IList<CEPullRequest>> GetPullRequestsInternal(string repositoryName, string branchName)
+        private async Task<IList<ICEPullRequest>> GetPullRequestsInternal(string repositoryName, string branchName)
         {
-            IList<CEPullRequest> result = new List<CEPullRequest>();
+            var result = new List<ICEPullRequest>();
 
             var pullRequests = await _service.GetPullRequests(repositoryName, branchName);
 
@@ -135,9 +135,9 @@ namespace CECode.Business.Services
             return result;
         }
 
-        private async Task<IList<CEPullRequest>> GetPullRequestsByJiraKeyInternal(string repositoryName, string jiraIssueKey)
+        private async Task<IList<ICEPullRequest>> GetPullRequestsByJiraKeyInternal(string repositoryName, string jiraIssueKey)
         {
-            IList<CEPullRequest> result = new List<CEPullRequest>();
+            var result = new List<ICEPullRequest>();
 
             var pullRequests = await _service.SearchPullRequests(repositoryName, jiraIssueKey);
 
@@ -156,7 +156,7 @@ namespace CECode.Business.Services
                     Status = pullRequestDetails.State.ToString(),
                     CreatedAt = pullRequestDetails.CreatedAt.UtcDateTime,
                     UpdatedAt = pullRequestDetails.UpdatedAt.UtcDateTime,
-                    ClosedAt = pullRequestDetails.ClosedAt?.UtcDateTime,
+                    //ClosedAt = pullRequestDetails.ClosedAt.HasValue ? pullRequestDetails.ClosedAt.Value.UtcDateTime : DateTime,
 
                     ChangedFiles = pullRequestDetails.ChangedFiles,
                     Additions = pullRequestDetails.Additions,
@@ -171,11 +171,11 @@ namespace CECode.Business.Services
                     Base = pullRequestDetails.Base.Sha,
                     HeadRef = pullRequestDetails.Head.Ref,
                     BaseRef = pullRequestDetails.Base.Ref,
-                    
+
                     IsLocked = pullRequestDetails.Locked,
                     IsMerged = pullRequestDetails.Merged,
                     IsMergeable = pullRequestDetails.Mergeable,
-                    MergedAt = pullRequestDetails.MergedAt?.UtcDateTime,
+                    //MergedAt = pullRequestDetails.MergedAt.HasValue ? pullRequestDetails.MergedAt.Value.UtcDateTime : null,
                     MergedBy = pullRequestDetails.MergedBy.Name,
 
                     User = pullRequestDetails.User.Name,
@@ -212,9 +212,9 @@ namespace CECode.Business.Services
             return (ICECommit)result;
         }
 
-        private async Task<IList<CEPullRequest>> GetPullRequestsInternal(IList<string> repositoryNames)
+        private async Task<IList<ICEPullRequest>> GetPullRequestsInternal(IList<string> repositoryNames)
         {
-            IList<CEPullRequest> result = new List<CEPullRequest>();
+            var result = new List<ICEPullRequest>();
 
             var searchResults = await _service.SearchPullRequests(repositoryNames);
 

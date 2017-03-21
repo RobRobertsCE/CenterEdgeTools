@@ -7,11 +7,12 @@ namespace CECode.TeamCity
     {
         Build GetAdvantageBuild();
         Build GetAdvantagePatches();
-        IList<TeamCityService.Branch> GetBranches();
-        BuildDetails GetBuildDetails(Build build);
-        IList<Build> GetBuilds();
-        IList<Build> GetBuilds(string buildType);
-        Build GetBuild(string buildType);
+        Build GetBuildByType(string buildType);
+        Build GetBuildById(int id);
+        Build GetBuildByNumber(string number);
         IList<RunningBuild.Build> GetRunningBuilds();
+        IList<RunningBuild.Build> GetBuilds(string locator);
+        BuildDetails GetBuildDetails(Build build);
+        BuildDetails GetBuildDetails(int id);
     }
 }

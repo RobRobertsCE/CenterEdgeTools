@@ -14,6 +14,7 @@ using CECode.GitHub;
 using CECode.Jira;
 using CECode.Jira.Service;
 using CECode.TeamCity;
+using CECodeHelper.Forms;
 
 namespace CECodeHelper
 {
@@ -22,8 +23,7 @@ namespace CECodeHelper
         ICEJiraService _jiraService;
         ICEGitHubService _gitHubService;
         ICETeamCityService _teamCityService;
-
-        CEWorkItemService _service;
+        ICEWorkItemService _workItemService;
 
         public Form1()
         {
@@ -48,15 +48,15 @@ namespace CECodeHelper
             try
             {
                 var jiraProfile = AccountProfileHelper.GetJIRAAccountInfo();
-                _jiraService = new CEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
+                _jiraService = ServiceFactory.GetCEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
 
                 var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
-                _gitHubService = new CEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
+                _gitHubService = ServiceFactory.GetCEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
 
                 var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
-                _teamCityService = new CETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
+                _teamCityService = ServiceFactory.GetCETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
 
-                _service = new CEWorkItemService(_jiraService, _gitHubService, _teamCityService);
+                _workItemService = ServiceFactory.GetCEWorkItemService(_jiraService, _gitHubService, _teamCityService);
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace CECodeHelper
             {
                 dgvJira.DataSource = null;
                 var item = _jiraService.GetItem(textBox1.Text);
-                dgvJira.DataSource = new List<CEJiraIssue>() { item };
+                dgvJira.DataSource = new List<ICEJiraIssue>() { item };
             }
             catch (Exception ex)
             {
@@ -241,7 +241,7 @@ namespace CECodeHelper
             {
                 var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
                 var gitHubService = new GitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
-                var dialog = new CECodeHelper.Forms.GitHubView(gitHubService);
+                var dialog = new GitHubView(gitHubService);
                 dialog.ShowDialog(this);
             }
             catch (Exception ex)
@@ -261,13 +261,12 @@ namespace CECodeHelper
 
                 var gitHubRepoName = "Advantage";
                 var jiraProjectName = "Advantage";
-                var jiraIssueId = txtJiraKey.Text; // 9035
+                var jiraIssueId = txtJiraKey.Text; 
 
-                var result = await _service.GetWorkItem(gitHubRepoName, jiraProjectName, jiraIssueId);
+                var result = await _workItemService.GetWorkItem(gitHubRepoName, jiraProjectName, jiraIssueId);
 
-                dgvJira.DataSource = new List<ICEJiraIssue>() { result.JiraIssue }; //;
+                dgvJira.DataSource = new List<ICEJiraIssue>() { result.JiraIssue }; 
                 dgvGitHub.DataSource = result.PullRequests;
-                //dgvTeamCity.DataSource = result.;
 
             }
             catch (Exception ex)
@@ -316,7 +315,7 @@ namespace CECodeHelper
 
                 var build = _teamCityService.GetAdvantageBuild();
 
-                dgvTeamCity.DataSource = new List<CEBuild>() { build };
+                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
             }
             catch (Exception ex)
             {
@@ -330,7 +329,7 @@ namespace CECodeHelper
             {
                 dgvTeamCity.DataSource = null;
 
-                var builds = _teamCityService.GetPatchBuilds();
+                var builds = _teamCityService.GetAdvantagePatches();
 
                 dgvTeamCity.DataSource = builds;
             }
@@ -348,7 +347,87 @@ namespace CECodeHelper
 
                 var build = _teamCityService.GetAdvantagePatches();
 
-                dgvTeamCity.DataSource = new List<CEBuild>() { build };
+                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var builds = _teamCityService.GetBuilds(txtLocator.Text);
+
+                dgvTeamCity.DataSource = builds;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var builds = _teamCityService.GetMergeBuilds(txtMergeNumber.Text);
+
+                dgvTeamCity.DataSource = builds;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var build = _teamCityService.GetBuild(Convert.ToInt32(txtBuildId.Text));
+
+                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var buildDetails = _teamCityService.GetBuildDetails(Convert.ToInt32(txtBuildId.Text));
+
+                dgvTeamCity.DataSource = new List<ICEBuildDetails>() { buildDetails };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dgvTeamCity.DataSource = null;
+
+                var build = _teamCityService.GetBuild(txtBuildNumber.Text);
+
+                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
             }
             catch (Exception ex)
             {

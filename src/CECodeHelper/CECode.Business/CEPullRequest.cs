@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace CECode.Business
 {
-    public class CEPullRequest : ICEPullRequest
+    internal class CEPullRequest : ICEPullRequest
     {
+        #region properties
         public long Id { get; set; }
         public int Number { get; set; }
         public string Sha { get; set; }
@@ -38,17 +39,20 @@ namespace CECode.Business
         public string DiffUrl { get; set; }
         public string HtmlUrl { get; set; }
         public string Url { get; set; }
-        
+
         public string User { get; set; }
 
         public int CommentCount { get; set; }
         public int CommitCount { get; set; }
 
-        public IList<ICECommit> Commits { get; set; }
+        public IList<ICECommit> Commits { get; set; } 
+        #endregion
 
+        #region ctor
         public CEPullRequest()
         {
             Commits = new List<ICECommit>();
-        }
+        } 
+        #endregion
     }
 }

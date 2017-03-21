@@ -4,14 +4,14 @@ namespace CECode.Business.Services
 {
     public interface ICETeamCityService
     {
-        IList<CEBuild> GetRunningBuilds();
-        IList<CEBuild> GetBuilds();
-        IList<CEBuild> GetPatchBuilds();
-        CEBuild GetAdvantageBuild();
-        CEBuild GetAdvantagePatches();
-
-        //IList<TeamCityService.Branch> GetBranches();
-
-        //BuildDetails GetBuildDetails(Build build);
+        ICEBuild GetAdvantageBuild();
+        ICEBuild GetAdvantagePatches();
+        ICEBuild GetBuild(int id);
+        ICEBuild GetBuild(string number);
+        ICEBuildDetails GetBuildDetails(int id);
+        IList<ICEBuild> GetBuilds();
+        IList<ICEBuild> GetBuilds(string locator);
+        IList<ICEBuild> GetMergeBuilds(string mergeNumber);
+        IList<ICEBuild> GetRunningBuilds();
     }
 }

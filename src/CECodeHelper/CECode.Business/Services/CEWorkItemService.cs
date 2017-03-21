@@ -8,7 +8,7 @@ using CECode.TeamCity;
 
 namespace CECode.Business.Services
 {
-    public class CEWorkItemService
+    internal class CEWorkItemService : ICEWorkItemService
     {
         #region fields
         private ICEJiraService _jiraService;
@@ -17,14 +17,14 @@ namespace CECode.Business.Services
         #endregion
 
         #region ctor
-        public CEWorkItemService(ICEJiraService jiraService, ICEGitHubService gitHubService, ICETeamCityService teamCityService)
+        internal CEWorkItemService(ICEJiraService jiraService, ICEGitHubService gitHubService, ICETeamCityService teamCityService)
         {
             _jiraService = jiraService;
             _gitHubService = gitHubService;
             _teamCityService = teamCityService;
         }
 
-        public CEWorkItemService()
+        internal CEWorkItemService()
         {
             var jiraProfile = AccountProfileHelper.GetJIRAAccountInfo();
             _jiraService = new CEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
@@ -38,12 +38,7 @@ namespace CECode.Business.Services
         #endregion
 
         #region public methods
-        public IList<CEWorkItem> GetWorkItems()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<CEWorkItem> GetWorkItem(string gitHubRepositoryName, string jiraProjectName, string jiraIssueNumber)
+        public async Task<ICEWorkItem> GetWorkItem(string gitHubRepositoryName, string jiraProjectName, string jiraIssueNumber)
         {
             var workItem = new CEWorkItem();
 

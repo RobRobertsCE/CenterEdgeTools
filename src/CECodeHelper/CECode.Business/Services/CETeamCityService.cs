@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,131 +8,82 @@ using CECode.TeamCity;
 
 namespace CECode.Business.Services
 {
-    public class CETeamCityService : ICETeamCityService
+    internal class CETeamCityService : ICETeamCityService
     {
+        #region fields
         private ITeamCityService _service;
+        #endregion
 
-        public CETeamCityService(string user, string password)
+        #region ctor
+        internal CETeamCityService(string user, string password)
         {
             _service = new TeamCityService(user, password);
         }
+        #endregion
 
-        public CEBuild GetAdvantageBuild()
+        #region public methods
+        public ICEBuild GetAdvantageBuild()
         {
             var build = _service.GetAdvantageBuild();
 
-            var result = new CEBuild()
-                {
-                    id = build.id,
-                    state = build.state,
-                    status = build.status,
-                    branchName = build.branchName,
-                    number = build.number,
-                    buildTypeId = build.buildTypeId,
-                    href = build.href,
-                    webUrl = build.webUrl
-                };
-
-            return result;
+            return TeamCityBuildAdapter.Translate(build);  
         }
 
-        public CEBuild GetAdvantagePatches()
+        public ICEBuild GetAdvantagePatches()
         {
             var build = _service.GetAdvantagePatches();
 
-            var result = new CEBuild()
-            {
-                id = build.id,
-                state = build.state,
-                status = build.status,
-                branchName = build.branchName,
-                number = build.number,
-                buildTypeId = build.buildTypeId,
-                href = build.href,
-                webUrl = build.webUrl
-            };
-
-            return result;
+            return TeamCityBuildAdapter.Translate(build);  
         }
 
-        public IList<CEBuild> GetBuilds()
+        public ICEBuild GetBuild(int id)
         {
-            var results = new List<CEBuild>();
+            var build = _service.GetBuildById(id);
 
-            var builds = _service.GetBuilds();
-
-            foreach (var build in builds)
-            {
-                var ceBuild = new CEBuild()
-                {
-                    id = build.id,
-                    state = build.state,
-                    status = build.status,
-                    branchName = build.branchName,
-                    number = build.number,
-                    buildTypeId = build.buildTypeId,
-                    href = build.href,
-                    webUrl = build.webUrl
-                };
-
-                results.Add(ceBuild);
-            }
-
-            return results;
+            return TeamCityBuildAdapter.Translate(build);  
         }
 
-        public IList<CEBuild> GetPatchBuilds()
+        public ICEBuild GetBuild(string number)
         {
-            var results = new List<CEBuild>();
+            var build = _service.GetBuildByNumber(number);
 
-            var builds = _service.GetBuilds("Advantage_Patches");
-
-            foreach (var build in builds)
-            {
-                var ceBuild = new CEBuild()
-                {
-                    id = build.id,
-                    state = build.state,
-                    status = build.status,
-                    branchName = build.branchName,
-                    number = build.number,
-                    buildTypeId = build.buildTypeId,
-                    href = build.href,
-                    webUrl = build.webUrl
-                };
-
-                results.Add(ceBuild);
-            }
-
-            return results;
+            return TeamCityBuildAdapter.Translate(build);  
         }
 
-        public IList<CEBuild> GetRunningBuilds()
+        public ICEBuildDetails GetBuildDetails(int id)
         {
-            var results = new List<CEBuild>();
+            var build = _service.GetBuildDetails(id);
 
+            return TeamCityBuildAdapter.Translate(build);  
+        }
+
+        public IList<ICEBuild> GetBuilds()
+        {
+            var builds = _service.GetBuilds("(default:any)");
+
+            return TeamCityBuildAdapter.Translate(builds);  
+        }
+
+        public IList<ICEBuild> GetBuilds(string locator)
+        {
+            var builds = _service.GetBuilds(locator);
+
+            return TeamCityBuildAdapter.Translate(builds);  
+        }
+
+        public IList<ICEBuild> GetMergeBuilds(string mergeNumber)
+        {
+            var builds = _service.GetBuilds(String.Format("locator=branch:({0}/merge)", mergeNumber));
+
+            return TeamCityBuildAdapter.Translate(builds);  
+        }
+
+        public IList<ICEBuild> GetRunningBuilds()
+        {
             var builds = _service.GetRunningBuilds();
 
-            foreach (var build in builds)
-            {
-                var ceBuild = new CEBuild()
-                {
-                    id = build.id,
-                    state = build.state,
-                    status = build.status,
-                    branchName = build.branchName,
-                    number = build.number,
-                    buildTypeId = build.buildTypeId,
-                    href = build.href,
-                    percentageComplete = build.percentageComplete,
-                    running = build.running,
-                    webUrl = build.webUrl
-                };
-
-                results.Add(ceBuild);
-            }
-
-            return results;
+            return TeamCityBuildAdapter.Translate(builds);           
         }
+        #endregion
     }
 }

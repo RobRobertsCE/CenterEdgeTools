@@ -10,49 +10,49 @@ namespace CECode.Business.Services
     /// <summary>
     /// Adapter for JiraService
     /// </summary>
-    public class CEJiraService : CECode.Business.Services.ICEJiraService
+    internal class CEJiraService : CECode.Business.Services.ICEJiraService
     {
         #region fields
         private IJiraService _service;
         #endregion
 
         #region ctor
-        public CEJiraService(string url, string userName, string password)
+        internal CEJiraService(string url, string userName, string password)
         {
             _service = new JiraService(url, userName, password);
         }
-        public CEJiraService(IJiraService service)
+        internal CEJiraService(IJiraService service)
         {
             _service = service;
         }
         #endregion
 
         #region public methods
-        public CEJiraIssue GetItem(string key)
+        public ICEJiraIssue GetItem(string key)
         {
             var issue = _service.GetIssue(key);
             return JiraItemAdapter.Translate(issue);
         }
 
-        public IList<CEJiraIssue> GetOpenItems(IList<string> projects)
+        public IList<ICEJiraIssue> GetOpenItems(IList<string> projects)
         {
             var issues = _service.GetOpenIssues(projects);
             return JiraItemAdapter.Translate(issues);
         }
 
-        public IList<CEJiraIssue> GetRAndDIssues()
+        public IList<ICEJiraIssue> GetRAndDIssues()
         {
             var issues = _service.GetRAndDIssues();
             return JiraItemAdapter.Translate(issues);
         }
 
-        public IList<CEJiraIssue> GetAMSIssues()
+        public IList<ICEJiraIssue> GetAMSIssues()
         {
             var issues = _service.GetAMSIssues();
             return JiraItemAdapter.Translate(issues);
         }
 
-        public IList<CEJiraIssue> GetByJql(string jql)
+        public IList<ICEJiraIssue> GetByJql(string jql)
         {
             var issues = _service.GetByJql(jql);
             return JiraItemAdapter.Translate(issues);

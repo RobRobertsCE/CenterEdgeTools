@@ -50,11 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CEBuild.cs" />
+    <Compile Include="CEBuildDetails.cs" />
     <Compile Include="CECommit.cs" />
     <Compile Include="CEWorkItem.cs" />
+    <Compile Include="ICEBranch.cs" />
+    <Compile Include="ICEBuild.cs" />
+    <Compile Include="ICEBuildDetails.cs" />
     <Compile Include="ICECommit.cs" />
     <Compile Include="ICEJiraIssue.cs" />
     <Compile Include="ICEPullRequest.cs" />
+    <Compile Include="ICEWorkItem.cs" />
+    <Compile Include="JiraItemAdapter.cs" />
     <Compile Include="Services\CEGitHubService.cs" />
     <Compile Include="CEJiraIssue.cs" />
     <Compile Include="Services\CEJiraService.cs" />
@@ -66,6 +72,9 @@
     <Compile Include="Services\ICEGitHubService.cs" />
     <Compile Include="Services\ICEJiraService.cs" />
     <Compile Include="Services\ICETeamCityService.cs" />
+    <Compile Include="Services\ICEWorkItemService.cs" />
+    <Compile Include="Services\ServiceFactory.cs" />
+    <Compile Include="TeamCityBuildAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
