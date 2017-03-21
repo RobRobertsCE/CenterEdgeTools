@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CECode.TeamCity;
+using CECode.TeamCity.Service;
 
 namespace CECode.Business.Services
 {

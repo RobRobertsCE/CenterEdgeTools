@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using CECode.Authentication;
 using CECode.Business;
 using CECode.Business.Services;
-using CECode.GitHub;
+using CECode.GitHub.Service;
 using CECode.Jira;
 using CECode.Jira.Service;
 using CECode.TeamCity;

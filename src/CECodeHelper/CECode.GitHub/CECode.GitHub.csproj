@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GitHubService.cs" />
-    <Compile Include="IGitHubService.cs" />
+    <Compile Include="Service\GitHubService.cs" />
+    <Compile Include="Service\IGitHubService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

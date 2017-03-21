@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CECode.GitHub
+namespace CECode.GitHub.Service
 {
     public class GitHubService : IGitHubService
     {

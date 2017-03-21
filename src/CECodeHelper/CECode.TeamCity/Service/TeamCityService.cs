@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace CECode.TeamCity
+namespace CECode.TeamCity.Service
 {
     public class TeamCityService : ITeamCityService
     {

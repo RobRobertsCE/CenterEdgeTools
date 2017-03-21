@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Octokit;
 
-namespace CECode.GitHub
+namespace CECode.GitHub.Service
 {
     public interface IGitHubService
     {

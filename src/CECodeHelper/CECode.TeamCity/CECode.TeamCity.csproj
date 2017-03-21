@@ -53,10 +53,9 @@
     <Compile Include="BuildDetails.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="EndpointBase.cs" />
-    <Compile Include="ITeamCityService.cs" />
+    <Compile Include="Service\ITeamCityService.cs" />
     <Compile Include="RunningBuild.cs" />
-    <Compile Include="TeamCity.cs" />
-    <Compile Include="TeamCityService.cs" />
+    <Compile Include="Service\TeamCityService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

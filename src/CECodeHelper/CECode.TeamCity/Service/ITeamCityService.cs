@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CECode.TeamCity
+namespace CECode.TeamCity.Service
 {
     public interface ITeamCityService
     {

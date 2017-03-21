@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CECode.GitHub;
+using CECode.GitHub.Service;
 
 namespace CECode.Business.Services
 {
