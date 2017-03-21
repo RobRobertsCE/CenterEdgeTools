@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CECode.Business.Adapters;
 using CECode.Jira.Service;
 
 namespace CECode.Business.Services
