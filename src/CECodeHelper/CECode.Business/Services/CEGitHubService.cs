@@ -156,7 +156,6 @@ namespace CECode.Business.Services
                     Status = pullRequestDetails.State.ToString(),
                     CreatedAt = pullRequestDetails.CreatedAt.UtcDateTime,
                     UpdatedAt = pullRequestDetails.UpdatedAt.UtcDateTime,
-                    //ClosedAt = pullRequestDetails.ClosedAt.HasValue ? pullRequestDetails.ClosedAt.Value.UtcDateTime : DateTime,
 
                     ChangedFiles = pullRequestDetails.ChangedFiles,
                     Additions = pullRequestDetails.Additions,
@@ -175,32 +174,46 @@ namespace CECode.Business.Services
                     IsLocked = pullRequestDetails.Locked,
                     IsMerged = pullRequestDetails.Merged,
                     IsMergeable = pullRequestDetails.Mergeable,
-                    //MergedAt = pullRequestDetails.MergedAt.HasValue ? pullRequestDetails.MergedAt.Value.UtcDateTime : null,
-                    MergedBy = pullRequestDetails.MergedBy.Name,
-
-                    User = pullRequestDetails.User.Name,
+                    User = pullRequestDetails.User.Login,
 
                     CommentCount = item.Comments,
                     CommitCount = pullRequestDetails.Commits
                 };
+                if (pullRequestDetails.Merged)
+                {
+                    cePullRequest.MergedBy = pullRequestDetails.MergedBy.Login;
+                    cePullRequest.MergedAt = pullRequestDetails.MergedAt.Value.UtcDateTime;
+                }
+                if (pullRequestDetails.ClosedAt.HasValue)
+                {
+                    cePullRequest.ClosedAt = pullRequestDetails.ClosedAt.Value.UtcDateTime;
+                }
                 if (cePullRequest.CommitCount > 0)
                 {
                     var commitSha = cePullRequest.Head;
                     for (int commitIdx = 0; commitIdx < cePullRequest.CommitCount; commitIdx++)
                     {
-                        var commit = await _service.GetPullRequestCommits(repositoryName, commitSha);
-                        var ceCommit = new CECommit()
+                        try
                         {
-                            Repo = repositoryName,
-                            Branch = cePullRequest.HeadRef,
-                            Sha = commit.Sha,
-                            Message = commit.Commit.Message,
-                            Files = commit.Files.Select(f => f.Filename).ToList()
-                        };
-                        cePullRequest.Commits.Add(ceCommit);
-                        commitSha = commit.Commit.Tree.Sha;
+                            var commit = await _service.GetPullRequestCommits(repositoryName, commitSha);
+                            var ceCommit = new CECommit()
+                            {
+                                Repo = repositoryName,
+                                Branch = cePullRequest.HeadRef,
+                                Sha = commit.Sha,
+                                Message = commit.Commit.Message,
+                                Files = commit.Files.Select(f => f.Filename).ToList()
+                            };
+                            cePullRequest.Commits.Add(ceCommit);
+                            commitSha = commit.Commit.Tree.Sha;
+                        }
+                        catch (Octokit.NotFoundException nfx)
+                        {
+
+                        }
                     }
                 }
+
                 result.Add(cePullRequest);
             }
             return result;

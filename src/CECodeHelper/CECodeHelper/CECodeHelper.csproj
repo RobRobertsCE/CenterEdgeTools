@@ -109,6 +109,13 @@
     <Compile Include="Forms\PatchFileMoverDialog.Designer.cs">
       <DependentUpon>PatchFileMoverDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="IIssueDashboard.cs" />
+    <Compile Include="IssueDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IssueDashboard.Designer.cs">
+      <DependentUpon>IssueDashboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logic\DbVersionHelper.cs" />
     <Compile Include="Logic\TaskResult.cs" />
     <Compile Include="Program.cs" />
@@ -136,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PatchFileMoverDialog.resx">
       <DependentUpon>PatchFileMoverDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IssueDashboard.resx">
+      <DependentUpon>IssueDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -11,6 +11,7 @@ namespace CECode.Business
         DateTime? Created { get; set; }
         IList<string> FixVersions { get; set; }
         string ItemNumber { get; set; }
+        int IssueNumber { get; }
         JiraStatus ItemStatus { get; set; }
         JiraIssueType ItemType { get; set; }
         string Key { get; set; }

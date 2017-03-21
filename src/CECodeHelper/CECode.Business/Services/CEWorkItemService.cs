@@ -38,6 +38,31 @@ namespace CECode.Business.Services
         #endregion
 
         #region public methods
+        public async Task<IList<ICEWorkItem>> GetWorkItems(string gitHubRepositoryName, string jiraProjectName)
+        {
+            var workItems = new List<ICEWorkItem>();
+
+            var jiraIssues = GetInProgressIssues();
+
+            foreach (var jiraIssue in jiraIssues)
+            {
+                var workItem = new CEWorkItem() { JiraIssue = jiraIssue };
+                try
+                {
+                    var pullRequestTask = await GetPullRequestsByJiraIssue(gitHubRepositoryName, jiraIssue.IssueNumber.ToString());
+                    workItem.PullRequests = pullRequestTask;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+
+                workItems.Add(workItem);
+            }
+
+            return workItems;
+        }
+
         public async Task<ICEWorkItem> GetWorkItem(string gitHubRepositoryName, string jiraProjectName, string jiraIssueNumber)
         {
             var workItem = new CEWorkItem();
@@ -47,7 +72,7 @@ namespace CECode.Business.Services
             var pullRequestTask = await GetPullRequestsByJiraIssue(gitHubRepositoryName, jiraIssueNumber);
 
             workItem.PullRequests = pullRequestTask;
-            
+
             return workItem;
         }
         #endregion
@@ -57,6 +82,21 @@ namespace CECode.Business.Services
         {
             var jiraIssueKey = String.Format("{0}-{1}", jiraProjectName, jiraIssueNumber);
             return _jiraService.GetItem(jiraIssueKey);
+        }
+
+        protected virtual IList<ICEJiraIssue> GetInProgressIssues()
+        {
+            return _jiraService.GetInProgressIssues();
+        }
+
+        protected virtual IList<ICEJiraIssue> GetJiraIssues(string jiraProjectName)
+        {
+            return _jiraService.GetOpenItems(new List<string>() { jiraProjectName });
+        }
+
+        protected virtual IList<ICEJiraIssue> GetJiraIssues(string jiraProjectName, int count, int start)
+        {
+            return _jiraService.GetItems(jiraProjectName, count, start);
         }
 
         protected async virtual Task<IList<ICEPullRequest>> GetPullRequestsByJiraIssue(string gitHubRepositoryName, string jiraIssueNumber)

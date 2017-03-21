@@ -41,6 +41,12 @@ namespace CECode.Business.Services
             return JiraItemAdapter.Translate(issues);
         }
 
+        public IList<ICEJiraIssue> GetItems(string jiraProjectName, int count, int start)
+        {
+            var issues = _service.GetIssues(new List<string>() { jiraProjectName }, count, start);
+            return JiraItemAdapter.Translate(issues);
+        }
+
         public IList<ICEJiraIssue> GetRAndDIssues()
         {
             var issues = _service.GetRAndDIssues();
@@ -56,6 +62,11 @@ namespace CECode.Business.Services
         public IList<ICEJiraIssue> GetByJql(string jql)
         {
             var issues = _service.GetByJql(jql);
+            return JiraItemAdapter.Translate(issues);
+        }
+        public IList<ICEJiraIssue> GetInProgressIssues()
+        {
+            var issues = _service.GetInProgressIssues();
             return JiraItemAdapter.Translate(issues);
         }
 
