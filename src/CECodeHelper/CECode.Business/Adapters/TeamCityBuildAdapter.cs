@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using CECode.TeamCity;
 
-namespace CECode.Business
+namespace CECode.Business.Adapters
 {
     internal class TeamCityBuildAdapter
     {

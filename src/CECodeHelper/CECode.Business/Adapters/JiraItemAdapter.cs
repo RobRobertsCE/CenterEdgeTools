@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CECode.Jira;
 
-namespace CECode.Business
+namespace CECode.Business.Adapters
 {
     internal class JiraItemAdapter
     {

@@ -60,7 +60,7 @@
     <Compile Include="ICEJiraIssue.cs" />
     <Compile Include="ICEPullRequest.cs" />
     <Compile Include="ICEWorkItem.cs" />
-    <Compile Include="JiraItemAdapter.cs" />
+    <Compile Include="Adapters\JiraItemAdapter.cs" />
     <Compile Include="Services\CEGitHubService.cs" />
     <Compile Include="CEJiraIssue.cs" />
     <Compile Include="Services\CEJiraService.cs" />
@@ -74,7 +74,7 @@
     <Compile Include="Services\ICETeamCityService.cs" />
     <Compile Include="Services\ICEWorkItemService.cs" />
     <Compile Include="Services\ServiceFactory.cs" />
-    <Compile Include="TeamCityBuildAdapter.cs" />
+    <Compile Include="Adapters\TeamCityBuildAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
