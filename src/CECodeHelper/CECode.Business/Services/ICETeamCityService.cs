@@ -6,9 +6,9 @@ namespace CECode.Business.Services
     {
         ICEBuild GetAdvantageBuild();
         ICEBuild GetAdvantagePatches();
-        ICEBuild GetBuild(int id);
+        ICEBuild GetBuild(long id);
         ICEBuild GetBuild(string number);
-        ICEBuildDetails GetBuildDetails(int id);
+        ICEBuildDetails GetBuildDetails(long id);
         IList<ICEBuild> GetBuilds();
         IList<ICEBuild> GetBuilds(string locator);
         IList<ICEBuild> GetMergeBuilds(string mergeNumber);

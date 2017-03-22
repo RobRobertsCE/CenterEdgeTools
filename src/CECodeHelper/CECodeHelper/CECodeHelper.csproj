@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CECodeHelper</RootNamespace>
     <AssemblyName>CECodeHelper</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +48,7 @@
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.105.2.3\lib\net451\RestSharp.dll</HintPath>
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -179,6 +180,10 @@
     <ProjectReference Include="..\CECode.Authentication\CECode.Authentication.csproj">
       <Project>{ac4e4b9f-7b15-49e2-a370-3a076a47712b}</Project>
       <Name>CECode.Authentication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.Branches\CECode.Branches.csproj">
+      <Project>{730efdcb-9652-4032-8c05-d323ee1e8b9d}</Project>
+      <Name>CECode.Branches</Name>
     </ProjectReference>
     <ProjectReference Include="..\CECode.BranchVersionHelper\CECode.BranchHelper.csproj">
       <Project>{a88cf59a-821a-47e6-8035-c0a0530a79d2}</Project>

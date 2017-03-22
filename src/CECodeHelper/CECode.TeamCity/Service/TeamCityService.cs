@@ -44,7 +44,7 @@ namespace CECode.TeamCity.Service
             return GetResponseData<Build>(uri);
         }
 
-        public Build GetBuildById(int id)
+        public Build GetBuildById(long id)
         {
             var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);          
             Console.WriteLine(url);
@@ -54,10 +54,13 @@ namespace CECode.TeamCity.Service
 
         public Build GetBuildByNumber(string number)
         {
-            var url = Build.GetListUrl() +  "/" + String.Format("number:{0}", number);          
+            //var url = Build.GetListUrl() +  "/" + String.Format("?locator=number:{0}", number);
+            var url = Build.GetListUrl() + "/" + String.Format("?locator=branch:default:any,name=({0}/merge)", number);
             Console.WriteLine(url);
             var uri = new Uri(url);
-            return GetResponseData<Build>(uri);
+            var build = GetResponseData<Build>(uri);
+
+            return build;
         }
 
         public IList<RunningBuild.Build> GetBuilds(string locator)
@@ -103,7 +106,6 @@ namespace CECode.TeamCity.Service
             {
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-
 
             return results;
         }
@@ -154,7 +156,7 @@ namespace CECode.TeamCity.Service
             return GetBuildDetails(build.id);
         }
 
-        public BuildDetails GetBuildDetails(int id)
+        public BuildDetails GetBuildDetails(long id)
         {
             var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);
             Console.WriteLine(url);

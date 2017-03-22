@@ -207,7 +207,7 @@ namespace CECode.Business.Services
                             cePullRequest.Commits.Add(ceCommit);
                             commitSha = commit.Commit.Tree.Sha;
                         }
-                        catch (Octokit.NotFoundException nfx)
+                        catch (Octokit.NotFoundException)
                         {
 
                         }

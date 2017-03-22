@@ -8,7 +8,6 @@ namespace CECode.Business
         public ICEJiraIssue JiraIssue { get; set; }
         public IList<ICEPullRequest> PullRequests { get; set; }
         public IList<ICEBranch> Branches { get; set; }
-        public IList<ICEBuild> Builds { get; set; }
         #endregion
 
         #region ctor
@@ -16,7 +15,6 @@ namespace CECode.Business
         {
             PullRequests = new List<ICEPullRequest>();
             Branches = new List<ICEBranch>();
-            Builds = new List<ICEBuild>();
         }
         #endregion
     }

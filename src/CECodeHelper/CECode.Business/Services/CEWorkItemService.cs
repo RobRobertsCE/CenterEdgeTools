@@ -32,12 +32,31 @@ namespace CECode.Business.Services
             var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
             _gitHubService = new CEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
 
-            var teamCityProfile = AccountProfileHelper.GetGitHubAccountInfo();
+            var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
             _teamCityService = new CETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
         }
         #endregion
 
         #region public methods
+        // Jira 
+        public async Task<IList<ICEWorkItem>> GetWorkItems(string jiraProjectName)
+        {
+            return await Task.Run(() =>
+                {
+                    var workItems = new List<ICEWorkItem>();
+
+                    var jiraIssues = GetInProgressIssues();
+
+                    foreach (var jiraIssue in jiraIssues)
+                    {
+                        var workItem = new CEWorkItem() { JiraIssue = jiraIssue };
+                        workItems.Add(workItem);
+                    }
+
+                    return workItems;
+                });
+        }
+
         public async Task<IList<ICEWorkItem>> GetWorkItems(string gitHubRepositoryName, string jiraProjectName)
         {
             var workItems = new List<ICEWorkItem>();
@@ -75,9 +94,62 @@ namespace CECode.Business.Services
 
             return workItem;
         }
+
+        // GitHub 
+        public async Task UpdateCommits(IList<ICEPullRequest> pullRequests, string gitHubProjectName)
+        {
+            foreach (var pullRequest in pullRequests)
+            {
+                await UpdateCommit(pullRequest, gitHubProjectName);
+            }
+        }
+
+        public async Task UpdateCommit(ICEPullRequest pullRequest, string gitHubProjectName)
+        {
+            pullRequest.Commits = await GetCommitsByPullRequest(gitHubProjectName, pullRequest.Sha);
+        }
+
+        public async Task UpdatePullRequests(IList<ICEWorkItem> workItems, string gitHubProjectName)
+        {
+            foreach (var workItem in workItems)
+            {
+                await UpdatePullRequests(workItem, gitHubProjectName);
+            }
+        }
+
+        public async Task UpdatePullRequests(ICEWorkItem workItem, string gitHubProjectName)
+        {
+            workItem.PullRequests = await GetPullRequestsByJiraIssue(gitHubProjectName, workItem.JiraIssue.IssueNumber.ToString());
+        }
+
+        // TeamCity 
+        public async Task UpdateBuilds(ICEWorkItem workItem)
+        {
+            foreach (var pullRequest in workItem.PullRequests)
+            {
+                await UpdateBuild(pullRequest);
+            }
+        }
+
+        public async Task UpdateBuild(ICEPullRequest pullRequest)
+        {
+            await Task.Run(() =>
+                {
+                    pullRequest.Builds = GetBuild(pullRequest.Number.ToString());
+                });
+        }
+
+        public async Task<ICEBuildDetails> GetBuildDetails(ICEPullRequest pullRequest)
+        {
+            return await Task<ICEBuildDetails>.Run(() =>
+            {
+                return GetBuildDetails(pullRequest.Id);
+            });
+        }
         #endregion
 
         #region private methods
+        // Jira 
         protected virtual ICEJiraIssue GetJiraIssue(string jiraProjectName, string jiraIssueNumber)
         {
             var jiraIssueKey = String.Format("{0}-{1}", jiraProjectName, jiraIssueNumber);
@@ -99,6 +171,7 @@ namespace CECode.Business.Services
             return _jiraService.GetItems(jiraProjectName, count, start);
         }
 
+        // GitHub 
         protected async virtual Task<IList<ICEPullRequest>> GetPullRequestsByJiraIssue(string gitHubRepositoryName, string jiraIssueNumber)
         {
             var pullRequestsResult = await _gitHubService.SearchPullRequests(gitHubRepositoryName, jiraIssueNumber);
@@ -117,6 +190,25 @@ namespace CECode.Business.Services
             else
                 return new List<ICECommit>();
         }
+
+        // TeamCity 
+        protected virtual IList<ICEBuild> GetBuild(string number)
+        {
+            return _teamCityService.GetMergeBuilds(number);
+        }
+
+        protected virtual ICEBuild GetBuild(long pullRequestId)
+        {
+            return _teamCityService.GetBuild(pullRequestId);
+        }
+
+        protected virtual ICEBuildDetails GetBuildDetails(long pullRequestId)
+        {
+            return _teamCityService.GetBuildDetails(pullRequestId);
+        }
         #endregion
+
+
+
     }
 }

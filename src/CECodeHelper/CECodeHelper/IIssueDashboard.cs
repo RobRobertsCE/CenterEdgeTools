@@ -7,5 +7,6 @@ namespace CECodeHelper
     {
         void DisplayMessage(string message);
         void ExceptionHandler(Exception ex);
+        void DisplayAccountsDialog();
     }
 }

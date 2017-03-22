@@ -38,7 +38,7 @@ namespace CECode.Business.Services
             return TeamCityBuildAdapter.Translate(build);  
         }
 
-        public ICEBuild GetBuild(int id)
+        public ICEBuild GetBuild(long id)
         {
             var build = _service.GetBuildById(id);
 
@@ -52,7 +52,7 @@ namespace CECode.Business.Services
             return TeamCityBuildAdapter.Translate(build);  
         }
 
-        public ICEBuildDetails GetBuildDetails(int id)
+        public ICEBuildDetails GetBuildDetails(long id)
         {
             var build = _service.GetBuildDetails(id);
 

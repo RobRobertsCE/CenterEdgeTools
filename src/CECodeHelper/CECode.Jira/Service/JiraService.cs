@@ -50,7 +50,7 @@ namespace CECode.Jira.Service
         public IList<Issue> GetInProgressIssues()
         {
             // var issueList = _jira.GetIssuesFromJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) AND (Updated > -1d) ORDER BY Rank ASC", 100, 0);
-            return _jira.GetIssuesFromJql("project IN (ADVANTAGE) AND sprint IN OpenSprints() AND status IN (\"In Progress\", QA) AND (cf[11200] IN (\"AMS\", \"R&D\")) ORDER BY created DESC", 100, 0).ToList();
+            return _jira.GetIssuesFromJql("project IN (ADVANTAGE) AND sprint IN OpenSprints() AND status IN (\"In Progress\", QA) AND (cf[11200] IN (\"AMS\", \"R&D\")) ORDER BY created DESC", 5, 0).ToList();
         }
 
         public IList<Issue> GetByJql(string jql)

@@ -7,7 +7,6 @@ namespace CECode.Business
     {
         ICEJiraIssue JiraIssue { get; set; }
         IList<ICEBranch> Branches { get; set; }
-        IList<ICEBuild> Builds { get; set; }
         IList<ICEPullRequest> PullRequests { get; set; }
     }
 }

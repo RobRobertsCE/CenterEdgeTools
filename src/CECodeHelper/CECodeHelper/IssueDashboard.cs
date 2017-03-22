@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CECode.Branches;
 
 namespace CECodeHelper
 {
@@ -17,6 +18,9 @@ namespace CECodeHelper
         #region events
         delegate void SafeDisplayMessageDelegate(string message);
         delegate void SafeExceptionHandlerDelegate(Exception ex);
+        delegate void SafeListUpdateDelegate(IList<ICEWorkItem> items);
+        delegate void SafePullRequestUpdateDelegate(IList<ICEPullRequest> pullRequests);
+        delegate void SafeBuildUpdateDelegate(IList<ICEBuild> builds);
         #endregion
 
         #region fields
@@ -49,7 +53,7 @@ namespace CECodeHelper
         }
         #endregion
 
-        #region common
+        #region public methods
         // TODO: Implement logging
         public virtual void ExceptionHandler(Exception ex)
         {
@@ -77,40 +81,117 @@ namespace CECodeHelper
                 string formattedMessage = String.Format("{0}: {1}\r\n", DateTime.Now, message);
                 txtMessages.AppendText(formattedMessage);
             }
+        }       
+        public void DisplayAccountsDialog()
+        {
+            var dialog = new AccountsDialog();
+            dialog.ShowDialog(this);
         }
         #endregion
 
-        public void DisplayPullRequests()
+        #region protected methods
+        protected virtual void UpdateListView(IList<ICEWorkItem> items)
         {
+            if (this.lstIssues.InvokeRequired)
+            {
+                SafeListUpdateDelegate d = new SafeListUpdateDelegate(UpdateListView);
+                Invoke(d, new object[] { items });
+            }
+            else
+            {
+                lstIssues.Items.Clear();
+                foreach (var item in _presenter.Items)
+                {
+                    var lvi = new ListViewItem(item.JiraIssue.ItemNumber);
+                    if (item.PullRequests.Count > 0)
+                        lvi.SubItems.Add(item.PullRequests[0].Number.ToString());
+                    else
+                        lvi.SubItems.Add("-");
+                    lvi.SubItems.Add(item.JiraIssue.Key);
+                    lvi.SubItems.Add(item.JiraIssue.Team);
+                    lvi.SubItems.Add(item.JiraIssue.ItemStatus.ToString());
+                    lvi.SubItems.Add(item.JiraIssue.Summary);
+                    if (item.PullRequests.Count > 0)
+                        lvi.SubItems.Add(item.PullRequests.Count.ToString());
+                    else
+                        lvi.SubItems.Add("-");
 
+                    lvi.Tag = item;
+                    lstIssues.Items.Add(lvi);
+                }
+            }
         }
 
+        protected virtual void UpdatePullRequestGrid(IList<ICEPullRequest> pullRequests)
+        {
+            if (this.dgvPullRequest.InvokeRequired)
+            {
+                SafePullRequestUpdateDelegate d = new SafePullRequestUpdateDelegate(UpdatePullRequestGrid);
+                Invoke(d, new object[] { pullRequests });
+            }
+            else
+            {
+                dgvPullRequest.DataSource = pullRequests;
+            }
+        }
+
+        protected virtual void UpdateBuildGrid(IList<ICEBuild> builds)
+        {
+            if (this.dgvPullRequest.InvokeRequired)
+            {
+                SafeBuildUpdateDelegate d = new SafeBuildUpdateDelegate(UpdateBuildGrid);
+                Invoke(d, new object[] { builds });
+            }
+            else
+            {
+                dgvBuilds.DataSource = builds;
+            }
+        }
+
+        protected virtual void UpdatePullRequests()
+        {
+            if (lstIssues.SelectedItems.Count == 0) return;
+            var selected = (ICEWorkItem)lstIssues.SelectedItems[0].Tag;
+            _presenter.UpdatePullRequests(selected);
+        }
+
+        protected virtual void UpdatePullRequestBuilds()
+        {
+            if (this.dgvPullRequest.SelectedRows.Count == 0) return;
+            var selected = (ICEPullRequest)this.dgvPullRequest.SelectedRows[0].DataBoundItem;
+            _presenter.UpdateBuilds(selected);
+        }
+
+        protected async virtual void UpdateIssueList()
+        {
+            await _presenter.UpdateIssues();
+        }
+        #endregion
+
+        #region event handlers
         private void _presenter_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             try
             {
                 if (e.PropertyName == "Items")
                 {
-                    lstIssues.Items.Clear();
-                    foreach (var item in _presenter.Items)
-                    {
-                        var lvi = new ListViewItem(item.JiraIssue.ItemNumber);
-                        lvi.SubItems.Add(item.JiraIssue.Key);
-                        lvi.SubItems.Add(item.JiraIssue.Team);
-                        lvi.SubItems.Add(item.JiraIssue.ItemStatus.ToString());
-                        lvi.SubItems.Add(item.JiraIssue.Summary);
-                        if (item.PullRequests.Count > 0)
-                            lvi.SubItems.Add(item.PullRequests.Count.ToString());
-                        else
-                            lvi.SubItems.Add("-");
+                    UpdateListView(_presenter.Items);
 
-                        lvi.Tag = item;
-                        lstIssues.Items.Add(lvi);
-                    }
+                    //updatePullRequestsToolStripMenuItem.Enabled = (_presenter.Items.Count > 0);
+                    //btnUpdatePullRequests.Enabled = (_presenter.Items.Count > 0);
+                    //updateBuildsToolStripMenuItem.Enabled = (_presenter.PullRequests.Count > 0);
+                    //btnUpdateBuilds.Enabled = (_presenter.PullRequests.Count > 0);
                 }
                 else if (e.PropertyName == "PullRequests")
                 {
-                    dgvPullRequest.DataSource = _presenter.PullRequests;
+                    UpdatePullRequestGrid(_presenter.PullRequests);
+
+                    //updateBuildsToolStripMenuItem.Enabled = (_presenter.PullRequests.Count > 0);
+                    //btnUpdateBuilds.Enabled = (_presenter.PullRequests.Count > 0);
+                }
+                else if (e.PropertyName == "Builds")
+                {
+                    UpdateBuildGrid(_presenter.Builds);
                 }
             }
             catch (Exception ex)
@@ -126,7 +207,7 @@ namespace CECodeHelper
 
         private void btnUpdateIssues_Click(object sender, EventArgs e)
         {
-            _presenter.UpdateIssues();
+            UpdateIssueList();
         }
 
         private void lstIssues_DoubleClick(object sender, EventArgs e)
@@ -135,6 +216,53 @@ namespace CECodeHelper
             var selected = (ICEWorkItem)lstIssues.SelectedItems[0].Tag;
             _presenter.WorkItemSelected(selected);
         }
+
+        private void accountsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _presenter.DisplayAccountsDialog();
+        }
+
+        private void lstIssues_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updatePullRequestsToolStripMenuItem.Enabled = (lstIssues.SelectedItems.Count > 0);
+            btnUpdatePullRequests.Enabled = (lstIssues.SelectedItems.Count > 0);
+            updateBuildsToolStripMenuItem.Enabled = (lstIssues.SelectedItems.Count > 0);
+            btnUpdateBuilds.Enabled = (lstIssues.SelectedItems.Count > 0);
+
+            if (lstIssues.SelectedItems.Count == 0) return;
+            var selected = (ICEWorkItem)lstIssues.SelectedItems[0].Tag;
+            _presenter.WorkItemSelected(selected);
+        }
+
+        #region work item context menu
+        private void updatePullRequestsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdatePullRequests();
+        }
+
+        private void updateBuildsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdatePullRequestBuilds();
+        }
+        #endregion
+
+        #region pull request context menu
+        private void updateBuildsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            UpdatePullRequestBuilds();
+        }
+        #endregion
+
+        private void btnUpdatePullRequests_Click(object sender, EventArgs e)
+        {
+            UpdatePullRequests();
+        }
+
+        private void btnUpdateBuilds_Click(object sender, EventArgs e)
+        {
+            UpdatePullRequestBuilds();
+        }
+        #endregion
     }
 
     public class IssueDashboardPresenter : INotifyPropertyChanged
@@ -154,6 +282,7 @@ namespace CECodeHelper
         ICEWorkItemService _workItemService;
         IIssueDashboard _window;
         DateTime _lastUpdate;
+        BranchMap _currentBranchMap;
         #endregion
 
         #region properties
@@ -167,7 +296,7 @@ namespace CECodeHelper
             set
             {
                 _items = value;
-                OnPropertyChanged(nameof(Items));
+                OnPropertyChanged("Items");
             }
         }
 
@@ -181,7 +310,21 @@ namespace CECodeHelper
             set
             {
                 _pullRequests = value;
-                OnPropertyChanged(nameof(PullRequests));
+                OnPropertyChanged("PullRequests");
+            }
+        }
+
+        private IList<ICEBuild> _builds = new List<ICEBuild>();
+        public IList<ICEBuild> Builds
+        {
+            get
+            {
+                return _builds;
+            }
+            set
+            {
+                _builds = value;
+                OnPropertyChanged("Builds");
             }
         }
         #endregion
@@ -200,7 +343,13 @@ namespace CECodeHelper
         {
             try
             {
-                // UpdateIssues();
+                var maps = BranchMapFactory.GetBranchMaps(DateTime.Now);
+                _currentBranchMap = maps.FirstOrDefault(m => m.Name == "Advantage");
+                Console.WriteLine("Version on {0} is {1}", _currentBranchMap.TargetDate.ToString(), _currentBranchMap.Version.ToString());
+                foreach (var branch in _currentBranchMap.Branches)
+                {
+                    Console.WriteLine("Branch {0}: {1}", branch.Name, branch.Version.ToString());
+                }
             }
             catch (Exception ex)
             {
@@ -209,28 +358,50 @@ namespace CECodeHelper
         }
         #endregion
 
-        public async virtual void UpdateIssues()
+        #region public methods
+        public async virtual Task UpdateIssues()
+        {
+            await Task.Run(() =>
+                   {
+                       try
+                       {
+                           var updatedItems = _workItemService.GetWorkItems("Advantage", "Advantage");
+
+                           foreach (var item in updatedItems.Result)
+                           {
+                               if (this.Items.Any(i => i.JiraIssue.ItemNumber == item.JiraIssue.ItemNumber))
+                               {
+                                   // TODO: update it
+                               }
+                               else
+                               {
+                                   // add it
+                                   Items.Add(item);
+                               }
+                           }
+
+                           OnPropertyChanged("Items");
+
+                           _lastUpdate = DateTime.Now;
+                       }
+                       catch (Exception ex)
+                       {
+                           ExceptionHandler(ex);
+                       }
+                   });
+        }
+
+        public virtual void WorkItemSelected(ICEWorkItem workItem)
+        {
+            PullRequests = workItem.PullRequests;
+            Builds = workItem.PullRequests.SelectMany(p => p.Builds).ToList();
+        }
+
+        public virtual void DisplayAccountsDialog()
         {
             try
             {
-                var updatedItems = await _workItemService.GetWorkItems("Advantage", "Advantage");
-
-                foreach (var item in updatedItems)
-                {
-                    if (this.Items.Any(i => i.JiraIssue.ItemNumber == item.JiraIssue.ItemNumber))
-                    {
-                        // TODO: update it
-                    }
-                    else
-                    {
-                        // add it
-                        Items.Add(item);
-                    }
-                }
-
-                OnPropertyChanged(nameof(Items));
-
-                _lastUpdate = DateTime.Now;
+                _window.DisplayAccountsDialog();
             }
             catch (Exception ex)
             {
@@ -238,11 +409,35 @@ namespace CECodeHelper
             }
         }
 
-        public void WorkItemSelected(ICEWorkItem workItem)
+        public virtual void UpdatePullRequests(ICEWorkItem workItem)
         {
-            PullRequests = workItem.PullRequests;
+            try
+            {
+                _workItemService.UpdatePullRequests(workItem, _currentBranchMap.GitHubProject);
+                PullRequests = workItem.PullRequests;
+                Builds = new List<ICEBuild>();
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler(ex);
+            }
         }
 
+        public virtual void UpdateBuilds(ICEPullRequest pullRequest)
+        {
+            try
+            {
+                _workItemService.UpdateBuild(pullRequest);
+                Builds = pullRequest.Builds;
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler(ex);
+            }
+        } 
+        #endregion
+
+        #region protected virtual methods
         protected virtual void ExceptionHandler(Exception ex)
         {
             _window.ExceptionHandler(ex);
@@ -251,6 +446,7 @@ namespace CECodeHelper
         protected virtual void DisplayMessage(string message)
         {
             _window.DisplayMessage(message);
-        }
+        } 
+        #endregion
     }
 }
