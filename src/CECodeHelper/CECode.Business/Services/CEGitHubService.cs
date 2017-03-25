@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CECode.GitHub.Service;
+using Octokit;
 
 namespace CECode.Business.Services
 {
@@ -26,36 +27,47 @@ namespace CECode.Business.Services
         #endregion
 
         #region public methods
+        // Branches 
         public async Task<IList<ICEBranch>> GetBranches(string repositoryName)
         {
             return await GetBranchesInternal(repositoryName);
         }
 
-        public async Task<IList<ICECommit>> GetCommits(string repoName, string branchName)
+        // Pull Requests 
+        public async Task<IList<ICEPullRequest>> SearchPullRequests(PullRequestSearchArgs e)
         {
-            return await GetCommitsInternal(repoName, branchName);
+            return await SearchPullRequestsInternal(e);
         }
 
+        public async Task<IList<ICEPullRequest>> SearchOpenPullRequests(string repositoryName)
+        {
+            return await SearchOpenPullRequestsInternal(repositoryName);
+        }      
+        public async Task<IList<ICEPullRequest>> SearchPullRequests(string repositoryName)
+        {
+            return await SearchPullRequests(new List<string> { repositoryName });
+        }
+        public async Task<IList<ICEPullRequest>> SearchPullRequests(IList<string> repositoryNames)
+        {
+            return await SearchPullRequestsInternal(ItemState.Closed | ItemState.Open, repositoryNames);
+        }
+        public async Task<IList<ICEPullRequest>> SearchPullRequests(string repositoryName, string branchName)
+        {
+            return await SearchPullRequestsInternal(repositoryName, branchName);
+        }
+        public async Task<IList<ICEPullRequest>> SearchPullRequestsByJiraKey(string repositoryName, string jiraIssueKey)
+        {
+            return await SearchPullRequestsByJiraKeyInternal(repositoryName, jiraIssueKey);
+        }
+        // Commits 
+        public async Task<IList<ICECommit>> GetCommits(string repositoryName, string branchName)
+        {
+            return await GetCommitsInternal(repositoryName, branchName);
+        }
         public async Task<ICECommit> GetPullRequestCommits(string repositoryName, string sha)
         {
             return await GetPullRequestCommitsInternal(repositoryName, sha);
         }
-
-        public async Task<IList<ICEPullRequest>> GetPullRequests(string repoName, string branchName)
-        {
-            return await GetPullRequestsInternal(repoName, branchName);
-        }
-
-        public async Task<IList<ICEPullRequest>> SearchPullRequests(IList<string> repoNames)
-        {
-            return await GetPullRequestsInternal(repoNames);
-        }
-
-        public async Task<IList<ICEPullRequest>> SearchPullRequests(string repoName, string jiraIssueKey)
-        {
-            return await GetPullRequestsByJiraKeyInternal(repoName, jiraIssueKey);
-        }
-
         public async Task<bool> IsCommitInBranch(string repositoryName, string branchName, string sha)
         {
             return await CheckCommitInBranch(repositoryName, branchName, sha);
@@ -63,6 +75,7 @@ namespace CECode.Business.Services
         #endregion
 
         #region private methods
+        // Branches 
         private async Task<IList<ICEBranch>> GetBranchesInternal(string repositoryName)
         {
             var result = new List<ICEBranch>();
@@ -83,31 +96,38 @@ namespace CECode.Business.Services
 
             return result;
         }
-
-        private async Task<IList<ICECommit>> GetCommitsInternal(string repositoryName, string branchName)
+        // Pull Requests 
+        private async Task<IList<ICEPullRequest>> SearchOpenPullRequestsInternal(string repositoryName)
         {
-            var result = new List<ICECommit>();
+            return await SearchPullRequestsInternal(ItemState.Open, new List<string>() { repositoryName });
+        }
+        private async Task<IList<ICEPullRequest>> SearchPullRequestsInternal(ItemState? state, IList<string> repositoryNames)
+        {
+            var result = new List<ICEPullRequest>();
 
-            var commits = await _service.GetCommits(repositoryName, branchName);
+            var searchResults = await _service.SearchPullRequests(state, repositoryNames);
 
-            foreach (var commit in commits)
+            foreach (var item in searchResults.Items)
             {
-                var ceCommit = new CECommit()
+                var cePullRequest = new CEPullRequest()
                 {
-                    Repo = repositoryName,
-                    Branch = branchName,
-                    Sha = commit.Sha,
-                    Message = commit.Commit.Message,
-                    Files = commit.Files.Select(f => f.Filename).ToList()
+                    Repo = item.Repository.Name,
+                    Sha = item.PullRequest.Head.Sha,
+                    Id = item.PullRequest.Id,
+                    Number = item.PullRequest.Number,
+                    Title = item.PullRequest.Title,
+                    Status = item.PullRequest.State.ToString(),
+                    IsLocked = item.PullRequest.Locked,
+                    IsMerged = item.PullRequest.Merged,
+                    CommentCount = item.PullRequest.Comments,
+                    CommitCount = item.PullRequest.Commits
                 };
-
-                result.Add(ceCommit);
+                result.Add(cePullRequest);
             }
 
             return result;
         }
-
-        private async Task<IList<ICEPullRequest>> GetPullRequestsInternal(string repositoryName, string branchName)
+        private async Task<IList<ICEPullRequest>> SearchPullRequestsInternal(string repositoryName, string branchName)
         {
             var result = new List<ICEPullRequest>();
 
@@ -118,7 +138,6 @@ namespace CECode.Business.Services
                 var cePullRequest = new CEPullRequest()
                 {
                     Repo = repositoryName,
-                    Branch = branchName,
                     Sha = pullRequest.Head.Sha,
                     Id = pullRequest.Id,
                     Number = pullRequest.Number,
@@ -134,8 +153,7 @@ namespace CECode.Business.Services
 
             return result;
         }
-
-        private async Task<IList<ICEPullRequest>> GetPullRequestsByJiraKeyInternal(string repositoryName, string jiraIssueKey)
+        private async Task<IList<ICEPullRequest>> SearchPullRequestsByJiraKeyInternal(string repositoryName, string jiraIssueKey)
         {
             var result = new List<ICEPullRequest>();
 
@@ -151,7 +169,6 @@ namespace CECode.Business.Services
                     Id = pullRequestDetails.Id,
                     Number = pullRequestDetails.Number,
                     Sha = pullRequestDetails.Base.Sha,
-                    Branch = pullRequestDetails.Base.Ref,
                     Title = pullRequestDetails.Title,
                     Status = pullRequestDetails.State.ToString(),
                     CreatedAt = pullRequestDetails.CreatedAt.UtcDateTime,
@@ -219,40 +236,77 @@ namespace CECode.Business.Services
             return result;
         }
 
-        private async Task<ICECommit> GetPullRequestCommitsInternal(string repositoryName, string sha)
-        {
-            var result = await _service.GetPullRequestCommits(repositoryName, sha);
-            return (ICECommit)result;
-        }
 
-        private async Task<IList<ICEPullRequest>> GetPullRequestsInternal(IList<string> repositoryNames)
+
+        private async Task<IList<ICEPullRequest>> SearchPullRequestsInternal(PullRequestSearchArgs e)
         {
             var result = new List<ICEPullRequest>();
 
-            var searchResults = await _service.SearchPullRequests(repositoryNames);
+            var request = new PullRequestRequest
+            {
+                State = (ItemStateFilter)e.State,
+                Base = e.Branch,
+            };
 
-            foreach (var item in searchResults.Items)
+            var options = new ApiOptions
+            {
+                PageCount = e.PageCount,
+                StartPage = e.StartPage,
+                PageSize = e.PageSize
+            };
+
+            var pullRequests = await _service.SearchPullRequests(e.Repository, request, options);
+
+            foreach (var pullRequest in pullRequests)
             {
                 var cePullRequest = new CEPullRequest()
                 {
-                    Repo = item.Repository.Name,
-                    Branch = item.PullRequest.Head.Ref,
-                    Sha = item.PullRequest.Head.Sha,
-                    Id = item.PullRequest.Id,
-                    Number = item.PullRequest.Number,
-                    Title = item.PullRequest.Title,
-                    Status = item.PullRequest.State.ToString(),
-                    IsLocked = item.PullRequest.Locked,
-                    IsMerged = item.PullRequest.Merged,
-                    CommentCount = item.PullRequest.Comments,
-                    CommitCount = item.PullRequest.Commits
+                    Repo = e.Repository,
+                    Sha = pullRequest.Head.Sha,
+                    Id = pullRequest.Id,
+                    Number = pullRequest.Number,
+                    Title = pullRequest.Title,
+                    Status = pullRequest.State.ToString(),
+                    IsLocked = pullRequest.Locked,
+                    IsMerged = pullRequest.Merged,
+                    CommentCount = pullRequest.Comments,
+                    CommitCount = pullRequest.Commits,
+                    UpdatedAt = pullRequest.UpdatedAt.DateTime,
+                    CreatedAt = pullRequest.CreatedAt.DateTime
                 };
                 result.Add(cePullRequest);
             }
 
             return result;
         }
+        // Commits 
+        private async Task<IList<ICECommit>> GetCommitsInternal(string repositoryName, string branchName)
+        {
+            var result = new List<ICECommit>();
 
+            var commits = await _service.GetCommits(repositoryName, branchName);
+
+            foreach (var commit in commits)
+            {
+                var ceCommit = new CECommit()
+                {
+                    Repo = repositoryName,
+                    Branch = branchName,
+                    Sha = commit.Sha,
+                    Message = commit.Commit.Message,
+                    Files = commit.Files.Select(f => f.Filename).ToList()
+                };
+
+                result.Add(ceCommit);
+            }
+
+            return result;
+        }
+        private async Task<ICECommit> GetPullRequestCommitsInternal(string repositoryName, string sha)
+        {
+            var result = await _service.GetPullRequestCommits(repositoryName, sha);
+            return (ICECommit)result;
+        }
         private async Task<bool> CheckCommitInBranch(string repositoryName, string branchName, string sha)
         {
             var result = await _service.CheckCommitInBranch(repositoryName, branchName, sha);

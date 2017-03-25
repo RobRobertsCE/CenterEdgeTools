@@ -9,7 +9,6 @@ namespace CECode.Business
         int Additions { get; set; }
         string Base { get; set; }
         string Body { get; set; }
-        string Branch { get; set; }
         int ChangedFiles { get; set; }
         int CommentCount { get; set; }
         int CommitCount { get; set; }

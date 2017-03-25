@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECodeHelper", "CECodeHelper\CECodeHelper.csproj", "{CCBF649D-232A-4207-8C88-98EE65512D7F}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECode.BranchHelper", "CECode.BranchVersionHelper\CECode.BranchHelper.csproj", "{A88CF59A-821A-47E6-8035-C0A0530A79D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECode.Branches", "CECode.Branches\CECode.Branches.csproj", "{730EFDCB-9652-4032-8C05-D323EE1E8B9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECodeDashboard", "CECodeDashboard\CECodeDashboard.csproj", "{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{730EFDCB-9652-4032-8C05-D323EE1E8B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{730EFDCB-9652-4032-8C05-D323EE1E8B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{730EFDCB-9652-4032-8C05-D323EE1E8B9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
