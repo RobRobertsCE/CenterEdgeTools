@@ -133,7 +133,7 @@ namespace CECode.Business.Services
         {
             await Task.Run(() =>
                 {
-                    pullRequest.Builds = GetBuild(pullRequest.Number.ToString());
+                    pullRequest.Builds = GetBuilds(pullRequest.Number);
                 });
         }
 
@@ -190,19 +190,14 @@ namespace CECode.Business.Services
         }
 
         // TeamCity 
-        protected virtual IList<ICEBuild> GetBuild(string number)
+        protected virtual IList<ICEBuildDetails> GetBuilds(int mergeNumber)
         {
-            return _teamCityService.GetMergeBuilds(number);
-        }
-
-        protected virtual ICEBuild GetBuild(long pullRequestId)
-        {
-            return _teamCityService.GetBuild(pullRequestId);
+            return _teamCityService.GetBuildsByMergeNumber(mergeNumber);
         }
 
         protected virtual ICEBuildDetails GetBuildDetails(long pullRequestId)
         {
-            return _teamCityService.GetBuildDetails(pullRequestId);
+            return _teamCityService.GetBuild(pullRequestId);
         }
         #endregion
     }

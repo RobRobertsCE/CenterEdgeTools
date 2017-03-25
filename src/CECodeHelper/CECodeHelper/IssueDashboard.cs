@@ -21,7 +21,7 @@ namespace CECodeHelper
         delegate void SafeExceptionHandlerDelegate(Exception ex);
         delegate void SafeListUpdateDelegate(IList<ICEWorkItem> items);
         delegate void SafePullRequestUpdateDelegate(IList<ICEPullRequest> pullRequests);
-        delegate void SafeBuildUpdateDelegate(IList<ICEBuild> builds);
+        delegate void SafeBuildUpdateDelegate(IList<ICEBuildDetails> builds);
         #endregion
 
         #region fields
@@ -141,7 +141,7 @@ namespace CECodeHelper
             }
         }
 
-        protected virtual void UpdateBuildGrid(IList<ICEBuild> builds)
+        protected virtual void UpdateBuildGrid(IList<ICEBuildDetails> builds)
         {
             if (this.dgvPullRequest.InvokeRequired)
             {
@@ -325,8 +325,8 @@ namespace CECodeHelper
             }
         }
 
-        private IList<ICEBuild> _builds = new List<ICEBuild>();
-        public IList<ICEBuild> Builds
+        private IList<ICEBuildDetails> _builds = new List<ICEBuildDetails>();
+        public IList<ICEBuildDetails> Builds
         {
             get
             {
@@ -421,7 +421,7 @@ namespace CECodeHelper
             {
                 _workItemService.UpdatePullRequests(workItem, _currentBranchMap.Name);
                 PullRequests = workItem.PullRequests;
-                Builds = new List<ICEBuild>();
+                Builds = new List<ICEBuildDetails>();
             }
             catch (Exception ex)
             {

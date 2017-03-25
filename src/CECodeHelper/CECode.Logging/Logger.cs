@@ -23,7 +23,6 @@ namespace CECode.Logging
         static Logger()
         {
             XmlConfigurator.Configure();
-            _log.Info("CECode Logger initialized");
         }
     }
 }

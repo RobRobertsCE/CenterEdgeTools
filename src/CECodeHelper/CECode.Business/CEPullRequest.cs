@@ -45,14 +45,14 @@ namespace CECode.Business
         public int CommitCount { get; set; }
 
         public IList<ICECommit> Commits { get; set; }
-        public IList<ICEBuild> Builds { get; set; } 
+        public IList<ICEBuildDetails> Builds { get; set; } 
         #endregion
 
         #region ctor
         public CEPullRequest()
         {
             Commits = new List<ICECommit>();
-            Builds = new List<ICEBuild>();
+            Builds = new List<ICEBuildDetails>();
         } 
         #endregion
     }

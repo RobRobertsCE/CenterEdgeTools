@@ -1,9 +1,17 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace CECode.TeamCity
+namespace CECode.TeamCity.Results
 {
-    public class Build : EndpointBase
+    public class BuildsRequestResult
+    {
+        public int count { get; set; }
+        public string href { get; set; }
+        public string nextHref { get; set; }
+        public List<BuildDetails> build { get; set; }       
+    }
+
+    public class BuildDetails : EndpointBase
     {
         public int id { get; set; }
         public string buildTypeId { get; set; }
@@ -127,29 +135,57 @@ namespace CECode.TeamCity
         public class VcsRootInstance
         {
             public string id { get; set; }
-            [JsonProperty(PropertyName = "vcs-root-id")]
+            [JsonProperty(PropertyName = "vcs-root-buildId")]
             public string vcs_root_id { get; set; }
             public string name { get; set; }
             public string href { get; set; }
         }
 
-        public static string GetItemUrl(string id)
+        public static string GetItemUrl(long id)
         {
             var urlSuffix = string.Format(Constants.BuildUrlSuffix, id);
             return BuildUrl(urlSuffix);
         }
-
         public static string GetListUrl()
         {
             return BuildUrl(Constants.BuildsUrlSuffix);
         }
-    }
-
-    public class BuildRequestResult
-    {
-        public int count { get; set; }
-        public string href { get; set; }
-        public string nextHref { get; set; }
-        public List<Build> build { get; set; }
+        public static string GetAllBuildsListUrl()
+        {
+            return BuildUrl(Constants.AllBuildsUrlSuffix);
+        }
+        public static string GetTypeUrl(string buildType)
+        {
+            var urlSuffix = string.Format(Constants.BuildTypeUrlSuffix, buildType);
+            return BuildUrl(urlSuffix);
+        }
+        public static string GetTypeBuildsUrl(string buildType)
+        {
+            var urlSuffix = string.Format(Constants.BuildTypeBuildsUrlSuffix, buildType);
+            return BuildUrl(urlSuffix);
+        }
+        public static string GetRunningUrl()
+        {
+            return BuildUrl(Constants.RunningBuildsUrlSuffix);
+        }
+        public static string GetMergeUrl(int mergeNumber)
+        {
+            var urlSuffix = string.Format(Constants.MergeBuildUrlSuffix, mergeNumber);
+            return BuildUrl(urlSuffix);
+        }
+        public static string GetQueueURL()
+        {
+            return BuildUrl(Constants.BuildQueueUrlSuffix);
+        }
+        public static string GetRelatedIssuesUrl(long id)
+        {
+            var urlSuffix = string.Format(Constants.BuildRelatedIssuesUrl, id);
+            return BuildUrl(urlSuffix);
+        }
+        public static string GetArtifactsUrl(long id)
+        {
+            var urlSuffix = string.Format(Constants.BuildArtifactsUrl, id);
+            return BuildUrl(urlSuffix);
+        }
     }
 }

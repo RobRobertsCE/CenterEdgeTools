@@ -53,13 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Branch.cs" />
-    <Compile Include="Build.cs" />
-    <Compile Include="BuildDetails.cs" />
+    <Compile Include="Results\BranchesRequestResult.cs" />
+    <Compile Include="Results\BuildsRequestResult.cs" />
+    <Compile Include="Results\BuildDetails.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="EndpointBase.cs" />
     <Compile Include="Service\ITeamCityService.cs" />
-    <Compile Include="RunningBuild.cs" />
+    <Compile Include="Results\RunningBuildsRequestResult.cs" />
     <Compile Include="Service\TeamCityService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -38,7 +38,6 @@ namespace CECode.GitHub.Service
             _user = user;
             _token = token;
             _owner = owner;
-            Logger.Log.Info("GitHubService initialized");
         }
         #endregion
 

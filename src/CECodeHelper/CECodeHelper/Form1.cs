@@ -315,39 +315,23 @@ namespace CECodeHelper
 
                 var build = _teamCityService.GetAdvantageBuild();
 
-                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
+                dgvTeamCity.DataSource = new List<ICEBuildDetails>() { build };
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
         }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                dgvTeamCity.DataSource = null;
-
-                var builds = _teamCityService.GetAdvantagePatches();
-
-                dgvTeamCity.DataSource = builds;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-        }
-
+        
         private void btnAdvantagePatches_Click(object sender, EventArgs e)
         {
             try
             {
                 dgvTeamCity.DataSource = null;
 
-                var build = _teamCityService.GetAdvantagePatches();
+                var build = _teamCityService.GetPatchBuild();
 
-                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
+                dgvTeamCity.DataSource = new List<ICEBuildDetails>() { build };
             }
             catch (Exception ex)
             {
@@ -361,7 +345,7 @@ namespace CECodeHelper
             {
                 dgvTeamCity.DataSource = null;
 
-                var builds = _teamCityService.GetBuilds(txtLocator.Text);
+                var builds = _teamCityService.GetBuildsQuery(txtLocator.Text);
 
                 dgvTeamCity.DataSource = builds;
             }
@@ -377,7 +361,7 @@ namespace CECodeHelper
             {
                 dgvTeamCity.DataSource = null;
 
-                var builds = _teamCityService.GetMergeBuilds(txtMergeNumber.Text);
+                var builds = _teamCityService.GetBuildsByMergeNumber(Int32.Parse(txtMergeNumber.Text));
 
                 dgvTeamCity.DataSource = builds;
             }
@@ -395,7 +379,7 @@ namespace CECodeHelper
 
                 var build = _teamCityService.GetBuild(Convert.ToInt32(txtBuildId.Text));
 
-                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
+                dgvTeamCity.DataSource = new List<ICEBuildDetails>() { build };
             }
             catch (Exception ex)
             {
@@ -409,7 +393,7 @@ namespace CECodeHelper
             {
                 dgvTeamCity.DataSource = null;
 
-                var buildDetails = _teamCityService.GetBuildDetails(Convert.ToInt32(txtBuildId.Text));
+                var buildDetails = _teamCityService.GetBuild(Convert.ToInt32(txtBuildId.Text));
 
                 dgvTeamCity.DataSource = new List<ICEBuildDetails>() { buildDetails };
             }
@@ -427,7 +411,7 @@ namespace CECodeHelper
 
                 var build = _teamCityService.GetBuild(Convert.ToInt32(txtBuildNumber.Text));
 
-                dgvTeamCity.DataSource = new List<ICEBuild>() { build };
+                dgvTeamCity.DataSource = new List<ICEBuildDetails>() { build };
             }
             catch (Exception ex)
             {

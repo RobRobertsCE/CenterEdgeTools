@@ -16,7 +16,6 @@ namespace CECode.Jira.Service
         public JiraService(string url, string userName, string password)
         {
             _jira = Atlassian.Jira.Jira.CreateRestClient(url, userName, password);
-            Logger.Log.Info("JiraService initialized");
         }
         #endregion
 

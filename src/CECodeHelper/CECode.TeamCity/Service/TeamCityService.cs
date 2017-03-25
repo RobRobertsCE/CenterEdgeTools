@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using CECode.Logging;
+using CECode.TeamCity.Results;
 
 namespace CECode.TeamCity.Service
 {
@@ -13,6 +14,7 @@ namespace CECode.TeamCity.Service
         #region fields
         private readonly string _user;
         private readonly string _password;
+        private readonly bool _verboseLogging = true;
         #endregion
 
         #region ctor
@@ -20,227 +22,122 @@ namespace CECode.TeamCity.Service
         {
             _user = user;
             _password = password;
-            Logger.Log.Info("TeamCityService initialized");
         }
         #endregion
 
         #region public methods
-        public Build GetAdvantageBuild()
+        public BuildDetails GetAdvantageBuild()
         {
-            return GetBuildByType("Advantage_Build");
+            return GetBuildByType(Constants.AdvantageBuild);
         }
 
-        public Build GetAdvantagePatches()
+        public BuildDetails GetAdvantagePatchBuild()
         {
-            return GetBuildByType("Advantage_Patches");
+            return GetBuildByType(Constants.PatchBuild);
         }
 
-        public Build GetBuildByType(string buildType)
+        public BuildDetails GetAdvantageAutoMergeBuild()
         {
-            var url = Build.GetListUrl();
-            if (!String.IsNullOrEmpty(buildType))
-            {
-                url += "/" + String.Format("buildType:{0}", buildType);
-            }
-            Logger.Log.Info(url);
-            var uri = new Uri(url);
-            return GetResponseData<Build>(uri);
+            return GetBuildByType(Constants.AutoMergeBuild);
         }
 
-        public Build GetBuildById(long id)
+        public BuildDetails GetBuildByType(string buildType)
         {
-            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);          
-            Logger.Log.Info(url);
-            var uri = new Uri(url);
-            return GetResponseData<Build>(uri);
+            var url = BuildDetails.GetTypeUrl(buildType);
+            return GetResponseData<BuildDetails>(url);
         }
 
-        public IList<Build> GetBuildsByMergeNumber(int number)
+        public IList<BuildDetails> GetBuildsByMergeNumber(int mergeNumber)
         {
-            //var url = Build.GetListUrl() +  "/" + String.Format("?locator=number:{0}", number);
-            // TODO: Fix Merge
-            var url = Build.GetListUrl() + "/" + String.Format("?locator=branch:name:({0}/merge)", number);
-            Console.WriteLine(url);
-            var url = Build.GetListUrl() + "/" + String.Format("?locator=branch:default:any,name=({0}/merge)", number);
-            Logger.Log.Info(url);
-            var uri = new Uri(url);
-            var buildRequestResult = GetResponseData<BuildRequestResult>(uri);          
-            return buildRequestResult.build;
+            var url = BuildDetails.GetMergeUrl(mergeNumber);
+            var response = GetResponseData<BuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<BuildDetails>();
         }
 
-        public IList<RunningBuild.Build> GetBuilds(string locator)
+        public BuildDetails GetBuild(long buildId)
         {
-            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
-
-            HttpClient client = new HttpClient();
-            //var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any";
-            var url = String.Format("https://teamcity.pfestore.com/httpAuth/app/rest/builds?{0}", locator);
-            Logger.Log.Info(url);
-            client.BaseAddress = new Uri(url);
-
-
-            // Add an Accept header for JSON format.
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-            byte[] cred = GetCredentials();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
-
-            // List data response.
-            HttpResponseMessage response = client.GetAsync("").Result;  // Blocking call!
-            if (response.IsSuccessStatusCode)
-            {
-                // Parse the response body. Blocking!
-                var responseData = response.Content.ReadAsAsync<RunningBuild>();
-                // TODO: Check result status
-                if (null != responseData.Result)
-                {
-                    if (responseData.Result.count > 0)
-                    {
-
-                        results = responseData.Result.build;
-
-                        foreach (var runningBuild in results)
-                        {
-                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-            }
-
-            return results;
+            var url = BuildDetails.GetItemUrl(buildId);
+            return GetResponseData<BuildDetails>(url);
         }
 
-        public IList<RunningBuild.Build> GetRunningBuilds()
+        public IList<RunningBuild> GetBuilds(string locator)
         {
-            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
-
-            HttpClient client = new HttpClient();
-            var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any";
-            Logger.Log.Info(url);
-            client.BaseAddress = new Uri(url);
-
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-            byte[] cred = GetCredentials();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
-
-            HttpResponseMessage response = client.GetAsync("").Result; 
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = response.Content.ReadAsAsync<RunningBuild>();
-                
-                if (null != responseData.Result)
-                {
-                    if (responseData.Result.count > 0)
-                    {
-
-                        results = responseData.Result.build;
-
-                        foreach (var runningBuild in results)
-                        {
-                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-            }
-
-            return results;
-        }
-        public IList<RunningBuild.Build> GetRunningBuilds(int number)
-        {
-            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
-
-            HttpClient client = new HttpClient();
-            var url = String.Format("https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any,number:{0}",number);
-            client.BaseAddress = new Uri(url);
-
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-            byte[] cred = GetCredentials();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
-
-            HttpResponseMessage response = client.GetAsync("").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = response.Content.ReadAsAsync<RunningBuild>();
-
-                if (null != responseData.Result)
-                {
-                    if (responseData.Result.count > 0)
-                    {
-
-                        results = responseData.Result.build;
-
-                        foreach (var runningBuild in results)
-                        {
-                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-            }
-
-            return results;
+            var url = BuildDetails.GetListUrl() + String.Format("?{0}", locator);
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
         }
 
-        public BuildDetails GetBuildDetails(Build build)
+        public IList<RunningBuild> GetBuilds()
         {
-            return GetBuildDetails(build.id);
+            var url = BuildDetails.GetAllBuildsListUrl() ;
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
         }
 
-        public BuildDetails GetBuildDetails(long id)
+        public IList<RunningBuild> GetBuildTypeBuilds(string buildType)
         {
-            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);
-            Logger.Log.Info(url);
-            var uri = new Uri(url);
-            return GetResponseData<BuildDetails>(uri);
+            var url = BuildDetails.GetTypeBuildsUrl(buildType);// +String.Format("?{0}", locator);
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<RunningBuild> GetQueuedBuilds()
+        {
+            var url = BuildDetails.GetQueueURL();
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<RunningBuild> GetRunningBuilds()
+        {
+            var url = BuildDetails.GetRunningUrl();
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
         }
         #endregion
 
         #region protected virtual methods
-        protected  virtual T GetResponseData<T>(Uri uri)
+
+        protected virtual T GetResponseData<T>(string url)
         {
+            T result;
+
+            Logger.Log.Debug(url);
+
+            var uri = new Uri(url);
+
             HttpClient client = GetHttpClient();
 
             HttpResponseMessage response = client.GetAsync(uri).Result;
 
+            if (_verboseLogging)
+            {
+                Logger.Log.Debug(String.Format("Response Status: {0}; Message: {1}; Reason Phrase: {2}", response.StatusCode, response.RequestMessage, response.ReasonPhrase));
+            }
+
             if (response.IsSuccessStatusCode)
             {
-                
                 try
                 {
-                var responseData = response.Content.ReadAsAsync<T>();
-                var dataObject = responseData.Result;
-                return dataObject;
-            }
+                    var responseData = response.Content.ReadAsAsync<T>();
+                    var dataObject = responseData.Result;
+                    result = dataObject;
+                }
                 catch (Exception ex)
                 {
-
                     var readStringTask = response.Content.ReadAsStringAsync();
                     string contentString = readStringTask.Result;
-                    Console.WriteLine(contentString);
-                    throw;
+                    Logger.Log.Error(String.Format("Exception in TeamCity Response.\r\nContent:{0}", contentString), ex);
+                    result = default(T);
                 }
             }
             else
             {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return default(T);
+                Logger.Log.Error(String.Format("Response Status: {0}; Message: {1}; Reason Phrase: {2}", response.StatusCode, response.RequestMessage, response.ReasonPhrase));
+                result = default(T);
             }
+
+            return result;
         }
 
         protected virtual HttpClient GetHttpClient()

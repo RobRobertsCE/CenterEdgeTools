@@ -134,13 +134,9 @@ namespace CECode.Business.Services
         {
             return await GetBuildDetailsInternal(id);
         }
-        public async Task<IList<ICEBuild>> GetBuilds(int number)
+        public async Task<IList<ICEBuildDetails>> GetBuilds(int number)
         {
             return await GetBuildsInternal(number);
-        }
-        public async Task<IList<ICEBuild>> GetRunningBuilds(int number)
-        {
-            return await GetBuildsRunningInternal(number);
         }
         #endregion
 
@@ -156,23 +152,15 @@ namespace CECode.Business.Services
         {
             return await Task.Run(() =>
             {
-                return _teamCityService.GetBuildDetails(id);
+                return _teamCityService.GetBuild(id);
             });
         }
 
-        protected virtual async Task<IList<ICEBuild>> GetBuildsInternal(int number)
+        protected virtual async Task<IList<ICEBuildDetails>> GetBuildsInternal(int number)
         {
             return await Task.Run(() =>
             {
                 return _teamCityService.GetBuildsByMergeNumber(number);
-            });
-        }
-
-        protected virtual async Task<IList<ICEBuild>> GetBuildsRunningInternal(int number)
-        {
-            return await Task.Run(() =>
-            {
-                return _teamCityService.GetRunningBuilds(number);
             });
         }
         #endregion

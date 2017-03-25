@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace CECode.TeamCity
-{
+namespace CECode.TeamCity.Results
+{ 
+    public class BranchesRequestResult
+    {
+        public List<Branch> branch { get; set; }       
+    }
+
     public class Branch
     {
         public string name { get; set; }
@@ -18,10 +23,5 @@ namespace CECode.TeamCity
                 return name;
             }
         }
-    }
-
-    public class RootObject
-    {
-        public List<Branch> branch { get; set; }
     }
 }

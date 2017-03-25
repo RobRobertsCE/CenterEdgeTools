@@ -4,15 +4,18 @@ namespace CECode.Business.Services
 {
     public interface ICETeamCityService
     {
-        ICEBuild GetAdvantageBuild();
-        ICEBuild GetAdvantagePatches();
-        ICEBuild GetBuild(long id);
-        IList<ICEBuild> GetBuildsByMergeNumber(int number);
+        ICEBuildDetails GetAdvantageBuild();
+        ICEBuildDetails GetPatchBuild();
+        ICEBuildDetails GetAutoMergeBuild();
+        ICEBuildDetails GetBuild(long id);
+        
         IList<ICEBuild> GetBuilds();
-        IList<ICEBuild> GetBuilds(string locator);
-        IList<ICEBuild> GetMergeBuilds(string mergeNumber);
+        IList<ICEBuild> GetBuildsQuery(string locator);
+        IList<ICEBuild> GetBuildTypeBuildsQuery(string buildType);
+
+        IList<ICEBuildDetails> GetBuildsByMergeNumber(int number);
+
+        IList<ICEBuild> GetQueuedBuilds();
         IList<ICEBuild> GetRunningBuilds();
-        IList<ICEBuild> GetRunningBuilds(int number);
-        ICEBuildDetails GetBuildDetails(long id);
     }
 }

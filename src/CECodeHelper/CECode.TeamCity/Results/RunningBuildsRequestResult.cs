@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CECode.Business
-{
-    internal class CEBuildDetails : ICEBuildDetails
+namespace CECode.TeamCity.Results
+{ 
+    public class RunningBuildsRequestResult
     {
-        #region properties
-        public string artifacts { get; set; }
-        public string changes { get; set; }
-        public DateTime? queuedDate { get; set; }
-        public DateTime? startDate { get; set; }
-        public DateTime? finishDate { get; set; }
+        public int count { get; set; }
+        public string href { get; set; }
+        public List<RunningBuild> build { get; set; }
+    }
+
+    public class RunningBuild
+    {
         public int id { get; set; }
         public string buildTypeId { get; set; }
         public string number { get; set; }
@@ -20,6 +25,6 @@ namespace CECode.Business
         public string branchName { get; set; }
         public string href { get; set; }
         public string webUrl { get; set; }
-        #endregion
     }
+
 }
