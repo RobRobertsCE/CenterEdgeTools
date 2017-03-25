@@ -29,7 +29,7 @@ namespace CECode.GitHub.Service
                 }
                 return _client;
             }
-        }       
+        }
         #endregion
 
         #region ctor
@@ -54,7 +54,7 @@ namespace CECode.GitHub.Service
         #region pull requests
         public async Task<PullRequest> GetPullRequest(string repositoryName, int number)
         {
-            return await GetPullRequestInternal( repositoryName, number);
+            return await GetPullRequestInternal(repositoryName, number);
         }
         public async Task<IReadOnlyList<PullRequest>> GetPullRequests(string repositoryName, string branchName)
         {
@@ -80,6 +80,13 @@ namespace CECode.GitHub.Service
         public async Task<SearchIssuesResult> SearchPullRequests(ItemState? state, DateRange updatedDateRange, IList<string> repositoryNames)
         {
             return await SearchPullRequestsInternal(state, updatedDateRange, repositoryNames);
+        }
+
+
+
+        public async Task<IReadOnlyList<PullRequest>> SearchPullRequests(string repositoryName, PullRequestRequest request, ApiOptions options)
+        {
+            return await SearchPullRequestsInternal(repositoryName, request, options);
         }
         #endregion
 
@@ -121,11 +128,11 @@ namespace CECode.GitHub.Service
         private async Task<IReadOnlyList<GitHubCommit>> GetCommitsByBranch(string repositoryName, string branchName)
         {
             var commitRequest = new CommitRequest
-              {
-                  Sha = branchName,
-                  Since = null,
-                  Until = null
-              };
+            {
+                Sha = branchName,
+                Since = null,
+                Until = null
+            };
 
             var options = new ApiOptions
             {
@@ -154,6 +161,11 @@ namespace CECode.GitHub.Service
         #endregion
 
         #region pull requests
+        private async Task<IReadOnlyList<PullRequest>> SearchPullRequestsInternal(string repositoryName, PullRequestRequest request, ApiOptions options)
+        {
+            return await Client.Repository.PullRequest.GetAllForRepository(_owner, repositoryName, request, options);
+        }
+
         private async Task<IReadOnlyList<PullRequest>> GetPullRequestsInBranch(ItemState? state, string repositoryName, string branchName)
         {
             var request = new PullRequestRequest

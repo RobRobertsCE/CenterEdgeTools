@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECodeHelper", "CECodeHelper\CECodeHelper.csproj", "{CCBF649D-232A-4207-8C88-98EE65512D7F}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECode.TeamCity", "CECode.TeamCity\CECode.TeamCity.csproj", "{4BA81A75-6F5A-434F-B3B0-76A4C5D8EC77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECode.Branches", "CECode.Branches\CECode.Branches.csproj", "{730EFDCB-9652-4032-8C05-D323EE1E8B9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECodeDashboard", "CECodeDashboard\CECodeDashboard.csproj", "{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CECode.AdvUpgrade", "CECode.AdvUpgrade\CECode.AdvUpgrade.csproj", "{F6CF7A72-9D84-4D1F-819A-310341C402E6}"
 EndProject
@@ -63,6 +65,10 @@ Global
 		{0B6F40EF-FF89-4F4C-B287-078A9A66C1B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B6F40EF-FF89-4F4C-B287-078A9A66C1B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B6F40EF-FF89-4F4C-B287-078A9A66C1B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71F8B299-5B13-4B6F-8033-707C4DC4FBA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

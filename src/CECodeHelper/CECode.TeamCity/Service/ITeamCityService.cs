@@ -9,8 +9,9 @@ namespace CECode.TeamCity.Service
         Build GetAdvantagePatches();
         Build GetBuildByType(string buildType);
         Build GetBuildById(long id);
-        Build GetBuildByNumber(string number);
+        IList<Build> GetBuildsByMergeNumber(int number);
         IList<RunningBuild.Build> GetRunningBuilds();
+        IList<RunningBuild.Build> GetRunningBuilds(int number);
         IList<RunningBuild.Build> GetBuilds(string locator);
         BuildDetails GetBuildDetails(Build build);
         BuildDetails GetBuildDetails(long id);

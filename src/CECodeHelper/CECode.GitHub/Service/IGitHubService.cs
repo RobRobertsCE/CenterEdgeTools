@@ -20,5 +20,8 @@ namespace CECode.GitHub.Service
         Task<SearchIssuesResult> SearchPullRequests(string repositoryName, string jiraIssueKey);
         Task<SearchIssuesResult> SearchPullRequests(ItemState? state, IList<string> repositoryNames);
         Task<SearchIssuesResult> SearchPullRequests(ItemState? state, DateRange updatedDateRange, IList<string> repositoryNames);
+
+
+        Task<IReadOnlyList<PullRequest>> SearchPullRequests(string repositoryName, PullRequestRequest request, ApiOptions options);
     }
 }

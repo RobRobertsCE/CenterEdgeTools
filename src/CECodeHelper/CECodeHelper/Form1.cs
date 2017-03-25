@@ -261,11 +261,11 @@ namespace CECodeHelper
 
                 var gitHubRepoName = "Advantage";
                 var jiraProjectName = "Advantage";
-                var jiraIssueId = txtJiraKey.Text; 
+                var jiraIssueId = txtJiraKey.Text;
 
                 var result = await _workItemService.GetWorkItem(gitHubRepoName, jiraProjectName, jiraIssueId);
 
-                dgvJira.DataSource = new List<ICEJiraIssue>() { result.JiraIssue }; 
+                dgvJira.DataSource = new List<ICEJiraIssue>() { result.JiraIssue };
                 dgvGitHub.DataSource = result.PullRequests;
 
             }
@@ -425,7 +425,7 @@ namespace CECodeHelper
             {
                 dgvTeamCity.DataSource = null;
 
-                var build = _teamCityService.GetBuild(txtBuildNumber.Text);
+                var build = _teamCityService.GetBuild(Convert.ToInt32(txtBuildNumber.Text));
 
                 dgvTeamCity.DataSource = new List<ICEBuild>() { build };
             }

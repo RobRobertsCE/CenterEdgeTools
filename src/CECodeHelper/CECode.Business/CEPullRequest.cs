@@ -10,7 +10,6 @@ namespace CECode.Business
         public int Number { get; set; }
         public string Sha { get; set; }
         public string Repo { get; set; }
-        public string Branch { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
         public DateTime UpdatedAt { get; set; }

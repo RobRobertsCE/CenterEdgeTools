@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -48,21 +49,23 @@ namespace CECode.TeamCity.Service
 
         public Build GetBuildById(long id)
         {
-            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);
+            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);          
             Logger.Log.Info(url);
             var uri = new Uri(url);
             return GetResponseData<Build>(uri);
         }
 
-        public Build GetBuildByNumber(string number)
+        public IList<Build> GetBuildsByMergeNumber(int number)
         {
             //var url = Build.GetListUrl() +  "/" + String.Format("?locator=number:{0}", number);
+            // TODO: Fix Merge
+            var url = Build.GetListUrl() + "/" + String.Format("?locator=branch:name:({0}/merge)", number);
+            Console.WriteLine(url);
             var url = Build.GetListUrl() + "/" + String.Format("?locator=branch:default:any,name=({0}/merge)", number);
             Logger.Log.Info(url);
             var uri = new Uri(url);
-            var build = GetResponseData<Build>(uri);
-
-            return build;
+            var buildRequestResult = GetResponseData<BuildRequestResult>(uri);          
+            return buildRequestResult.build;
         }
 
         public IList<RunningBuild.Build> GetBuilds(string locator)
@@ -127,6 +130,46 @@ namespace CECode.TeamCity.Service
             byte[] cred = GetCredentials();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
 
+            HttpResponseMessage response = client.GetAsync("").Result; 
+            if (response.IsSuccessStatusCode)
+            {
+                var responseData = response.Content.ReadAsAsync<RunningBuild>();
+                
+                if (null != responseData.Result)
+                {
+                    if (responseData.Result.count > 0)
+                    {
+
+                        results = responseData.Result.build;
+
+                        foreach (var runningBuild in results)
+                        {
+                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+
+            return results;
+        }
+        public IList<RunningBuild.Build> GetRunningBuilds(int number)
+        {
+            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
+
+            HttpClient client = new HttpClient();
+            var url = String.Format("https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any,number:{0}",number);
+            client.BaseAddress = new Uri(url);
+
+            client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+
+            byte[] cred = GetCredentials();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
+
             HttpResponseMessage response = client.GetAsync("").Result;
             if (response.IsSuccessStatusCode)
             {
@@ -169,7 +212,7 @@ namespace CECode.TeamCity.Service
         #endregion
 
         #region protected virtual methods
-        protected virtual T GetResponseData<T>(Uri uri)
+        protected  virtual T GetResponseData<T>(Uri uri)
         {
             HttpClient client = GetHttpClient();
 
@@ -177,9 +220,21 @@ namespace CECode.TeamCity.Service
 
             if (response.IsSuccessStatusCode)
             {
+                
+                try
+                {
                 var responseData = response.Content.ReadAsAsync<T>();
                 var dataObject = responseData.Result;
                 return dataObject;
+            }
+                catch (Exception ex)
+                {
+
+                    var readStringTask = response.Content.ReadAsStringAsync();
+                    string contentString = readStringTask.Result;
+                    Console.WriteLine(contentString);
+                    throw;
+                }
             }
             else
             {

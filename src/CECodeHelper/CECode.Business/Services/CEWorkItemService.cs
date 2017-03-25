@@ -1,10 +1,8 @@
-﻿using System;
+﻿using CECode.Authentication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CECode.Authentication;
-using CECode.TeamCity;
 
 namespace CECode.Business.Services
 {
@@ -207,8 +205,5 @@ namespace CECode.Business.Services
             return _teamCityService.GetBuildDetails(pullRequestId);
         }
         #endregion
-
-
-
     }
 }

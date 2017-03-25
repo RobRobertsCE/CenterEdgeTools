@@ -75,8 +75,10 @@
     <Compile Include="Services\ICEJiraService.cs" />
     <Compile Include="Services\ICETeamCityService.cs" />
     <Compile Include="Services\ICEWorkItemService.cs" />
+    <Compile Include="Services\PullRequestSearchArgs.cs" />
     <Compile Include="Services\ServiceFactory.cs" />
     <Compile Include="Adapters\TeamCityBuildAdapter.cs" />
+    <Compile Include="Services\WorkItemService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
