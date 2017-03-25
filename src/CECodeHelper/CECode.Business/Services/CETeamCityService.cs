@@ -75,7 +75,7 @@ namespace CECode.Business.Services
 
         public IList<ICEBuild> GetMergeBuilds(string mergeNumber)
         {
-            var builds = _service.GetBuilds(String.Format("locator=branch:({0}/merge)", mergeNumber));
+            var builds = _service.GetBuilds(String.Format("locator=branch:({0}/merge),running:any", mergeNumber));
 
             return TeamCityBuildAdapter.Translate(builds);  
         }

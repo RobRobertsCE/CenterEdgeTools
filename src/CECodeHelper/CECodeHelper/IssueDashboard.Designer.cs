@@ -59,6 +59,8 @@
             this.dgvPullRequest = new System.Windows.Forms.DataGridView();
             this.ctxPullRequests = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.updateBuildsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dBUpgradeHelperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.ctxWorkItem.SuspendLayout();
@@ -72,7 +74,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.toolsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1008, 24);
@@ -91,12 +94,12 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -318,6 +321,21 @@
             this.updateBuildsToolStripMenuItem1.Text = "Update Builds";
             this.updateBuildsToolStripMenuItem1.Click += new System.EventHandler(this.updateBuildsToolStripMenuItem1_Click);
             // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dBUpgradeHelperToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // dBUpgradeHelperToolStripMenuItem
+            // 
+            this.dBUpgradeHelperToolStripMenuItem.Name = "dBUpgradeHelperToolStripMenuItem";
+            this.dBUpgradeHelperToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.dBUpgradeHelperToolStripMenuItem.Text = "DB Upgrade helper";
+            this.dBUpgradeHelperToolStripMenuItem.Click += new System.EventHandler(this.dBUpgradeHelperToolStripMenuItem_Click);
+            // 
             // IssueDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -378,5 +396,7 @@
         private System.Windows.Forms.ContextMenuStrip ctxPullRequests;
         private System.Windows.Forms.ToolStripMenuItem updateBuildsToolStripMenuItem1;
         private System.Windows.Forms.Splitter splitter2;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dBUpgradeHelperToolStripMenuItem;
     }
 }

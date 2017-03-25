@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Octokit">
       <HintPath>..\packages\Octokit.0.24.0\lib\net45\Octokit.dll</HintPath>
     </Reference>
@@ -52,9 +56,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CECode.BranchVersionHelper\CECode.BranchHelper.csproj">
-      <Project>{a88cf59a-821a-47e6-8035-c0a0530a79d2}</Project>
-      <Name>CECode.BranchHelper</Name>
+    <ProjectReference Include="..\CECode.Logging\CECode.Logging.csproj">
+      <Project>{0b6f40ef-ff89-4f4c-b287-078a9a66c1b1}</Project>
+      <Name>CECode.Logging</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

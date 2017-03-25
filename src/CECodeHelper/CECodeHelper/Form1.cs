@@ -191,7 +191,7 @@ namespace CECodeHelper
         {
             try
             {
-                var dialog = new AccountsDialog();
+                var dialog = new AccountProfilesDialog();
                 dialog.ShowDialog(this);
             }
             catch (Exception ex)

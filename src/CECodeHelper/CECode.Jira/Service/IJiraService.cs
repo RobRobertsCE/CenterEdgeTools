@@ -9,7 +9,7 @@ namespace CECode.Jira.Service
         Issue GetIssue(string key);
         IList<Issue> GetAMSIssues();
         IList<Issue> GetRAndDIssues();
-        IList<Issue> GetByJql(string jql);
+        IList<Issue> GetByJql(string jql, int max, int startAt);
         IList<Issue> GetOpenIssues(IList<string> projects);
         IList<Issue> GetIssues(IList<string> projects, int count, int start);
         IList<Issue> GetInProgressIssues();

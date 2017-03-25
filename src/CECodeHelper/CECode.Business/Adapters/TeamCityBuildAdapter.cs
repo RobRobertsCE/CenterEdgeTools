@@ -56,7 +56,8 @@ namespace CECode.Business.Adapters
                 number = build.number,
                 buildTypeId = build.buildTypeId,
                 href = build.href,
-                webUrl = build.webUrl
+                webUrl = build.webUrl,
+                percentageComplete = build.percentageComplete 
             };
 
             return ceBuild;

@@ -61,7 +61,7 @@ namespace CECode.Business.Services
 
         public IList<ICEJiraIssue> GetByJql(string jql)
         {
-            var issues = _service.GetByJql(jql);
+            var issues = _service.GetByJql(jql, 50, 0);
             return JiraItemAdapter.Translate(issues);
         }
         public IList<ICEJiraIssue> GetInProgressIssues()

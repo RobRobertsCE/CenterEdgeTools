@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CECode.AdvUpgrade;
 
 namespace CECodeHelper
 {
@@ -28,15 +29,22 @@ namespace CECodeHelper
         {
             try
             {
+                lblVersionTextFile.Text = "Version.txt: " + VersionHelper.VersionFileVersion.ToString();
+                lblTempVersion.Text = "Temporary Version: " + VersionHelper.PendingDbVersion.ToString();
+                lblPendingVersion.Text = "New Version: " + VersionHelper.NewDbVersion.ToString();
+
                 var projectPath = Path.GetFileName(VersionHelper.UpgradeProjectFolder.TrimEnd('\\'));
                 var projectNode = tvPending.Nodes.Add(projectPath);
+                projectNode.ExpandAll();
 
                 FileInfo projectFileInfo = new FileInfo(VersionHelper.UpgradeProjectVbProjectFile);
                 var projectFileNode = projectNode.Nodes.Add(projectFileInfo.Name);
                 projectFileNode.Tag = projectFileInfo;
+                projectFileNode.ExpandAll();
 
                 var minorVersionFolderPath = Path.GetFileName(VersionHelper.MinorVersionFolder.TrimEnd('\\'));
                 var minorVersionNode = projectNode.Nodes.Add(minorVersionFolderPath);
+                minorVersionNode.ExpandAll();
 
                 foreach (var minorFolderItem in Directory.GetFileSystemEntries(VersionHelper.MinorVersionFolder, "*.*"))
                 {
@@ -48,6 +56,7 @@ namespace CECodeHelper
                         if (di.Name.EndsWith("100"))
                         {
                             node.ForeColor = Color.Black;
+                            node.ExpandAll();
                         }
                         else
                         {
@@ -90,6 +99,14 @@ namespace CECodeHelper
             try
             {
                 var result = VersionHelper.UpdateProject();
+
+                if (result.Errors.Count > 0)
+                {
+                    foreach (var errorMessage in result.Errors)
+                    {
+                        Console.WriteLine(errorMessage);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -99,7 +116,24 @@ namespace CECodeHelper
 
         private void tvPending_DoubleClick(object sender, EventArgs e)
         {
+            try
+            {
+                if (null != tvPending.SelectedNode)
+                {
+                    var selectedFileInfo = (FileInfo)tvPending.SelectedNode.Tag;
+                    var fileContent = File.ReadAllText(selectedFileInfo.FullName);
+                    this.txtFile.Text = fileContent;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

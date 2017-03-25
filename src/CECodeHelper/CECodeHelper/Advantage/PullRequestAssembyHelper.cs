@@ -30,17 +30,16 @@ namespace CECode.GitHub
         #endregion
 
         #region properties
-        public string RepoName { get; private set; }
+        public string RepositoryName { get; private set; }
         public string WinUserName { get; private set; }
-        public PullRequestView PullRequest { get; private set; }
         #endregion
 
         #region read only properties
-        public string RepoFolder
+        public string RepositoryFolder
         {
             get
             {
-                return String.Format(RepoPathTemplate, WinUserName, RepoName);
+                return String.Format(RepoPathTemplate, WinUserName, RepositoryName);
             }
         }
         public IList<string> AssemblyFiles
@@ -53,12 +52,12 @@ namespace CECode.GitHub
         #endregion
 
         #region ctor
-        public PullRequestAssembyHelper(PullRequestView pullRequest, string winUser)
+        public PullRequestAssembyHelper(string repositoryName, IList<string> files, string winUser)
         {
             this.WinUserName = winUser;
-            this.PullRequest = pullRequest;
-            this.RepoName = pullRequest.RepoName;
-            _changedFiles = pullRequest.Files.Where(f => !f.Contains("UnitTest")).ToList();
+            this.RepositoryName = repositoryName;
+            // TODO: Update exclude list
+            _changedFiles = files.Where(f => !f.Contains("UnitTest")).ToList();
             _assemblies = GetAssemblyList();
         }
         #endregion
@@ -97,7 +96,7 @@ namespace CECode.GitHub
             else // resx? trdx?
                 language = DotNetLanguage.VB;
 
-            var fullName = Path.Combine(RepoFolder, codeFile);
+            var fullName = Path.Combine(RepositoryFolder, codeFile);
             var dirName = Path.GetDirectoryName(fullName);
             if (Directory.Exists(dirName))
             {

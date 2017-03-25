@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CECode.Branches;
+using CECodeHelper.Forms;
 
 namespace CECodeHelper
 {
@@ -81,10 +82,15 @@ namespace CECodeHelper
                 string formattedMessage = String.Format("{0}: {1}\r\n", DateTime.Now, message);
                 txtMessages.AppendText(formattedMessage);
             }
-        }       
-        public void DisplayAccountsDialog()
+        }
+        public virtual void DisplayAccountsDialog()
         {
-            var dialog = new AccountsDialog();
+            var dialog = new AccountProfilesDialog();
+            dialog.ShowDialog(this);
+        }
+        public virtual void DisplayDbVersionDialog()
+        {
+            var dialog = new DbVersionDialog();
             dialog.ShowDialog(this);
         }
         #endregion
@@ -263,6 +269,11 @@ namespace CECodeHelper
             UpdatePullRequestBuilds();
         }
         #endregion
+
+        private void dBUpgradeHelperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _presenter.DisplayDbVersionDialog();
+        }
     }
 
     public class IssueDashboardPresenter : INotifyPropertyChanged
@@ -343,13 +354,8 @@ namespace CECodeHelper
         {
             try
             {
-                var maps = BranchMapFactory.GetBranchMaps(DateTime.Now);
-                _currentBranchMap = maps.FirstOrDefault(m => m.Name == "Advantage");
-                Console.WriteLine("Version on {0} is {1}", _currentBranchMap.TargetDate.ToString(), _currentBranchMap.Version.ToString());
-                foreach (var branch in _currentBranchMap.Branches)
-                {
-                    Console.WriteLine("Branch {0}: {1}", branch.Name, branch.Version.ToString());
-                }
+                var branchMapFactory = new BranchMapFactory();
+                _currentBranchMap = branchMapFactory.GetCurrentMap();               
             }
             catch (Exception ex)
             {
@@ -413,7 +419,7 @@ namespace CECodeHelper
         {
             try
             {
-                _workItemService.UpdatePullRequests(workItem, _currentBranchMap.GitHubProject);
+                _workItemService.UpdatePullRequests(workItem, _currentBranchMap.Name);
                 PullRequests = workItem.PullRequests;
                 Builds = new List<ICEBuild>();
             }
@@ -435,6 +441,18 @@ namespace CECodeHelper
                 ExceptionHandler(ex);
             }
         } 
+
+        public virtual void DisplayDbVersionDialog()
+        {
+            try
+            {
+                _window.DisplayDbVersionDialog();
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler(ex);
+            }
+        }
         #endregion
 
         #region protected virtual methods

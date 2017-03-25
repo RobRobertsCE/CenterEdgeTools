@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using CECode.Logging;
 
 namespace CECode.TeamCity.Service
 {
@@ -18,6 +19,7 @@ namespace CECode.TeamCity.Service
         {
             _user = user;
             _password = password;
+            Logger.Log.Info("TeamCityService initialized");
         }
         #endregion
 
@@ -39,15 +41,15 @@ namespace CECode.TeamCity.Service
             {
                 url += "/" + String.Format("buildType:{0}", buildType);
             }
-            Console.WriteLine(url);
+            Logger.Log.Info(url);
             var uri = new Uri(url);
             return GetResponseData<Build>(uri);
         }
 
         public Build GetBuildById(long id)
         {
-            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);          
-            Console.WriteLine(url);
+            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);
+            Logger.Log.Info(url);
             var uri = new Uri(url);
             return GetResponseData<Build>(uri);
         }
@@ -56,7 +58,7 @@ namespace CECode.TeamCity.Service
         {
             //var url = Build.GetListUrl() +  "/" + String.Format("?locator=number:{0}", number);
             var url = Build.GetListUrl() + "/" + String.Format("?locator=branch:default:any,name=({0}/merge)", number);
-            Console.WriteLine(url);
+            Logger.Log.Info(url);
             var uri = new Uri(url);
             var build = GetResponseData<Build>(uri);
 
@@ -70,7 +72,7 @@ namespace CECode.TeamCity.Service
             HttpClient client = new HttpClient();
             //var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any";
             var url = String.Format("https://teamcity.pfestore.com/httpAuth/app/rest/builds?{0}", locator);
-            Console.WriteLine(url);
+            Logger.Log.Info(url);
             client.BaseAddress = new Uri(url);
 
 
@@ -116,6 +118,7 @@ namespace CECode.TeamCity.Service
 
             HttpClient client = new HttpClient();
             var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any";
+            Logger.Log.Info(url);
             client.BaseAddress = new Uri(url);
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -124,11 +127,11 @@ namespace CECode.TeamCity.Service
             byte[] cred = GetCredentials();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
 
-            HttpResponseMessage response = client.GetAsync("").Result; 
+            HttpResponseMessage response = client.GetAsync("").Result;
             if (response.IsSuccessStatusCode)
             {
                 var responseData = response.Content.ReadAsAsync<RunningBuild>();
-                
+
                 if (null != responseData.Result)
                 {
                     if (responseData.Result.count > 0)
@@ -159,7 +162,7 @@ namespace CECode.TeamCity.Service
         public BuildDetails GetBuildDetails(long id)
         {
             var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);
-            Console.WriteLine(url);
+            Logger.Log.Info(url);
             var uri = new Uri(url);
             return GetResponseData<BuildDetails>(uri);
         }

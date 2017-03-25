@@ -1,7 +1,8 @@
-﻿using Octokit;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CECode.Logging;
+using Octokit;
 
 namespace CECode.GitHub.Service
 {
@@ -37,6 +38,7 @@ namespace CECode.GitHub.Service
             _user = user;
             _token = token;
             _owner = owner;
+            Logger.Log.Info("GitHubService initialized");
         }
         #endregion
 
@@ -111,7 +113,7 @@ namespace CECode.GitHub.Service
         #region branches
         private async Task<IReadOnlyList<Branch>> GetBranchList(string repoName)
         {
-            return await Client.Repository.GetAllBranches(_owner, repoName);
+            return await Client.Repository.Branch.GetAll(_owner, repoName);
         }
         #endregion
 
