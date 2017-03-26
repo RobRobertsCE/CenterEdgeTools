@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CECode.Business
 {
-    class CEBuildArtifact : ICEBuildArtifact
+    internal class CEBuildArtifact : ICEBuildArtifact
     {
         public string name { get; set; }
         public long size { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CECode.Business
 {
-    class CEBuildIssue : ICEBuildIssue
+    internal class CEBuildIssue : ICEBuildIssue
     {
         public string id { get; set; }
         public string url { get; set; }

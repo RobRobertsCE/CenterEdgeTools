@@ -18,7 +18,7 @@ namespace CECodeDashboard
     public partial class TeamCityTestApp : Form
     {
         #region fields
-        WorkItemService _service;
+        //WorkItemService _service;
         ICETeamCityService _teamCity;
         #endregion
 
@@ -27,7 +27,7 @@ namespace CECodeDashboard
         {
             InitializeComponent();
 
-            _service = new WorkItemService();
+            //_service = new WorkItemService();
             var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
             _teamCity = ServiceFactory.GetCETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
             Logger.Log.Debug("TeamCity Test App Started");
@@ -62,75 +62,77 @@ namespace CECodeDashboard
             RunTest();
         }
 
-        async void RunTest()
+        void RunTest()
         {
             try
             {
-                var workItems = new List<WorkItem>();
+                //var workItems = new List<WorkItem>();
 
-                var pullRequests = await _service.GetPullRequests("Advantage", DateTime.Now.AddDays(-10), 20);
-                foreach (var pullRequest in pullRequests)
-                {
-                    var workItem = new WorkItem()
-                    {
-                        Number = pullRequest.Number,
-                        Id = pullRequest.Id,
-                        Status = pullRequest.Status,
-                        Title = pullRequest.Title,
-                        Developer = pullRequest.User
-                    };
+                //var pullRequests = await _service.GetPullRequests("Advantage", DateTime.Now.AddDays(-10), 20);
+                //foreach (var pullRequest in pullRequests)
+                //{
+                //    var workItem = new WorkItem()
+                //    {
+                //        Number = pullRequest.Number,
+                //        Id = pullRequest.Id,
+                //        Status = pullRequest.Status,
+                //        Title = pullRequest.Title,
+                //        Developer = pullRequest.User
+                //    };
 
-                    var jiraIssues = await _service.GetJiraIssues(workItem.JiraIssueKeys());
-                    foreach (var jiraIssue in jiraIssues)
-                    {
-                        var workItemJiraIssue = new WorkItemJiraIssue()
-                        {
-                            JiraKey = jiraIssue.Key,
-                            JiraTitle = jiraIssue.Summary,
-                            JiraStatus = jiraIssue.ItemStatus.ToString(),
-                            AffectsVersion = String.Join(",", jiraIssue.AffectsVersions.ToArray()),
-                            FixVersion = String.Join(",",jiraIssue.FixVersions.ToArray()),
-                            Team = jiraIssue.Team
-                        };
-                        workItem.JiraIssues.Add(workItemJiraIssue);
-                    }
+                //    var jiraIssues = await _service.GetJiraIssues(workItem.JiraIssueKeys());
+                //    foreach (var jiraIssue in jiraIssues)
+                //    {
+                //        var workItemJiraIssue = new WorkItemJiraIssue()
+                //        {
+                //            JiraKey = jiraIssue.Key,
+                //            JiraTitle = jiraIssue.Summary,
+                //            JiraStatus = jiraIssue.ItemStatus.ToString(),
+                //            AffectsVersion = String.Join(",", jiraIssue.AffectsVersions.ToArray()),
+                //            FixVersion = String.Join(",",jiraIssue.FixVersions.ToArray()),
+                //            Team = jiraIssue.Team
+                //        };
+                //        workItem.JiraIssues.Add(workItemJiraIssue);
+                //    }
 
-                    if (workItem.Status == "Open")
-                    {
-                        var builds = await _service.GetBuilds(pullRequest.Number);
+                //    if (workItem.Status == "Open")
+                //    {
+                //        var builds = await _service.GetBuilds(pullRequest.Number);
 
-                        foreach (var build in builds)
-                        {
-                            var workItemBuild = new WorkItemBuild()
-                            {
-                                Id = build.id,
-                                Number = build.number,
-                                Status = build.status,
-                                State = build.state,
-                                Branch = build.branchName,
-                                PercentComplete = build.percentageComplete
-                            };
+                //        foreach (var build in builds)
+                //        {
+                //            var workItemBuild = new WorkItemBuild()
+                //            {
+                //                Id = build.id,
+                //                Number = build.number,
+                //                Status = build.status,
+                //                State = build.state,
+                //                Branch = build.branchName,
+                //                PercentComplete = build.percentageComplete
+                //            };
 
-                            workItem.Builds.Add(workItemBuild);
-                        }
-                    }
+                //            workItem.Builds.Add(workItemBuild);
+                //        }
+                //    }
 
-                    workItems.Add(workItem);
-                }
-                foreach (var workItem in workItems)
-                {
-                    Console.WriteLine("{0} {1} {2} {3}", workItem.Number, workItem.Status, workItem.Developer, workItem.Title);
-                    Console.WriteLine("------------- JIRA ------------");
-                    foreach (var issue in workItem.JiraIssues)
-                    {
-                        Console.WriteLine("\t{0} {1} [{2}] [{3}] {4}", issue.JiraKey, issue.Team, issue.JiraStatus, issue.JiraTitle, issue.AffectsVersion);
-                    }
-                    Console.WriteLine("------------- GitHib ------------");
-                    foreach (var build in workItem.Builds)
-                    {
-                        Console.WriteLine("\t{0} {1} {2} {3} {4}", build.Number, build.Status, build.State, build.Branch, build.PercentComplete);
-                    }
-                }
+                //    workItems.Add(workItem);
+                //}
+                //foreach (var workItem in workItems)
+                //{
+                //    Console.WriteLine("**************************************************************");
+                //    Console.WriteLine("{0} {1} {2} {3}", workItem.Number, workItem.Status, workItem.Developer, workItem.Title);
+                //    Console.WriteLine("------------- JIRA ------------");
+                //    foreach (var issue in workItem.JiraIssues)
+                //    {
+                //        Console.WriteLine("\t{0} {1} [{2}] [{3}] {4}", issue.JiraKey, issue.Team, issue.JiraStatus, issue.JiraTitle, issue.AffectsVersion);
+                //    }
+                //    Console.WriteLine("------------- GitHib ------------");
+                //    foreach (var build in workItem.Builds)
+                //    {
+                //        Console.WriteLine("\t{0} {1} {2} {3} {4}", build.Number, build.Status, build.State, build.Branch, build.PercentComplete);
+                //    }
+                //    Console.WriteLine();
+                //}
             }
             catch (Exception ex)
             {

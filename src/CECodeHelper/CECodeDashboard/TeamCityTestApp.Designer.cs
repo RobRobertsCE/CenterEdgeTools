@@ -251,7 +251,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(51, 16);
             this.label7.TabIndex = 19;
-            this.label7.Text = "long id:";
+            this.label7.Text = "long buildId:";
             // 
             // label6
             // 
@@ -261,7 +261,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(51, 16);
             this.label6.TabIndex = 18;
-            this.label6.Text = "long id:";
+            this.label6.Text = "long buildId:";
             // 
             // btnGetBuildArtifacts
             // 
@@ -337,7 +337,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(51, 16);
             this.label1.TabIndex = 13;
-            this.label1.Text = "long id:";
+            this.label1.Text = "long buildId:";
             // 
             // txtParam
             // 

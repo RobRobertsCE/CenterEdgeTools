@@ -4,7 +4,6 @@ namespace CECode.Business
 {
     internal class CEBuildDetails : ICEBuildDetails
     {
-        #region properties
         public string artifacts { get; set; }
         public string changes { get; set; }
         public DateTime? queuedDate { get; set; }
@@ -20,6 +19,5 @@ namespace CECode.Business
         public string branchName { get; set; }
         public string href { get; set; }
         public string webUrl { get; set; }
-        #endregion
     }
 }

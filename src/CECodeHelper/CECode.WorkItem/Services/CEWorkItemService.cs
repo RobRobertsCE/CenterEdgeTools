@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CECode.Business.Services;
+using CECode.Business;
 
-namespace CECode.Business.Services
+namespace CECode.WorkItem.Services
 {
     internal class CEWorkItemService : ICEWorkItemService
     {
@@ -20,18 +22,6 @@ namespace CECode.Business.Services
             _jiraService = jiraService;
             _gitHubService = gitHubService;
             _teamCityService = teamCityService;
-        }
-
-        internal CEWorkItemService()
-        {
-            var jiraProfile = AccountProfileHelper.GetJIRAAccountInfo();
-            _jiraService = new CEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
-
-            var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
-            _gitHubService = new CEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
-
-            var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
-            _teamCityService = new CETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
         }
         #endregion
 

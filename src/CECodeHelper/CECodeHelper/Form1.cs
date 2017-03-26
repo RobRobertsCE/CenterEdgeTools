@@ -14,6 +14,7 @@ using CECode.GitHub.Service;
 using CECode.Jira;
 using CECode.Jira.Service;
 using CECode.TeamCity;
+using CECode.WorkItem.Services;
 using CECodeHelper.Forms;
 
 namespace CECodeHelper
@@ -48,15 +49,15 @@ namespace CECodeHelper
             try
             {
                 var jiraProfile = AccountProfileHelper.GetJIRAAccountInfo();
-                _jiraService = ServiceFactory.GetCEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
+                _jiraService = CECode.Business.Services.ServiceFactory.GetCEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
 
                 var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
-                _gitHubService = ServiceFactory.GetCEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
+                _gitHubService = CECode.Business.Services.ServiceFactory.GetCEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
 
                 var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
-                _teamCityService = ServiceFactory.GetCETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
+                _teamCityService = CECode.Business.Services.ServiceFactory.GetCETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
 
-                _workItemService = ServiceFactory.GetCEWorkItemService(_jiraService, _gitHubService, _teamCityService);
+                _workItemService = CECode.WorkItem.Services.ServiceFactory.GetCEWorkItemService(_jiraService, _gitHubService, _teamCityService);
             }
             catch (Exception ex)
             {

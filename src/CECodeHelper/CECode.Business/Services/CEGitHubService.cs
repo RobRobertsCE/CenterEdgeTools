@@ -235,9 +235,6 @@ namespace CECode.Business.Services
             }
             return result;
         }
-
-
-
         private async Task<IList<ICEPullRequest>> SearchPullRequestsInternal(PullRequestSearchArgs e)
         {
             var result = new List<ICEPullRequest>();

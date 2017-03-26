@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CECode.Business.Services;
+using CECode.Business;
 
-namespace CECode.Business.Services
+namespace CECode.WorkItem.Services
 {
     public class WorkItemService
     {
@@ -22,21 +24,9 @@ namespace CECode.Business.Services
             _gitHubService = gitHubService;
             _teamCityService = teamCityService;
         }
-
-        public WorkItemService()
-        {
-            var jiraProfile = AccountProfileHelper.GetJIRAAccountInfo();
-            _jiraService = new CEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
-
-            var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
-            _gitHubService = new CEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
-
-            var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
-            _teamCityService = new CETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
-        }
         #endregion
 
-        #region public methods - pull requests
+        #region public methods - jira issues
         public async Task<IList<ICEJiraIssue>> GetJiraIssues(IList<string> keys)
         {
             IList<ICEJiraIssue> results = new List<ICEJiraIssue>();
@@ -148,13 +138,13 @@ namespace CECode.Business.Services
         #endregion
 
         #region public methods - builds
-        public async Task<ICEBuildDetails> GetBuildDetails(long id)
+        public async Task<ICEBuildDetails> GetBuildDetails(long buildId)
         {
-            return await GetBuildDetailsInternal(id);
+            return await GetBuildInternal(buildId);
         }
-        public async Task<IList<ICEBuildDetails>> GetBuilds(int number)
+        public async Task<IList<ICEBuildDetails>> GetBuilds(int pullRequestNumber)
         {
-            return await GetBuildsInternal(number);
+            return await GetBuildsByPullRequestInternal(pullRequestNumber);
         }
         #endregion
 
@@ -176,7 +166,7 @@ namespace CECode.Business.Services
         #endregion
 
         #region protected virtual methods - builds
-        protected virtual async Task<ICEBuildDetails> GetBuildDetailsInternal(long id)
+        protected virtual async Task<ICEBuildDetails> GetBuildInternal(long id)
         {
             return await Task.Run(() =>
             {
@@ -184,7 +174,7 @@ namespace CECode.Business.Services
             });
         }
 
-        protected virtual async Task<IList<ICEBuildDetails>> GetBuildsInternal(int number)
+        protected virtual async Task<IList<ICEBuildDetails>> GetBuildsByPullRequestInternal(int number)
         {
             return await Task.Run(() =>
             {

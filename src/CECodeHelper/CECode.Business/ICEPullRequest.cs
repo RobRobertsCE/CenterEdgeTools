@@ -13,7 +13,7 @@ namespace CECode.Business
         int CommentCount { get; set; }
         int CommitCount { get; set; }
         IList<ICECommit> Commits { get; set; }
-        IList<ICEBuildDetails> Builds { get; set; }
+        IList<ICEBuildDetails> Builds { get; set; } 
         int Deletions { get; set; }
         string DiffUrl { get; set; }
         string HeadRef { get; set; }

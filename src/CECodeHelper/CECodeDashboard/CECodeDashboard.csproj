@@ -106,6 +106,10 @@
       <Project>{0b6f40ef-ff89-4f4c-b287-078a9a66c1b1}</Project>
       <Name>CECode.Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CECode.WorkItem\CECode.WorkItem.csproj">
+      <Project>{0d58a7d8-3a76-4fbc-81e2-a000dccfb555}</Project>
+      <Name>CECode.WorkItem</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

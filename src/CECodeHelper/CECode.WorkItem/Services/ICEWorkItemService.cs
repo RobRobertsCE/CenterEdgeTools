@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CECode.Business;
 
-namespace CECode.Business.Services
+namespace CECode.WorkItem.Services
 {
     public interface ICEWorkItemService
     {

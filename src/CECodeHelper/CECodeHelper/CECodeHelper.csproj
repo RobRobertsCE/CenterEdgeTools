@@ -164,6 +164,10 @@
       <Project>{4ba81a75-6f5a-434f-b3b0-76a4c5d8ec77}</Project>
       <Name>CECode.TeamCity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CECode.WorkItem\CECode.WorkItem.csproj">
+      <Project>{0d58a7d8-3a76-4fbc-81e2-a000dccfb555}</Project>
+      <Name>CECode.WorkItem</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

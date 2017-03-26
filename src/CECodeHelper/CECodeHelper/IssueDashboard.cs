@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CECode.Branches;
 using CECodeHelper.Forms;
+using CECode.WorkItem.Services;
 
 namespace CECodeHelper
 {
@@ -42,7 +43,7 @@ namespace CECodeHelper
         {
             try
             {
-                var service = ServiceFactory.GetCEWorkItemService();
+                var service = CECode.WorkItem.Services.ServiceFactory.GetCEWorkItemService();
                 _presenter = new IssueDashboardPresenter(this, service);
 
                 _presenter.PropertyChanged += _presenter_PropertyChanged;
@@ -55,7 +56,6 @@ namespace CECodeHelper
         #endregion
 
         #region public methods
-        // TODO: Implement logging
         public virtual void ExceptionHandler(Exception ex)
         {
             if (this.InvokeRequired)

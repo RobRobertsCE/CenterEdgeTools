@@ -22,15 +22,5 @@ namespace CECode.Business.Services
         {
             return new CETeamCityService(user, password);
         }
-
-        public static ICEWorkItemService GetCEWorkItemService()
-        {
-            return new CEWorkItemService();
-        }
-
-        public static ICEWorkItemService GetCEWorkItemService(ICEJiraService jiraService, ICEGitHubService gitHubService, ICETeamCityService teamCityService)
-        {
-            return new CEWorkItemService(jiraService, gitHubService, teamCityService);
-        }
     }
 }
