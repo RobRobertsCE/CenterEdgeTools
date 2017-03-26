@@ -68,7 +68,7 @@ namespace CECodeDashboard
             {
                 var workItems = new List<WorkItem>();
 
-                var pullRequests = await _service.GetPullRequests("Advantage", DateTime.Now.AddDays(-1), 3);
+                var pullRequests = await _service.GetPullRequests("Advantage", DateTime.Now.AddDays(-10), 20);
                 foreach (var pullRequest in pullRequests)
                 {
                     var workItem = new WorkItem()
@@ -79,6 +79,21 @@ namespace CECodeDashboard
                         Title = pullRequest.Title,
                         Developer = pullRequest.User
                     };
+
+                    var jiraIssues = await _service.GetJiraIssues(workItem.JiraIssueKeys());
+                    foreach (var jiraIssue in jiraIssues)
+                    {
+                        var workItemJiraIssue = new WorkItemJiraIssue()
+                        {
+                            JiraKey = jiraIssue.Key,
+                            JiraTitle = jiraIssue.Summary,
+                            JiraStatus = jiraIssue.ItemStatus.ToString(),
+                            AffectsVersion = String.Join(",", jiraIssue.AffectsVersions.ToArray()),
+                            FixVersion = String.Join(",",jiraIssue.FixVersions.ToArray()),
+                            Team = jiraIssue.Team
+                        };
+                        workItem.JiraIssues.Add(workItemJiraIssue);
+                    }
 
                     if (workItem.Status == "Open")
                     {
@@ -105,9 +120,15 @@ namespace CECodeDashboard
                 foreach (var workItem in workItems)
                 {
                     Console.WriteLine("{0} {1} {2} {3}", workItem.Number, workItem.Status, workItem.Developer, workItem.Title);
+                    Console.WriteLine("------------- JIRA ------------");
+                    foreach (var issue in workItem.JiraIssues)
+                    {
+                        Console.WriteLine("\t{0} {1} [{2}] [{3}] {4}", issue.JiraKey, issue.Team, issue.JiraStatus, issue.JiraTitle, issue.AffectsVersion);
+                    }
+                    Console.WriteLine("------------- GitHib ------------");
                     foreach (var build in workItem.Builds)
                     {
-                        Console.WriteLine("\t{1} {2} {3} {4}", build.Number, build.Status, build.State, build.Branch, build.PercentComplete);
+                        Console.WriteLine("\t{0} {1} {2} {3} {4}", build.Number, build.Status, build.State, build.Branch, build.PercentComplete);
                     }
                 }
             }
@@ -227,7 +248,7 @@ namespace CECodeDashboard
         {
             try
             {
-                var results = _teamCity.GetBuildsByMergeNumber(GetIntParam());
+                var results = _teamCity.GetBuildsByPullRequest(GetIntParam());
                 dgv.DataSource = results;
             }
             catch (Exception ex)
@@ -264,12 +285,28 @@ namespace CECodeDashboard
 
         private void btnGetBuildArtifacts_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var results = _teamCity.GetBuildArtifacts(GetLongParam());
+                dgv.DataSource = results;
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler(ex);
+            }
         }
 
         private void btnGetBuildIssues_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var results = _teamCity.GetBuildRelatedIssues(GetLongParam());
+                dgv.DataSource = results;
+            }
+            catch (Exception ex)
+            {
+                ExceptionHandler(ex);
+            }
         }
     }
 }

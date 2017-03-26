@@ -11,13 +11,26 @@ namespace CECodeDashboard.Logic
         public string Title { get; set; }
         public string Status { get; set; }
         public string Developer { get; set; }
-        public WorkItemJiraIssue JiraIssue { get; set; }
+        public IList<WorkItemJiraIssue> JiraIssues { get; set; }
         public IList<WorkItemBuild> Builds { get; set; }
 
         public WorkItem()
         {
             Builds = new List<WorkItemBuild>();
-            JiraIssue = new WorkItemJiraIssue();
+            JiraIssues = new List<WorkItemJiraIssue>();
+        }
+
+        public IList<string> JiraIssueKeys()
+        {
+            var keys = new List<string>();
+            var tag = "ADVANTAGE-";
+            if (Title.ToUpper().Contains(tag))
+            {
+                var i = Title.ToUpper().IndexOf(tag);
+                var key = Title.Substring(i, tag.Length + 4);
+                keys.Add(key);
+            }
+            return keys;
         }
     }
 }

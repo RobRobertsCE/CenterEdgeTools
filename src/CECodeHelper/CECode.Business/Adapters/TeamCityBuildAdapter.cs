@@ -72,37 +72,50 @@ namespace CECode.Business.Adapters
             return ceBuild;
         }
 
-        //public static IList<ICEBuildDetails> Translate(IEnumerable<BuildDetails> builds)
-        //{
-        //    IList<ICEBuildDetails> ceBuildDetails = new List<ICEBuildDetails>();
-        //    foreach (var entity in builds)
-        //    {
-        //        ceBuildDetails.Add(Translate(entity));
-        //    }
-        //    return ceBuildDetails;
-        //}
+        public static IList<ICEBuildArtifact> Translate(IEnumerable<File> buildFiles)
+        {
+            IList<ICEBuildArtifact> ceBuildArtifacts = new List<ICEBuildArtifact>();
+            foreach (var artifact in buildFiles)
+            {
+                ceBuildArtifacts.Add(Translate(artifact));
+            }
+            return ceBuildArtifacts;
+        }
 
-        //public static ICEBuildDetails Translate(BuildDetails build)
-        //{
-        //    ICEBuildDetails details = new CEBuildDetails()
-        //    {
-        //        id = build.id,
-        //        state = build.state,
-        //        status = build.status,
-        //        branchName = build.branchName,
-        //        number = build.number,
-        //        buildTypeId = build.buildTypeId,
-        //        href = build.href,
-        //        webUrl = build.webUrl,
-        //        artifacts = build.artifacts.href,
-        //        changes = build.changes.href
-        //    };
-        //    if (!String.IsNullOrEmpty(build.queuedDate)) details.queuedDate = DateTime.ParseExact(build.queuedDate, "yyyyMMddTHHmmssK", new CultureInfo("en-US"));
-        //    if (!String.IsNullOrEmpty(build.startDate)) details.startDate = DateTime.ParseExact(build.startDate, "yyyyMMddTHHmmssK", new CultureInfo("en-US"));
-        //    if (!String.IsNullOrEmpty(build.finishDate)) details.finishDate = DateTime.ParseExact(build.finishDate, "yyyyMMddTHHmmssK", new CultureInfo("en-US"));
+        public static ICEBuildArtifact Translate(File buildFile)
+        {
+            ICEBuildArtifact ceArtifact = new CEBuildArtifact()
+            {
+                name = buildFile.name,
+                size = buildFile.size,
+                modificationTime = DateTime.ParseExact(buildFile.modificationTime, "yyyyMMddTHHmmssK", CultureInfo.InvariantCulture),
+                metadataHref = buildFile.href,
+                contentHref = buildFile.content.href
+            };
 
-        //    return details;
-        //}
+            return ceArtifact;
+        }
+
+        public static IList<ICEBuildIssue> Translate(IEnumerable<Issue> buildIssues)
+        {
+            IList<ICEBuildIssue> ceBuildIssues = new List<ICEBuildIssue>();
+            foreach (var buildIssue in buildIssues)
+            {
+                ceBuildIssues.Add(Translate(buildIssue));
+            }
+            return ceBuildIssues;
+        }
+
+        public static ICEBuildIssue Translate(Issue buildIssue)
+        {
+            ICEBuildIssue ceBuildIssue = new CEBuildIssue()
+            {
+                id = buildIssue.id,
+                url = buildIssue.url
+            };
+
+            return ceBuildIssue;
+        }
         #endregion
     }
 }

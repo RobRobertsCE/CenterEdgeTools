@@ -192,7 +192,7 @@ namespace CECode.Business.Services
         // TeamCity 
         protected virtual IList<ICEBuildDetails> GetBuilds(int mergeNumber)
         {
-            return _teamCityService.GetBuildsByMergeNumber(mergeNumber);
+            return _teamCityService.GetBuildsByPullRequest(mergeNumber);
         }
 
         protected virtual ICEBuildDetails GetBuildDetails(long pullRequestId)

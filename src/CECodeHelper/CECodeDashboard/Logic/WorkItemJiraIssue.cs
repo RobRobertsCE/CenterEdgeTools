@@ -9,6 +9,6 @@
         public string FixVersion { get; set; }
         public string JiraType { get; set; }
         public string JiraPriority { get; set; }
-        public string JiraPoints { get; set; }
+        public string Team { get; set; }
     }
 }

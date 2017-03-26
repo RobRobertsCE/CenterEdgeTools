@@ -361,7 +361,7 @@ namespace CECodeHelper
             {
                 dgvTeamCity.DataSource = null;
 
-                var builds = _teamCityService.GetBuildsByMergeNumber(Int32.Parse(txtMergeNumber.Text));
+                var builds = _teamCityService.GetBuildsByPullRequest(Int32.Parse(txtMergeNumber.Text));
 
                 dgvTeamCity.DataSource = builds;
             }

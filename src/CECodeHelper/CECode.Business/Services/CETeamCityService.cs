@@ -68,10 +68,9 @@ namespace CECode.Business.Services
             return TeamCityBuildAdapter.Translate(builds);
         }
 
-        public IList<ICEBuildDetails> GetBuildsByMergeNumber(int mergeNumber)
+        public IList<ICEBuildDetails> GetBuildsByPullRequest(int pullRequestNumber)
         {
-            var builds = _service.GetBuildsByMergeNumber(mergeNumber);
-
+            var builds = _service.GetBuildsByPullRequest(pullRequestNumber);
             return TeamCityBuildAdapter.Translate(builds);
         }
 
@@ -85,7 +84,18 @@ namespace CECode.Business.Services
         public IList<ICEBuild> GetQueuedBuilds()
         {
             var builds = _service.GetQueuedBuilds();
+            return TeamCityBuildAdapter.Translate(builds);
+        }
 
+        public IList<ICEBuildIssue> GetBuildRelatedIssues(long buildId)
+        {
+            var builds = _service.GetBuildRelatedIssues(buildId);
+            return TeamCityBuildAdapter.Translate(builds);
+        }
+
+        public IList<ICEBuildArtifact> GetBuildArtifacts(long buildId)
+        {
+            var builds = _service.GetBuildArtifacts(buildId);
             return TeamCityBuildAdapter.Translate(builds);
         }
         #endregion

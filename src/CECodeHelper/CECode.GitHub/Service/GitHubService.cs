@@ -81,8 +81,6 @@ namespace CECode.GitHub.Service
             return await SearchPullRequestsInternal(state, updatedDateRange, repositoryNames);
         }
 
-
-
         public async Task<IReadOnlyList<PullRequest>> SearchPullRequests(string repositoryName, PullRequestRequest request, ApiOptions options)
         {
             return await SearchPullRequestsInternal(repositoryName, request, options);

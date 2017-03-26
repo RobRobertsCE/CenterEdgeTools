@@ -177,9 +177,9 @@ namespace CECode.TeamCity.Results
         {
             return BuildUrl(Constants.BuildQueueUrlSuffix);
         }
-        public static string GetRelatedIssuesUrl(long id)
+        public static string GetRelatedIssuesUrl(long buildId)
         {
-            var urlSuffix = string.Format(Constants.BuildRelatedIssuesUrl, id);
+            var urlSuffix = string.Format(Constants.BuildRelatedIssuesUrl, buildId);
             return BuildUrl(urlSuffix);
         }
         public static string GetArtifactsUrl(long id)

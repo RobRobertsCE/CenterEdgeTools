@@ -7,7 +7,7 @@ namespace CECode.TeamCity.Results
     //{
     //    public int id { get; set; }
     //    public string buildTypeId { get; set; }
-    //    public string number { get; set; }
+    //    public string pullRequestNumber { get; set; }
     //    public string status { get; set; }
     //    public string state { get; set; }
     //    public string branchName { get; set; }

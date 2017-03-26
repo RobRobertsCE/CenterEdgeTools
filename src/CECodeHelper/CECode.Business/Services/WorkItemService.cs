@@ -37,6 +37,24 @@ namespace CECode.Business.Services
         #endregion
 
         #region public methods - pull requests
+        public async Task<IList<ICEJiraIssue>> GetJiraIssues(IList<string> keys)
+        {
+            IList<ICEJiraIssue> results = new List<ICEJiraIssue>();
+            foreach (var key in keys)
+            {
+                var jiraIssue = await GetJiraIssue(key);
+                results.Add(jiraIssue);
+            }
+            return results;
+        }
+
+        public async Task<ICEJiraIssue> GetJiraIssue(string key)
+        {
+            return await GetJiraIssueInternal(key);
+        }
+        #endregion
+
+        #region public methods - pull requests
         public async Task<IList<ICEPullRequest>> GetPullRequests(PullRequestSearchArgs e)
         {
             return await GetPullRequestsInternal(e);
@@ -140,6 +158,16 @@ namespace CECode.Business.Services
         }
         #endregion
 
+        #region protected virtual methods - jira issues
+        protected async virtual Task<ICEJiraIssue> GetJiraIssueInternal(string key)
+        {
+            return await Task.Run(() =>
+            {
+                return _jiraService.GetItem(key);
+            });
+        }
+        #endregion
+
         #region protected virtual methods - pull requests
         protected async virtual Task<IList<ICEPullRequest>> GetPullRequestsInternal(PullRequestSearchArgs e)
         {
@@ -160,7 +188,7 @@ namespace CECode.Business.Services
         {
             return await Task.Run(() =>
             {
-                return _teamCityService.GetBuildsByMergeNumber(number);
+                return _teamCityService.GetBuildsByPullRequest(number);
             });
         }
         #endregion

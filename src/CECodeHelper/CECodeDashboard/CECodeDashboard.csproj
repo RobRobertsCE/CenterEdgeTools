@@ -98,6 +98,10 @@
       <Project>{1708a12a-4c35-4875-8e15-4214513d9a44}</Project>
       <Name>CECode.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CECode.Jira\CECode.Jira.csproj">
+      <Project>{cee65c50-3a50-4f8a-8eb4-b5f1c2270174}</Project>
+      <Name>CECode.Jira</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CECode.Logging\CECode.Logging.csproj">
       <Project>{0b6f40ef-ff89-4f4c-b287-078a9a66c1b1}</Project>
       <Name>CECode.Logging</Name>

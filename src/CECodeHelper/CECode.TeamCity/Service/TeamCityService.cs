@@ -47,7 +47,7 @@ namespace CECode.TeamCity.Service
             return GetResponseData<BuildDetails>(url);
         }
 
-        public IList<BuildDetails> GetBuildsByMergeNumber(int mergeNumber)
+        public IList<BuildDetails> GetBuildsByPullRequest(int mergeNumber)
         {
             var url = BuildDetails.GetMergeUrl(mergeNumber);
             var response = GetResponseData<BuildsRequestResult>(url);
@@ -69,7 +69,7 @@ namespace CECode.TeamCity.Service
 
         public IList<RunningBuild> GetBuilds()
         {
-            var url = BuildDetails.GetAllBuildsListUrl() ;
+            var url = BuildDetails.GetAllBuildsListUrl();
             var response = GetResponseData<RunningBuildsRequestResult>(url);
             return (null != response) ? response.build : new List<RunningBuild>();
         }
@@ -93,6 +93,42 @@ namespace CECode.TeamCity.Service
             var url = BuildDetails.GetRunningUrl();
             var response = GetResponseData<RunningBuildsRequestResult>(url);
             return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<Issue> GetBuildRelatedIssues(long buildId)
+        {
+            IList<Issue> result = new List<Issue>();
+            var url = BuildDetails.GetRelatedIssuesUrl(buildId);
+            var response = GetResponseData<BuildIssuesRequestResult>(url);
+            if (null==response || null==response.issueUsage)
+            {
+                return result;
+            }
+
+            foreach (var buildIssue in response.issueUsage)
+            {
+                result.Add(buildIssue.issue);
+            }
+
+            return result;
+        }
+
+        public IList<File> GetBuildArtifacts(long buildId)
+        {
+            IList<File> result = new List<File>();
+            var url = BuildDetails.GetArtifactsUrl(buildId);
+            var response = GetResponseData<BuildArtifactsRequestResult>(url);
+            if (null == response || null == response.file)
+            {
+                return result;
+            }
+
+            foreach (var buildFile in response.file)
+            {
+                result.Add(buildFile);
+            }
+
+            return result;
         }
         #endregion
 
@@ -122,6 +158,12 @@ namespace CECode.TeamCity.Service
                     var responseData = response.Content.ReadAsAsync<T>();
                     var dataObject = responseData.Result;
                     result = dataObject;
+                    if (_verboseLogging)
+                    {
+                        var readStringTask = response.Content.ReadAsStringAsync();
+                        string contentString = readStringTask.Result;
+                        Logger.Log.Debug(String.Format("Content:\r\n{0}", contentString));
+                    }
                 }
                 catch (Exception ex)
                 {

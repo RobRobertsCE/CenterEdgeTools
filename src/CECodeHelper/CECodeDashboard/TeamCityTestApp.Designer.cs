@@ -33,6 +33,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnBuildTypesQuery = new System.Windows.Forms.Button();
             this.btnGetQueuedBuilds = new System.Windows.Forms.Button();
             this.btnGetBuildsByMergeNumber = new System.Windows.Forms.Button();
@@ -42,17 +43,16 @@
             this.btnGetBuildsByLocator = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btnGetBuildArtifacts = new System.Windows.Forms.Button();
+            this.btnGetBuildIssues = new System.Windows.Forms.Button();
             this.btnAutoMergeBuild = new System.Windows.Forms.Button();
             this.btnAdvBuilds = new System.Windows.Forms.Button();
             this.btnAdvPatches = new System.Windows.Forms.Button();
             this.btnGetBuildById = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtParam = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btnGetBuildIssues = new System.Windows.Forms.Button();
-            this.btnGetBuildArtifacts = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -126,6 +126,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "List Result";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(416, 136);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(107, 16);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "string buildType:";
+            // 
             // btnBuildTypesQuery
             // 
             this.btnBuildTypesQuery.Location = new System.Drawing.Point(216, 128);
@@ -155,7 +165,7 @@
             this.btnGetBuildsByMergeNumber.Name = "btnGetBuildsByMergeNumber";
             this.btnGetBuildsByMergeNumber.Size = new System.Drawing.Size(192, 39);
             this.btnGetBuildsByMergeNumber.TabIndex = 8;
-            this.btnGetBuildsByMergeNumber.Text = "GetBuildsByMergeNumber";
+            this.btnGetBuildsByMergeNumber.Text = "GetBuildsByPullRequest";
             this.btnGetBuildsByMergeNumber.UseVisualStyleBackColor = true;
             this.btnGetBuildsByMergeNumber.Click += new System.EventHandler(this.btnGetBuildsByMergeNumber_Click);
             // 
@@ -233,6 +243,48 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Single Item Result";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(344, 136);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(51, 16);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "long id:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(344, 88);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(51, 16);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "long id:";
+            // 
+            // btnGetBuildArtifacts
+            // 
+            this.btnGetBuildArtifacts.Location = new System.Drawing.Point(184, 128);
+            this.btnGetBuildArtifacts.Margin = new System.Windows.Forms.Padding(4);
+            this.btnGetBuildArtifacts.Name = "btnGetBuildArtifacts";
+            this.btnGetBuildArtifacts.Size = new System.Drawing.Size(149, 39);
+            this.btnGetBuildArtifacts.TabIndex = 17;
+            this.btnGetBuildArtifacts.Text = "GetBuildArtifacts";
+            this.btnGetBuildArtifacts.UseVisualStyleBackColor = true;
+            this.btnGetBuildArtifacts.Click += new System.EventHandler(this.btnGetBuildArtifacts_Click);
+            // 
+            // btnGetBuildIssues
+            // 
+            this.btnGetBuildIssues.Location = new System.Drawing.Point(184, 80);
+            this.btnGetBuildIssues.Margin = new System.Windows.Forms.Padding(4);
+            this.btnGetBuildIssues.Name = "btnGetBuildIssues";
+            this.btnGetBuildIssues.Size = new System.Drawing.Size(149, 39);
+            this.btnGetBuildIssues.TabIndex = 16;
+            this.btnGetBuildIssues.Text = "GetBuildIssues";
+            this.btnGetBuildIssues.UseVisualStyleBackColor = true;
+            this.btnGetBuildIssues.Click += new System.EventHandler(this.btnGetBuildIssues_Click);
+            // 
             // btnAutoMergeBuild
             // 
             this.btnAutoMergeBuild.Location = new System.Drawing.Point(21, 128);
@@ -294,58 +346,6 @@
             this.txtParam.Name = "txtParam";
             this.txtParam.Size = new System.Drawing.Size(436, 22);
             this.txtParam.TabIndex = 11;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(416, 136);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(107, 16);
-            this.label2.TabIndex = 23;
-            this.label2.Text = "string buildType:";
-            // 
-            // btnGetBuildIssues
-            // 
-            this.btnGetBuildIssues.Location = new System.Drawing.Point(184, 80);
-            this.btnGetBuildIssues.Margin = new System.Windows.Forms.Padding(4);
-            this.btnGetBuildIssues.Name = "btnGetBuildIssues";
-            this.btnGetBuildIssues.Size = new System.Drawing.Size(149, 39);
-            this.btnGetBuildIssues.TabIndex = 16;
-            this.btnGetBuildIssues.Text = "GetBuildIssues";
-            this.btnGetBuildIssues.UseVisualStyleBackColor = true;
-            this.btnGetBuildIssues.Click += new System.EventHandler(this.btnGetBuildIssues_Click);
-            // 
-            // btnGetBuildArtifacts
-            // 
-            this.btnGetBuildArtifacts.Location = new System.Drawing.Point(184, 128);
-            this.btnGetBuildArtifacts.Margin = new System.Windows.Forms.Padding(4);
-            this.btnGetBuildArtifacts.Name = "btnGetBuildArtifacts";
-            this.btnGetBuildArtifacts.Size = new System.Drawing.Size(149, 39);
-            this.btnGetBuildArtifacts.TabIndex = 17;
-            this.btnGetBuildArtifacts.Text = "GetBuildArtifacts";
-            this.btnGetBuildArtifacts.UseVisualStyleBackColor = true;
-            this.btnGetBuildArtifacts.Click += new System.EventHandler(this.btnGetBuildArtifacts_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(344, 96);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(51, 16);
-            this.label6.TabIndex = 18;
-            this.label6.Text = "long id:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(344, 144);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 16);
-            this.label7.TabIndex = 19;
-            this.label7.Text = "long id:";
             // 
             // TeamCityTestApp
             // 

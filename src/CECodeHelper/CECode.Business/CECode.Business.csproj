@@ -52,12 +52,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CEBuild.cs" />
+    <Compile Include="CEBuildArtifact.cs" />
     <Compile Include="CEBuildDetails.cs" />
+    <Compile Include="CEBuildIssue.cs" />
     <Compile Include="CECommit.cs" />
     <Compile Include="CEWorkItem.cs" />
     <Compile Include="ICEBranch.cs" />
     <Compile Include="ICEBuild.cs" />
+    <Compile Include="ICEBuildArtifact.cs" />
     <Compile Include="ICEBuildDetails.cs" />
+    <Compile Include="ICEBuildIssue.cs" />
     <Compile Include="ICECommit.cs" />
     <Compile Include="ICEJiraIssue.cs" />
     <Compile Include="ICEPullRequest.cs" />
