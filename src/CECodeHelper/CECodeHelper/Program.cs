@@ -16,7 +16,7 @@ namespace CECodeHelper
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new IssueDashboard());
+            Application.Run(new Form1());
         }
     }
 }

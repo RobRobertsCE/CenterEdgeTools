@@ -137,24 +137,34 @@ namespace CECodeHelper.Forms
         private async void button2_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
+            StringBuilder csvSb = new StringBuilder();
+
             try
             {
                 var rootNode = trvBranch.Nodes[0];
-                var mainBranches = new List<string>() { "master", "beta", "develop" };
+                var mainBranches = new List<string>() { "master", "develop" };
+                csvSb.AppendLine(String.Format("{0}, {1}, {2}, {3}", "sha", "master", "develop", "branchName"));
+
                 foreach (TreeNode branchNode in rootNode.Nodes)
                 {
                     var branch = (Branch)branchNode.Tag;
                     string sha = branch.Commit.Sha;
+                    csvSb.AppendFormat("{0}, ", sha);
 
                     foreach (var mainBranch in mainBranches)
                     {
                         var isInBranch = await CommitIsInBranch(mainBranch, sha);
                         var statusMessage = String.Format("Feature branch '{0}' is {1}in main branch '{2}' [{3}]", branch.Name, isInBranch ? "" : "NOT ", mainBranch, sha.Substring(0, 8));
                         sb.AppendLine(statusMessage);
+                        csvSb.AppendFormat("{0}, ", isInBranch ? "YES" : "-");
                     }
+                    csvSb.AppendFormat("{0}\r\n", branch.Name);
                 }
                 Console.WriteLine("Writing report...");
-                System.IO.File.WriteAllText(@"C:\GitHubFeaturebranches\FeatureBranchReport.txt", sb.ToString());
+                System.IO.File.WriteAllText(String.Format(@"C:\GitHubFeaturebranches\FeatureBranchReport.{0}.txt", DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")), sb.ToString());
+
+                Console.WriteLine("Writing csv...");
+                System.IO.File.WriteAllText(String.Format(@"C:\GitHubFeaturebranches\FeatureBranchReport.{0}.csv", DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")), csvSb.ToString());
             }
             catch (Exception ex)
             {
