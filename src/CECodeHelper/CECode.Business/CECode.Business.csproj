@@ -56,12 +56,14 @@
     <Compile Include="CEBuildDetails.cs" />
     <Compile Include="CEBuildIssue.cs" />
     <Compile Include="CECommit.cs" />
+    <Compile Include="CECommitComment.cs" />
     <Compile Include="ICEBranch.cs" />
     <Compile Include="ICEBuild.cs" />
     <Compile Include="ICEBuildArtifact.cs" />
     <Compile Include="ICEBuildDetails.cs" />
     <Compile Include="ICEBuildIssue.cs" />
     <Compile Include="ICECommit.cs" />
+    <Compile Include="ICECommitComment.cs" />
     <Compile Include="ICEJiraIssue.cs" />
     <Compile Include="ICEPullRequest.cs" />
     <Compile Include="Adapters\JiraItemAdapter.cs" />

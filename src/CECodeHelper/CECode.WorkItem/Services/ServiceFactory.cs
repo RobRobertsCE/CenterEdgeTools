@@ -14,9 +14,9 @@ namespace CECode.WorkItem.Services
         {
             var teamCityProfile = AccountProfileHelper.GetTeamCityAccountInfo();
             var teamCityService = CECode.Business.Services.ServiceFactory.GetCETeamCityService(teamCityProfile.Login, teamCityProfile.Password);
-            var gitHubProfile = AccountProfileHelper.GetTeamCityAccountInfo();
+            var gitHubProfile = AccountProfileHelper.GetGitHubAccountInfo();
             var gitHubService = CECode.Business.Services.ServiceFactory.GetCEGitHubService(gitHubProfile.Login, gitHubProfile.Token, gitHubProfile.Owner);
-            var jiraProfile = AccountProfileHelper.GetTeamCityAccountInfo();
+            var jiraProfile = AccountProfileHelper.GetJIRAAccountInfo();
             var jiraService = CECode.Business.Services.ServiceFactory.GetCEJiraService(jiraProfile.URL, jiraProfile.Login, jiraProfile.Password);
             return new CEWorkItemService(jiraService, gitHubService, teamCityService);
         }

@@ -254,26 +254,26 @@ namespace CECodeHelper
 
         private async void btnCEWorkItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                dgvJira.DataSource = null;
-                dgvGitHub.DataSource = null;
-                dgvTeamCity.DataSource = null;
+            //try
+            //{
+            //    dgvJira.DataSource = null;
+            //    dgvGitHub.DataSource = null;
+            //    dgvTeamCity.DataSource = null;
 
-                var gitHubRepoName = "Advantage";
-                var jiraProjectName = "Advantage";
-                var jiraIssueId = txtJiraKey.Text;
+            //    var gitHubRepoName = "Advantage";
+            //    var jiraProjectName = "Advantage";
+            //    var jiraIssueId = txtJiraKey.Text;
 
-                var result = await _workItemService.GetWorkItem(gitHubRepoName, jiraProjectName, jiraIssueId);
+            //    var result = await _workItemService.GetWorkItem(gitHubRepoName, jiraProjectName, jiraIssueId);
 
-                dgvJira.DataSource = new List<ICEJiraIssue>() { result.JiraIssue };
-                dgvGitHub.DataSource = result.PullRequests;
+            //    dgvJira.DataSource = new List<ICEJiraIssue>() { result.JiraIssue };
+            //    dgvGitHub.DataSource = result.PullRequests;
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.ToString());
+            //}
         }
 
         private void btnTeamCity_Click(object sender, EventArgs e)

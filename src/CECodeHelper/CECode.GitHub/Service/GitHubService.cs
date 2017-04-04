@@ -110,6 +110,17 @@ namespace CECode.GitHub.Service
             var result = await GetPullRequestCommitsInternal(repositoryName, sha);
             return result;
         }
+
+        public async Task<IReadOnlyList<PullRequestCommit>> GetPullRequestCommits(string repositoryName, int number)
+        {
+            var result = await GetPullRequestCommitsInternal(repositoryName, number);
+            return result;
+        }
+        public async Task<IReadOnlyList<PullRequestReviewComment>> GetPullRequestComments(string repositoryName, int number)
+        {
+            var result = await GetPullRequestCommentsInternal(repositoryName, number);
+            return result;
+        }
         #endregion
         #endregion
 
@@ -154,7 +165,6 @@ namespace CECode.GitHub.Service
         {
             return await Client.Repository.Commit.Get(_owner, repositoryName, sha);
         }
-
         #endregion
 
         #region pull requests
@@ -185,9 +195,27 @@ namespace CECode.GitHub.Service
         {
             return await Client.Repository.PullRequest.GetAllForRepository(_owner, repositoryName, request, options);
         }
+
         private async Task<PullRequest> GetPullRequestInternal(string repositoryName, int number)
         {
-            return await Client.Repository.PullRequest.Get(_owner, repositoryName, number);
+            return await Client.Repository.PullRequest.Get(_owner, repositoryName, number); ;
+        }
+
+        private async Task<IReadOnlyList<PullRequestCommit>> GetPullRequestCommitsInternal(string repositoryName, int number)
+        {
+            return await Client.Repository.PullRequest.Commits(_owner, repositoryName, number);
+        }
+
+        private async Task<IReadOnlyList<CommitComment>> GetPullRequestCommentsInternal(string repositoryName, string sha)
+        {
+            var comments = await Client.Repository.Comment.GetAllForCommit(_owner, repositoryName, sha);
+            return comments;
+        }
+        
+        private async Task<IReadOnlyList<PullRequestReviewComment>> GetPullRequestCommentsInternal(string repositoryName, int number)
+        {
+            var comments = await Client.Repository.PullRequest.ReviewComment.GetAll(_owner, repositoryName, number);
+            return comments;
         }
 
         private async Task<SearchIssuesResult> SearchPullRequestsInternal(ItemState? state, IList<string> repositorynames)

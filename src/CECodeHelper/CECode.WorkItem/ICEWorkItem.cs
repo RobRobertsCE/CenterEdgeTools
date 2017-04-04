@@ -5,8 +5,7 @@ namespace CECode.Business
 {
     public interface ICEWorkItem
     {
-        ICEJiraIssue JiraIssue { get; set; }
-        IList<ICEBranch> Branches { get; set; }
-        IList<ICEPullRequest> PullRequests { get; set; }
+        IList<ICEJiraIssue> JiraIssues { get; set; }
+        ICEPullRequest PullRequest { get; set; }
     }
 }

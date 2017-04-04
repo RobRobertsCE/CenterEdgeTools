@@ -94,6 +94,7 @@
     <Compile Include="IssueDashboard.Designer.cs">
       <DependentUpon>IssueDashboard.cs</DependentUpon>
     </Compile>
+    <Compile Include="IssueDashboardPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -163,6 +164,10 @@
     <ProjectReference Include="..\CECode.TeamCity\CECode.TeamCity.csproj">
       <Project>{4ba81a75-6f5a-434f-b3b0-76a4c5d8ec77}</Project>
       <Name>CECode.TeamCity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.WorkItem.Views\CECode.WorkItem.Views.csproj">
+      <Project>{abfd7fc1-8a09-4871-b6a8-2c7c16ec9a3b}</Project>
+      <Name>CECode.WorkItem.Views</Name>
     </ProjectReference>
     <ProjectReference Include="..\CECode.WorkItem\CECode.WorkItem.csproj">
       <Project>{0d58a7d8-3a76-4fbc-81e2-a000dccfb555}</Project>

@@ -37,6 +37,7 @@ namespace CECode.Business
         public string PatchUrl { get; set; }
         public string DiffUrl { get; set; }
         public string HtmlUrl { get; set; }
+        public string IssueUrl { get; set; }
         public string Url { get; set; }
 
         public string User { get; set; }
@@ -45,15 +46,51 @@ namespace CECode.Business
         public int CommitCount { get; set; }
 
         public IList<ICECommit> Commits { get; set; }
-        public IList<ICEBuildDetails> Builds { get; set; } 
+        public IList<ICECommitComment> Comments { get; set; }
+        public IList<ICEBuildDetails> Builds { get; set; }
         #endregion
 
         #region ctor
         public CEPullRequest()
         {
             Commits = new List<ICECommit>();
+            Comments = new List<ICECommitComment>();
             Builds = new List<ICEBuildDetails>();
-        } 
+        }
+        #endregion
+
+        #region public methods
+        public virtual IList<string> GetIssueKeys(string projectName)
+        {
+            var issueContent = Title + Body;
+            var tag = String.Format("{0}-", projectName.ToUpper());
+            return ParseIssueKeys(issueContent, tag);
+        }
+        #endregion
+
+        #region ctor
+        protected virtual IList<string> ParseIssueKeys(string content, string tag)
+        {
+            var keys = new List<string>();
+
+            var titleAndBody = content.ToUpper();
+
+            int issueKeyIdx = 0;
+            int startIdx = 0;
+
+            while (issueKeyIdx > -1 && startIdx < titleAndBody.Length)
+            {
+                issueKeyIdx = titleAndBody.IndexOf(tag, startIdx);
+                if (issueKeyIdx > 0)
+                {
+                    var key = titleAndBody.Substring(issueKeyIdx, tag.Length + 4);
+                    keys.Add(key);
+                }
+                startIdx = issueKeyIdx + issueKeyIdx + tag.Length;
+            }
+
+            return keys;
+        }
         #endregion
     }
 }
