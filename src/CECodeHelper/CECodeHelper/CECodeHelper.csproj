@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CCBF649D-232A-4207-8C88-98EE65512D7F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CECodeHelper</RootNamespace>
+    <AssemblyName>CECodeHelper</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Atlassian.Jira, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Atlassian.Jira.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Octokit, Version=0.24.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Octokit.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Advantage\PullRequestAssembyHelper.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AccountProfilesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AccountProfilesDialog.Designer.cs">
+      <DependentUpon>AccountProfilesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DbVersionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DbVersionDialog.Designer.cs">
+      <DependentUpon>DbVersionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GitHubView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GitHubView.Designer.cs">
+      <DependentUpon>GitHubView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IIssueDashboard.cs" />
+    <Compile Include="IssueDashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IssueDashboard.Designer.cs">
+      <DependentUpon>IssueDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IssueDashboardPresenter.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AccountProfilesDialog.resx">
+      <DependentUpon>AccountProfilesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DbVersionDialog.resx">
+      <DependentUpon>DbVersionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GitHubView.resx">
+      <DependentUpon>GitHubView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IssueDashboard.resx">
+      <DependentUpon>IssueDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CECode.AdvUpgrade\CECode.AdvUpgrade.csproj">
+      <Project>{f6cf7a72-9d84-4d1f-819a-310341c402e6}</Project>
+      <Name>CECode.AdvUpgrade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.Authentication\CECode.Authentication.csproj">
+      <Project>{ac4e4b9f-7b15-49e2-a370-3a076a47712b}</Project>
+      <Name>CECode.Authentication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.Branches\CECode.Branches.csproj">
+      <Project>{730efdcb-9652-4032-8c05-d323ee1e8b9d}</Project>
+      <Name>CECode.Branches</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.Business\CECode.Business.csproj">
+      <Project>{1708a12a-4c35-4875-8e15-4214513d9a44}</Project>
+      <Name>CECode.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.GitHub\CECode.GitHub.csproj">
+      <Project>{38ace417-197e-4c4b-94ae-9d6d984e81c2}</Project>
+      <Name>CECode.GitHub</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.Jira\CECode.Jira.csproj">
+      <Project>{cee65c50-3a50-4f8a-8eb4-b5f1c2270174}</Project>
+      <Name>CECode.Jira</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.TeamCity\CECode.TeamCity.csproj">
+      <Project>{4ba81a75-6f5a-434f-b3b0-76a4c5d8ec77}</Project>
+      <Name>CECode.TeamCity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.WorkItem.Views\CECode.WorkItem.Views.csproj">
+      <Project>{abfd7fc1-8a09-4871-b6a8-2c7c16ec9a3b}</Project>
+      <Name>CECode.WorkItem.Views</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.WorkItem\CECode.WorkItem.csproj">
+      <Project>{0d58a7d8-3a76-4fbc-81e2-a000dccfb555}</Project>
+      <Name>CECode.WorkItem</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
