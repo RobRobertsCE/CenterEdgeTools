@@ -52,16 +52,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CEBuild.cs" />
+    <Compile Include="CEBuildArtifact.cs" />
     <Compile Include="CEBuildDetails.cs" />
+    <Compile Include="CEBuildIssue.cs" />
     <Compile Include="CECommit.cs" />
-    <Compile Include="CEWorkItem.cs" />
+    <Compile Include="CECommitComment.cs" />
     <Compile Include="ICEBranch.cs" />
     <Compile Include="ICEBuild.cs" />
+    <Compile Include="ICEBuildArtifact.cs" />
     <Compile Include="ICEBuildDetails.cs" />
+    <Compile Include="ICEBuildIssue.cs" />
     <Compile Include="ICECommit.cs" />
+    <Compile Include="ICECommitComment.cs" />
     <Compile Include="ICEJiraIssue.cs" />
     <Compile Include="ICEPullRequest.cs" />
-    <Compile Include="ICEWorkItem.cs" />
     <Compile Include="Adapters\JiraItemAdapter.cs" />
     <Compile Include="Services\CEGitHubService.cs" />
     <Compile Include="CEJiraIssue.cs" />
@@ -70,15 +74,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CEPullRequest.cs" />
     <Compile Include="Services\CETeamCityService.cs" />
-    <Compile Include="Services\CEWorkItemService.cs" />
     <Compile Include="Services\ICEGitHubService.cs" />
     <Compile Include="Services\ICEJiraService.cs" />
     <Compile Include="Services\ICETeamCityService.cs" />
-    <Compile Include="Services\ICEWorkItemService.cs" />
     <Compile Include="Services\PullRequestSearchArgs.cs" />
     <Compile Include="Services\ServiceFactory.cs" />
     <Compile Include="Adapters\TeamCityBuildAdapter.cs" />
-    <Compile Include="Services\WorkItemService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

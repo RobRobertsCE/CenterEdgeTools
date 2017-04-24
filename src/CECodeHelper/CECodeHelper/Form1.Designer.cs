@@ -47,18 +47,17 @@
             this.btnTeamCity = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.btnAdvantagePatches = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txtLocator = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.txtMergeNumber = new System.Windows.Forms.TextBox();
+            this.txtBuildNumber = new System.Windows.Forms.TextBox();
+            this.button9 = new System.Windows.Forms.Button();
             this.txtBuildId = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.txtBuildNumber = new System.Windows.Forms.TextBox();
-            this.button9 = new System.Windows.Forms.Button();
+            this.txtMergeNumber = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.txtLocator = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvJira)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGitHub)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTeamCity)).BeginInit();
@@ -242,16 +241,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(1016, 8);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(192, 24);
-            this.button3.TabIndex = 19;
-            this.button3.Text = "Team City - Advantage Patch Builds";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // btnAdvantagePatches
             // 
             this.btnAdvantagePatches.Location = new System.Drawing.Point(8, 48);
@@ -284,41 +273,23 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Team City";
             // 
-            // txtLocator
+            // txtBuildNumber
             // 
-            this.txtLocator.Location = new System.Drawing.Point(384, 16);
-            this.txtLocator.Name = "txtLocator";
-            this.txtLocator.Size = new System.Drawing.Size(144, 20);
-            this.txtLocator.TabIndex = 21;
-            this.txtLocator.Text = "locator=";
+            this.txtBuildNumber.Location = new System.Drawing.Point(768, 16);
+            this.txtBuildNumber.Name = "txtBuildNumber";
+            this.txtBuildNumber.Size = new System.Drawing.Size(56, 20);
+            this.txtBuildNumber.TabIndex = 31;
+            this.txtBuildNumber.Text = "3144";
             // 
-            // button4
+            // button9
             // 
-            this.button4.Location = new System.Drawing.Point(256, 16);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(120, 24);
-            this.button4.TabIndex = 22;
-            this.button4.Text = "Builds by Locator";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(256, 48);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(120, 24);
-            this.button5.TabIndex = 23;
-            this.button5.Text = "Builds by Merge #";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // txtMergeNumber
-            // 
-            this.txtMergeNumber.Location = new System.Drawing.Point(384, 48);
-            this.txtMergeNumber.Name = "txtMergeNumber";
-            this.txtMergeNumber.Size = new System.Drawing.Size(56, 20);
-            this.txtMergeNumber.TabIndex = 24;
-            this.txtMergeNumber.Text = "6008";
+            this.button9.Location = new System.Drawing.Point(680, 16);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(80, 24);
+            this.button9.TabIndex = 29;
+            this.button9.Text = "Builds by #";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // txtBuildId
             // 
@@ -348,23 +319,41 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
-            // txtBuildNumber
+            // txtMergeNumber
             // 
-            this.txtBuildNumber.Location = new System.Drawing.Point(768, 16);
-            this.txtBuildNumber.Name = "txtBuildNumber";
-            this.txtBuildNumber.Size = new System.Drawing.Size(56, 20);
-            this.txtBuildNumber.TabIndex = 31;
-            this.txtBuildNumber.Text = "3144";
+            this.txtMergeNumber.Location = new System.Drawing.Point(384, 48);
+            this.txtMergeNumber.Name = "txtMergeNumber";
+            this.txtMergeNumber.Size = new System.Drawing.Size(56, 20);
+            this.txtMergeNumber.TabIndex = 24;
+            this.txtMergeNumber.Text = "6008";
             // 
-            // button9
+            // button5
             // 
-            this.button9.Location = new System.Drawing.Point(680, 16);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(80, 24);
-            this.button9.TabIndex = 29;
-            this.button9.Text = "Builds by #";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
+            this.button5.Location = new System.Drawing.Point(256, 48);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(120, 24);
+            this.button5.TabIndex = 23;
+            this.button5.Text = "Builds by Merge #";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(256, 16);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(120, 24);
+            this.button4.TabIndex = 22;
+            this.button4.Text = "Builds by Locator";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // txtLocator
+            // 
+            this.txtLocator.Location = new System.Drawing.Point(384, 16);
+            this.txtLocator.Name = "txtLocator";
+            this.txtLocator.Size = new System.Drawing.Size(144, 20);
+            this.txtLocator.TabIndex = 21;
+            this.txtLocator.Text = "locator=";
             // 
             // Form1
             // 
@@ -372,7 +361,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1311, 610);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.txtJiraKey);
             this.Controls.Add(this.btnCEWorkItem);
             this.Controls.Add(this.btnGitHubView);
@@ -424,7 +412,6 @@
         private System.Windows.Forms.Button btnTeamCity;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button btnAdvantagePatches;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button4;

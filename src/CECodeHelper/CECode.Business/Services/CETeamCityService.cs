@@ -19,59 +19,58 @@ namespace CECode.Business.Services
         #endregion
 
         #region public methods
-        public ICEBuild GetAdvantageBuild()
+        public ICEBuildDetails GetAdvantageBuild()
         {
             var build = _service.GetAdvantageBuild();
 
             return TeamCityBuildAdapter.Translate(build);
         }
 
-        public ICEBuild GetAdvantagePatches()
+        public ICEBuildDetails GetPatchBuild()
         {
-            var build = _service.GetAdvantagePatches();
+            var build = _service.GetAdvantagePatchBuild();
 
             return TeamCityBuildAdapter.Translate(build);
         }
 
-        public ICEBuild GetBuild(long id)
+        public ICEBuildDetails GetAutoMergeBuild()
         {
-            var build = _service.GetBuildById(id);
+            var build = _service.GetAdvantageAutoMergeBuild();
 
             return TeamCityBuildAdapter.Translate(build);
         }
-        
-        public ICEBuildDetails GetBuildDetails(long id)
+
+        public ICEBuildDetails GetBuild(long id)
         {
-            var build = _service.GetBuildDetails(id);
+            var build = _service.GetBuild(id);
 
             return TeamCityBuildAdapter.Translate(build);
         }
 
         public IList<ICEBuild> GetBuilds()
         {
-            var builds = _service.GetBuilds("(default:any)");
+            var builds = _service.GetBuilds();
 
             return TeamCityBuildAdapter.Translate(builds);
         }
 
-        public IList<ICEBuild> GetBuilds(string locator)
+        public IList<ICEBuild> GetBuildsQuery(string locator)
         {
             var builds = _service.GetBuilds(locator);
 
             return TeamCityBuildAdapter.Translate(builds);
         }
 
-        public IList<ICEBuild> GetMergeBuilds(string mergeNumber)
+        public IList<ICEBuild> GetBuildTypeBuildsQuery(string buildType)
         {
-            var builds = _service.GetBuilds(String.Format("locator=branch:({0}/merge)", mergeNumber));
+            var builds = _service.GetBuildTypeBuilds(buildType);
 
             return TeamCityBuildAdapter.Translate(builds);
         }
 
-        public IList<ICEBuild> GetBuildsByMergeNumber(int mergeNumber)
+        public IList<ICEBuildDetails> GetBuildsByPullRequest(int pullRequestNumber)
         {
-            var builds = _service.GetBuildsByMergeNumber(mergeNumber);
-
+            var builds = _service.GetBuildsByPullRequest(pullRequestNumber);
             return TeamCityBuildAdapter.Translate(builds);
         }
 
@@ -81,10 +80,22 @@ namespace CECode.Business.Services
 
             return TeamCityBuildAdapter.Translate(builds);
         }
-        public IList<ICEBuild> GetRunningBuilds(int number)
-        {
-            var builds = _service.GetRunningBuilds(number);
 
+        public IList<ICEBuild> GetQueuedBuilds()
+        {
+            var builds = _service.GetQueuedBuilds();
+            return TeamCityBuildAdapter.Translate(builds);
+        }
+
+        public IList<ICEBuildIssue> GetBuildRelatedIssues(long buildId)
+        {
+            var builds = _service.GetBuildRelatedIssues(buildId);
+            return TeamCityBuildAdapter.Translate(builds);
+        }
+
+        public IList<ICEBuildArtifact> GetBuildArtifacts(long buildId)
+        {
+            var builds = _service.GetBuildArtifacts(buildId);
             return TeamCityBuildAdapter.Translate(builds);
         }
         #endregion

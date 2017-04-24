@@ -36,9 +36,10 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dBUpgradeHelperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnUpdateIssues = new System.Windows.Forms.ToolStripButton();
-            this.btnUpdatePullRequests = new System.Windows.Forms.ToolStripButton();
             this.btnUpdateBuilds = new System.Windows.Forms.ToolStripButton();
             this.lstIssues = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -48,22 +49,24 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ctxWorkItem = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.updatePullRequestsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateBuildsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtMessages = new System.Windows.Forms.TextBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.splitter2 = new System.Windows.Forms.Splitter();
-            this.dgvBuilds = new System.Windows.Forms.DataGridView();
             this.dgvPullRequest = new System.Windows.Forms.DataGridView();
             this.ctxPullRequests = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.updateBuildsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.buildDetails1 = new CECode.WorkItem.Views.BuildDetails();
+            this.pullRequestDetailsView = new CECode.WorkItem.Views.PullRequestDetails();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.ctxWorkItem.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBuilds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPullRequest)).BeginInit();
             this.ctxPullRequests.SuspendLayout();
             this.SuspendLayout();
@@ -72,10 +75,11 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.toolsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1008, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1185, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -91,12 +95,12 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(89, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -115,15 +119,29 @@
             this.accountsToolStripMenuItem.Text = "&Accounts";
             this.accountsToolStripMenuItem.Click += new System.EventHandler(this.accountsToolStripMenuItem_Click);
             // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dBUpgradeHelperToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // dBUpgradeHelperToolStripMenuItem
+            // 
+            this.dBUpgradeHelperToolStripMenuItem.Name = "dBUpgradeHelperToolStripMenuItem";
+            this.dBUpgradeHelperToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.dBUpgradeHelperToolStripMenuItem.Text = "DB Upgrade helper";
+            this.dBUpgradeHelperToolStripMenuItem.Click += new System.EventHandler(this.dBUpgradeHelperToolStripMenuItem_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnUpdateIssues,
-            this.btnUpdatePullRequests,
             this.btnUpdateBuilds});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1008, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1185, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -136,17 +154,6 @@
             this.btnUpdateIssues.Size = new System.Drawing.Size(83, 22);
             this.btnUpdateIssues.Text = "Update Issues";
             this.btnUpdateIssues.Click += new System.EventHandler(this.btnUpdateIssues_Click);
-            // 
-            // btnUpdatePullRequests
-            // 
-            this.btnUpdatePullRequests.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnUpdatePullRequests.Enabled = false;
-            this.btnUpdatePullRequests.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdatePullRequests.Image")));
-            this.btnUpdatePullRequests.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnUpdatePullRequests.Name = "btnUpdatePullRequests";
-            this.btnUpdatePullRequests.Size = new System.Drawing.Size(122, 22);
-            this.btnUpdatePullRequests.Text = "Update Pull Requests";
-            this.btnUpdatePullRequests.Click += new System.EventHandler(this.btnUpdatePullRequests_Click);
             // 
             // btnUpdateBuilds
             // 
@@ -169,7 +176,11 @@
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader2,
-            this.columnHeader6});
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader10,
+            this.columnHeader11});
             this.lstIssues.ContextMenuStrip = this.ctxWorkItem;
             this.lstIssues.Dock = System.Windows.Forms.DockStyle.Top;
             this.lstIssues.FullRowSelect = true;
@@ -177,12 +188,11 @@
             this.lstIssues.HideSelection = false;
             this.lstIssues.Location = new System.Drawing.Point(0, 49);
             this.lstIssues.Name = "lstIssues";
-            this.lstIssues.Size = new System.Drawing.Size(1008, 183);
+            this.lstIssues.Size = new System.Drawing.Size(1185, 183);
             this.lstIssues.TabIndex = 2;
             this.lstIssues.UseCompatibleStateImageBehavior = false;
             this.lstIssues.View = System.Windows.Forms.View.Details;
             this.lstIssues.SelectedIndexChanged += new System.EventHandler(this.lstIssues_SelectedIndexChanged);
-            this.lstIssues.DoubleClick += new System.EventHandler(this.lstIssues_DoubleClick);
             // 
             // columnHeader1
             // 
@@ -190,11 +200,12 @@
             // 
             // columnHeader7
             // 
-            this.columnHeader7.Text = "GitHub Issue #";
+            this.columnHeader7.Text = "GitHub #";
+            this.columnHeader7.Width = 89;
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Project";
+            this.columnHeader3.Text = "JIRA Key";
             this.columnHeader3.Width = 111;
             // 
             // columnHeader4
@@ -204,51 +215,60 @@
             // 
             // columnHeader5
             // 
-            this.columnHeader5.Text = "Status";
+            this.columnHeader5.Text = "JIRA Status";
             this.columnHeader5.Width = 86;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Summary";
-            this.columnHeader2.Width = 443;
+            this.columnHeader2.Width = 144;
             // 
             // columnHeader6
             // 
-            this.columnHeader6.Text = "Pull Request";
+            this.columnHeader6.Text = "GitHub Status";
             this.columnHeader6.Width = 128;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Commits";
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Comments";
+            this.columnHeader9.Width = 73;
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "Title";
+            this.columnHeader10.Width = 163;
+            // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "Body";
             // 
             // ctxWorkItem
             // 
             this.ctxWorkItem.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.updatePullRequestsToolStripMenuItem,
             this.updateBuildsToolStripMenuItem});
             this.ctxWorkItem.Name = "ctxWorkItem";
-            this.ctxWorkItem.Size = new System.Drawing.Size(186, 48);
-            // 
-            // updatePullRequestsToolStripMenuItem
-            // 
-            this.updatePullRequestsToolStripMenuItem.Enabled = false;
-            this.updatePullRequestsToolStripMenuItem.Name = "updatePullRequestsToolStripMenuItem";
-            this.updatePullRequestsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.updatePullRequestsToolStripMenuItem.Text = "Update Pull Requests";
-            this.updatePullRequestsToolStripMenuItem.Click += new System.EventHandler(this.updatePullRequestsToolStripMenuItem_Click);
+            this.ctxWorkItem.Size = new System.Drawing.Size(153, 48);
             // 
             // updateBuildsToolStripMenuItem
             // 
             this.updateBuildsToolStripMenuItem.Enabled = false;
             this.updateBuildsToolStripMenuItem.Name = "updateBuildsToolStripMenuItem";
-            this.updateBuildsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.updateBuildsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.updateBuildsToolStripMenuItem.Text = "Update Builds";
             this.updateBuildsToolStripMenuItem.Click += new System.EventHandler(this.updateBuildsToolStripMenuItem_Click);
             // 
             // txtMessages
             // 
             this.txtMessages.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.txtMessages.Location = new System.Drawing.Point(0, 449);
+            this.txtMessages.Location = new System.Drawing.Point(0, 610);
             this.txtMessages.Multiline = true;
             this.txtMessages.Name = "txtMessages";
             this.txtMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtMessages.Size = new System.Drawing.Size(1008, 71);
+            this.txtMessages.Size = new System.Drawing.Size(1185, 71);
             this.txtMessages.TabIndex = 3;
             // 
             // splitter1
@@ -256,52 +276,32 @@
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
             this.splitter1.Location = new System.Drawing.Point(0, 232);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(1008, 3);
+            this.splitter1.Size = new System.Drawing.Size(1185, 3);
             this.splitter1.TabIndex = 4;
             this.splitter1.TabStop = false;
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.splitter2);
-            this.panel1.Controls.Add(this.dgvBuilds);
+            this.panel1.Controls.Add(this.buildDetails1);
             this.panel1.Controls.Add(this.dgvPullRequest);
+            this.panel1.Controls.Add(this.pullRequestDetailsView);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 235);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1008, 214);
+            this.panel1.Size = new System.Drawing.Size(1185, 375);
             this.panel1.TabIndex = 5;
-            // 
-            // splitter2
-            // 
-            this.splitter2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.splitter2.Location = new System.Drawing.Point(0, 104);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(1004, 3);
-            this.splitter2.TabIndex = 2;
-            this.splitter2.TabStop = false;
-            // 
-            // dgvBuilds
-            // 
-            this.dgvBuilds.BackgroundColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.dgvBuilds.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dgvBuilds.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBuilds.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvBuilds.Location = new System.Drawing.Point(0, 104);
-            this.dgvBuilds.Name = "dgvBuilds";
-            this.dgvBuilds.Size = new System.Drawing.Size(1004, 106);
-            this.dgvBuilds.TabIndex = 1;
             // 
             // dgvPullRequest
             // 
             this.dgvPullRequest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPullRequest.ContextMenuStrip = this.ctxPullRequests;
             this.dgvPullRequest.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dgvPullRequest.Location = new System.Drawing.Point(0, 0);
+            this.dgvPullRequest.Location = new System.Drawing.Point(864, 0);
             this.dgvPullRequest.MultiSelect = false;
             this.dgvPullRequest.Name = "dgvPullRequest";
             this.dgvPullRequest.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPullRequest.Size = new System.Drawing.Size(1004, 104);
+            this.dgvPullRequest.Size = new System.Drawing.Size(317, 144);
             this.dgvPullRequest.TabIndex = 0;
             // 
             // ctxPullRequests
@@ -318,11 +318,34 @@
             this.updateBuildsToolStripMenuItem1.Text = "Update Builds";
             this.updateBuildsToolStripMenuItem1.Click += new System.EventHandler(this.updateBuildsToolStripMenuItem1_Click);
             // 
+            // buildDetails1
+            // 
+            this.buildDetails1.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.buildDetails1.Builds = null;
+            this.buildDetails1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buildDetails1.Location = new System.Drawing.Point(864, 144);
+            this.buildDetails1.Name = "buildDetails1";
+            this.buildDetails1.Padding = new System.Windows.Forms.Padding(4);
+            this.buildDetails1.Size = new System.Drawing.Size(317, 227);
+            this.buildDetails1.TabIndex = 3;
+            // 
+            // pullRequestDetailsView
+            // 
+            this.pullRequestDetailsView.AutoScroll = true;
+            this.pullRequestDetailsView.BackColor = System.Drawing.Color.LightGray;
+            this.pullRequestDetailsView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pullRequestDetailsView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pullRequestDetailsView.Location = new System.Drawing.Point(0, 0);
+            this.pullRequestDetailsView.Name = "pullRequestDetailsView";
+            this.pullRequestDetailsView.PullRequest = null;
+            this.pullRequestDetailsView.Size = new System.Drawing.Size(864, 371);
+            this.pullRequestDetailsView.TabIndex = 2;
+            // 
             // IssueDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 520);
+            this.ClientSize = new System.Drawing.Size(1185, 681);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.lstIssues);
@@ -339,7 +362,6 @@
             this.toolStrip1.PerformLayout();
             this.ctxWorkItem.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBuilds)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPullRequest)).EndInit();
             this.ctxPullRequests.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -366,17 +388,21 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.DataGridView dgvPullRequest;
-        private System.Windows.Forms.DataGridView dgvBuilds;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem accountsToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ContextMenuStrip ctxWorkItem;
-        private System.Windows.Forms.ToolStripMenuItem updatePullRequestsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateBuildsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton btnUpdatePullRequests;
         private System.Windows.Forms.ToolStripButton btnUpdateBuilds;
         private System.Windows.Forms.ContextMenuStrip ctxPullRequests;
         private System.Windows.Forms.ToolStripMenuItem updateBuildsToolStripMenuItem1;
-        private System.Windows.Forms.Splitter splitter2;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dBUpgradeHelperToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.ColumnHeader columnHeader9;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.ColumnHeader columnHeader11;
+        private CECode.WorkItem.Views.PullRequestDetails pullRequestDetailsView;
+        private CECode.WorkItem.Views.BuildDetails buildDetails1;
     }
 }

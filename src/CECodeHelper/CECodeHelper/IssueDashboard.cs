@@ -1,15 +1,9 @@
-﻿using CECode.Business;
-using CECode.Business.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using CECode.Branches;
+using CECode.Business;
+using CECodeHelper.Forms;
 
 namespace CECodeHelper
 {
@@ -20,7 +14,7 @@ namespace CECodeHelper
         delegate void SafeExceptionHandlerDelegate(Exception ex);
         delegate void SafeListUpdateDelegate(IList<ICEWorkItem> items);
         delegate void SafePullRequestUpdateDelegate(IList<ICEPullRequest> pullRequests);
-        delegate void SafeBuildUpdateDelegate(IList<ICEBuild> builds);
+        delegate void SafeBuildUpdateDelegate(IList<ICEBuildDetails> builds);
         #endregion
 
         #region fields
@@ -41,7 +35,9 @@ namespace CECodeHelper
         {
             try
             {
-                var service = ServiceFactory.GetCEWorkItemService();
+                var service = CECode.WorkItem.Services.ServiceFactory.GetCEWorkItemService();
+                service.ProjectName = "Advantage";
+
                 _presenter = new IssueDashboardPresenter(this, service);
 
                 _presenter.PropertyChanged += _presenter_PropertyChanged;
@@ -54,7 +50,6 @@ namespace CECodeHelper
         #endregion
 
         #region public methods
-        // TODO: Implement logging
         public virtual void ExceptionHandler(Exception ex)
         {
             if (this.InvokeRequired)
@@ -81,20 +76,25 @@ namespace CECodeHelper
                 string formattedMessage = String.Format("{0}: {1}\r\n", DateTime.Now, message);
                 txtMessages.AppendText(formattedMessage);
             }
-        }       
-        public void DisplayAccountsDialog()
+        }
+        public virtual void DisplayAccountsDialog()
         {
-            var dialog = new AccountsDialog();
+            var dialog = new AccountProfilesDialog();
+            dialog.ShowDialog(this);
+        }
+        public virtual void DisplayDbVersionDialog()
+        {
+            var dialog = new DbVersionDialog();
             dialog.ShowDialog(this);
         }
         #endregion
 
         #region protected methods
-        protected virtual void UpdateListView(IList<ICEWorkItem> items)
+        protected virtual void UpdateWorkItemsListView(IList<ICEWorkItem> items)
         {
             if (this.lstIssues.InvokeRequired)
             {
-                SafeListUpdateDelegate d = new SafeListUpdateDelegate(UpdateListView);
+                SafeListUpdateDelegate d = new SafeListUpdateDelegate(UpdateWorkItemsListView);
                 Invoke(d, new object[] { items });
             }
             else
@@ -102,21 +102,37 @@ namespace CECodeHelper
                 lstIssues.Items.Clear();
                 foreach (var item in _presenter.Items)
                 {
-                    var lvi = new ListViewItem(item.JiraIssue.ItemNumber);
-                    if (item.PullRequests.Count > 0)
-                        lvi.SubItems.Add(item.PullRequests[0].Number.ToString());
-                    else
-                        lvi.SubItems.Add("-");
-                    lvi.SubItems.Add(item.JiraIssue.Key);
-                    lvi.SubItems.Add(item.JiraIssue.Team);
-                    lvi.SubItems.Add(item.JiraIssue.ItemStatus.ToString());
-                    lvi.SubItems.Add(item.JiraIssue.Summary);
-                    if (item.PullRequests.Count > 0)
-                        lvi.SubItems.Add(item.PullRequests.Count.ToString());
-                    else
-                        lvi.SubItems.Add("-");
+                    var itemText = "-";
+                    if (item.JiraIssues.Count > 0)
+                    {
+                        itemText = item.JiraIssues[0].IssueNumber.ToString();
+                    }
+                    var lvi = new ListViewItem(itemText);
 
+                    lvi.SubItems.Add(item.PullRequest.Number.ToString());
+
+                    if (item.JiraIssues.Count > 0)
+                    {
+                        lvi.SubItems.Add(item.JiraIssues[0].Key);
+                        lvi.SubItems.Add(item.JiraIssues[0].Team);
+                        lvi.SubItems.Add(item.JiraIssues[0].ItemStatus.ToString());
+                        lvi.SubItems.Add(item.JiraIssues[0].Summary);
+                    }
+                    else
+                    {
+                        lvi.SubItems.Add("-");
+                        lvi.SubItems.Add("-");
+                        lvi.SubItems.Add("-");
+                        lvi.SubItems.Add("-");
+                    }
+
+                    lvi.SubItems.Add(item.PullRequest.Status);
+                    lvi.SubItems.Add(item.PullRequest.CommitCount.ToString());
+                    lvi.SubItems.Add(item.PullRequest.CommentCount.ToString());
+                    lvi.SubItems.Add(item.PullRequest.Title);
+                    lvi.SubItems.Add(item.PullRequest.Body);
                     lvi.Tag = item;
+
                     lstIssues.Items.Add(lvi);
                 }
             }
@@ -135,48 +151,41 @@ namespace CECodeHelper
             }
         }
 
-        protected virtual void UpdateBuildGrid(IList<ICEBuild> builds)
+        protected virtual void UpdateBuildsView(IList<ICEBuildDetails> builds)
         {
-            if (this.dgvPullRequest.InvokeRequired)
+            if (this.buildDetails1.InvokeRequired)
             {
-                SafeBuildUpdateDelegate d = new SafeBuildUpdateDelegate(UpdateBuildGrid);
+                SafeBuildUpdateDelegate d = new SafeBuildUpdateDelegate(UpdateBuildsView);
                 Invoke(d, new object[] { builds });
             }
             else
             {
-                dgvBuilds.DataSource = builds;
+                this.buildDetails1.Builds = builds;
             }
         }
 
-        protected virtual void UpdatePullRequests()
-        {
-            if (lstIssues.SelectedItems.Count == 0) return;
-            var selected = (ICEWorkItem)lstIssues.SelectedItems[0].Tag;
-            _presenter.UpdatePullRequests(selected);
-        }
-
-        protected virtual void UpdatePullRequestBuilds()
+        protected virtual void UpdatePullRequestBuildsList()
         {
             if (this.dgvPullRequest.SelectedRows.Count == 0) return;
+            this.buildDetails1.Builds = null;
             var selected = (ICEPullRequest)this.dgvPullRequest.SelectedRows[0].DataBoundItem;
             _presenter.UpdateBuilds(selected);
         }
 
-        protected async virtual void UpdateIssueList()
+        protected async virtual void UpdateWorkItemsList()
         {
             await _presenter.UpdateIssues();
         }
         #endregion
 
-        #region event handlers
+        #region presenter events
         private void _presenter_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             try
             {
                 if (e.PropertyName == "Items")
                 {
-                    UpdateListView(_presenter.Items);
-
+                    UpdateWorkItemsListView(_presenter.Items);
                     //updatePullRequestsToolStripMenuItem.Enabled = (_presenter.Items.Count > 0);
                     //btnUpdatePullRequests.Enabled = (_presenter.Items.Count > 0);
                     //updateBuildsToolStripMenuItem.Enabled = (_presenter.PullRequests.Count > 0);
@@ -184,14 +193,14 @@ namespace CECodeHelper
                 }
                 else if (e.PropertyName == "PullRequests")
                 {
-                    UpdatePullRequestGrid(_presenter.PullRequests);
+                    //UpdatePullRequestGrid(_presenter.PullRequests);
 
                     //updateBuildsToolStripMenuItem.Enabled = (_presenter.PullRequests.Count > 0);
                     //btnUpdateBuilds.Enabled = (_presenter.PullRequests.Count > 0);
                 }
                 else if (e.PropertyName == "Builds")
                 {
-                    UpdateBuildGrid(_presenter.Builds);
+                    //UpdateBuildsView(_presenter.Builds);
                 }
             }
             catch (Exception ex)
@@ -199,22 +208,31 @@ namespace CECodeHelper
                 ExceptionHandler(ex);
             }
         }
+        #endregion
 
+        #region work item list events
+        private async void lstIssues_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateBuildsToolStripMenuItem.Enabled = (lstIssues.SelectedItems.Count > 0);
+            btnUpdateBuilds.Enabled = (lstIssues.SelectedItems.Count > 0);
+
+            if (lstIssues.SelectedItems.Count == 0) return;
+            var selected = (ICEWorkItem)lstIssues.SelectedItems[0].Tag;
+
+            await _presenter.UpdatePullRequest(selected);
+
+            UpdatePullRequestGrid(new List<ICEPullRequest>() { selected.PullRequest });
+
+            pullRequestDetailsView.PullRequest = selected.PullRequest;
+
+            this.buildDetails1.Builds = selected.PullRequest.Builds;
+        }
+        #endregion
+
+        #region main menu item event handlers
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void btnUpdateIssues_Click(object sender, EventArgs e)
-        {
-            UpdateIssueList();
-        }
-
-        private void lstIssues_DoubleClick(object sender, EventArgs e)
-        {
-            if (lstIssues.SelectedItems.Count == 0) return;
-            var selected = (ICEWorkItem)lstIssues.SelectedItems[0].Tag;
-            _presenter.WorkItemSelected(selected);
         }
 
         private void accountsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -222,231 +240,33 @@ namespace CECodeHelper
             _presenter.DisplayAccountsDialog();
         }
 
-        private void lstIssues_SelectedIndexChanged(object sender, EventArgs e)
+        private void dBUpgradeHelperToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            updatePullRequestsToolStripMenuItem.Enabled = (lstIssues.SelectedItems.Count > 0);
-            btnUpdatePullRequests.Enabled = (lstIssues.SelectedItems.Count > 0);
-            updateBuildsToolStripMenuItem.Enabled = (lstIssues.SelectedItems.Count > 0);
-            btnUpdateBuilds.Enabled = (lstIssues.SelectedItems.Count > 0);
-
-            if (lstIssues.SelectedItems.Count == 0) return;
-            var selected = (ICEWorkItem)lstIssues.SelectedItems[0].Tag;
-            _presenter.WorkItemSelected(selected);
-        }
-
-        #region work item context menu
-        private void updatePullRequestsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdatePullRequests();
-        }
-
-        private void updateBuildsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdatePullRequestBuilds();
+            _presenter.DisplayDbVersionDialog();
         }
         #endregion
 
-        #region pull request context menu
-        private void updateBuildsToolStripMenuItem1_Click(object sender, EventArgs e)
+        #region main toolbar event handlers
+        private void btnUpdateIssues_Click(object sender, EventArgs e)
         {
-            UpdatePullRequestBuilds();
+            UpdateWorkItemsList();
         }
-        #endregion
-
-        private void btnUpdatePullRequests_Click(object sender, EventArgs e)
-        {
-            UpdatePullRequests();
-        }
-
         private void btnUpdateBuilds_Click(object sender, EventArgs e)
         {
-            UpdatePullRequestBuilds();
-        }
-        #endregion
-    }
-
-    public class IssueDashboardPresenter : INotifyPropertyChanged
-    {
-        #region events
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            if (null != PropertyChanged)
-            {
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
+            UpdatePullRequestBuildsList();
         }
         #endregion
 
-        #region fields
-        ICEWorkItemService _workItemService;
-        IIssueDashboard _window;
-        DateTime _lastUpdate;
-        BranchMap _currentBranchMap;
-        #endregion
-
-        #region properties
-        private IList<ICEWorkItem> _items = new List<ICEWorkItem>();
-        public IList<ICEWorkItem> Items
+        #region context menu event handlers
+        private void updateBuildsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            get
-            {
-                return _items;
-            }
-            set
-            {
-                _items = value;
-                OnPropertyChanged("Items");
-            }
+            UpdatePullRequestBuildsList();
         }
-
-        private IList<ICEPullRequest> _pullRequests = new List<ICEPullRequest>();
-        public IList<ICEPullRequest> PullRequests
+       
+        private void updateBuildsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            get
-            {
-                return _pullRequests;
-            }
-            set
-            {
-                _pullRequests = value;
-                OnPropertyChanged("PullRequests");
-            }
+            UpdatePullRequestBuildsList();
         }
-
-        private IList<ICEBuild> _builds = new List<ICEBuild>();
-        public IList<ICEBuild> Builds
-        {
-            get
-            {
-                return _builds;
-            }
-            set
-            {
-                _builds = value;
-                OnPropertyChanged("Builds");
-            }
-        }
-        #endregion
-
-        #region ctor/init
-        public IssueDashboardPresenter(IIssueDashboard window, ICEWorkItemService workItemService)
-        {
-            _window = window;
-            _workItemService = workItemService;
-            _lastUpdate = DateTime.MinValue;
-
-            InitializePresenter();
-        }
-
-        protected virtual void InitializePresenter()
-        {
-            try
-            {
-                var maps = BranchMapFactory.GetBranchMaps(DateTime.Now);
-                _currentBranchMap = maps.FirstOrDefault(m => m.Name == "Advantage");
-                Console.WriteLine("Version on {0} is {1}", _currentBranchMap.TargetDate.ToString(), _currentBranchMap.Version.ToString());
-                foreach (var branch in _currentBranchMap.Branches)
-                {
-                    Console.WriteLine("Branch {0}: {1}", branch.Name, branch.Version.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionHandler(ex);
-            }
-        }
-        #endregion
-
-        #region public methods
-        public async virtual Task UpdateIssues()
-        {
-            await Task.Run(() =>
-                   {
-                       try
-                       {
-                           var updatedItems = _workItemService.GetWorkItems("Advantage", "Advantage");
-
-                           foreach (var item in updatedItems.Result)
-                           {
-                               if (this.Items.Any(i => i.JiraIssue.ItemNumber == item.JiraIssue.ItemNumber))
-                               {
-                                   // TODO: update it
-                               }
-                               else
-                               {
-                                   // add it
-                                   Items.Add(item);
-                               }
-                           }
-
-                           OnPropertyChanged("Items");
-
-                           _lastUpdate = DateTime.Now;
-                       }
-                       catch (Exception ex)
-                       {
-                           ExceptionHandler(ex);
-                       }
-                   });
-        }
-
-        public virtual void WorkItemSelected(ICEWorkItem workItem)
-        {
-            PullRequests = workItem.PullRequests;
-            Builds = workItem.PullRequests.SelectMany(p => p.Builds).ToList();
-        }
-
-        public virtual void DisplayAccountsDialog()
-        {
-            try
-            {
-                _window.DisplayAccountsDialog();
-            }
-            catch (Exception ex)
-            {
-                ExceptionHandler(ex);
-            }
-        }
-
-        public virtual void UpdatePullRequests(ICEWorkItem workItem)
-        {
-            try
-            {
-                _workItemService.UpdatePullRequests(workItem, _currentBranchMap.GitHubProject);
-                PullRequests = workItem.PullRequests;
-                Builds = new List<ICEBuild>();
-            }
-            catch (Exception ex)
-            {
-                ExceptionHandler(ex);
-            }
-        }
-
-        public virtual void UpdateBuilds(ICEPullRequest pullRequest)
-        {
-            try
-            {
-                _workItemService.UpdateBuild(pullRequest);
-                Builds = pullRequest.Builds;
-            }
-            catch (Exception ex)
-            {
-                ExceptionHandler(ex);
-            }
-        } 
-        #endregion
-
-        #region protected virtual methods
-        protected virtual void ExceptionHandler(Exception ex)
-        {
-            _window.ExceptionHandler(ex);
-        }
-
-        protected virtual void DisplayMessage(string message)
-        {
-            _window.DisplayMessage(message);
-        } 
         #endregion
     }
 }

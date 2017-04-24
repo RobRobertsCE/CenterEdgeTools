@@ -62,29 +62,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Advantage\PatchHelper.cs" />
     <Compile Include="Advantage\PullRequestAssembyHelper.cs" />
-    <Compile Include="Advantage\PullRequestView.cs" />
-    <Compile Include="Advantage\VersionExtensions.cs" />
-    <Compile Include="DbVersionLibrary\Constants.cs" />
-    <Compile Include="DbVersionLibrary\DbBuildVersion.cs" />
-    <Compile Include="DbVersionLibrary\DbMinorVersion.cs" />
-    <Compile Include="DbVersionLibrary\DbUpgradeFile.cs" />
-    <Compile Include="DbVersionLibrary\DbVersion.cs" />
-    <Compile Include="DbVersionLibrary\DbVersionHelper.cs" />
-    <Compile Include="DbVersionLibrary\TaskResult.cs" />
-    <Compile Include="DbVersionLibrary\VersionExtensions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AccountsDialog.cs">
+    <Compile Include="Forms\AccountProfilesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AccountsDialog.Designer.cs">
-      <DependentUpon>AccountsDialog.cs</DependentUpon>
+    <Compile Include="Forms\AccountProfilesDialog.Designer.cs">
+      <DependentUpon>AccountProfilesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\DbVersionDialog.cs">
       <SubType>Form</SubType>
@@ -98,18 +87,6 @@
     <Compile Include="Forms\GitHubView.Designer.cs">
       <DependentUpon>GitHubView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PatchFileEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PatchFileEditor.Designer.cs">
-      <DependentUpon>PatchFileEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PatchFileMoverDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PatchFileMoverDialog.Designer.cs">
-      <DependentUpon>PatchFileMoverDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="IIssueDashboard.cs" />
     <Compile Include="IssueDashboard.cs">
       <SubType>Form</SubType>
@@ -117,33 +94,20 @@
     <Compile Include="IssueDashboard.Designer.cs">
       <DependentUpon>IssueDashboard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logic\DbVersionHelper.cs" />
-    <Compile Include="Logic\TaskResult.cs" />
+    <Compile Include="IssueDashboardPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsDialog.Designer.cs">
-      <DependentUpon>SettingsDialog.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AccountsDialog.resx">
-      <DependentUpon>AccountsDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AccountProfilesDialog.resx">
+      <DependentUpon>AccountProfilesDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DbVersionDialog.resx">
       <DependentUpon>DbVersionDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GitHubView.resx">
       <DependentUpon>GitHubView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PatchFileEditor.resx">
-      <DependentUpon>PatchFileEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PatchFileMoverDialog.resx">
-      <DependentUpon>PatchFileMoverDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IssueDashboard.resx">
       <DependentUpon>IssueDashboard.cs</DependentUpon>
@@ -158,10 +122,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SettingsDialog.resx">
-      <DependentUpon>SettingsDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -177,6 +137,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CECode.AdvUpgrade\CECode.AdvUpgrade.csproj">
+      <Project>{f6cf7a72-9d84-4d1f-819a-310341c402e6}</Project>
+      <Name>CECode.AdvUpgrade</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CECode.Authentication\CECode.Authentication.csproj">
       <Project>{ac4e4b9f-7b15-49e2-a370-3a076a47712b}</Project>
       <Name>CECode.Authentication</Name>
@@ -184,10 +148,6 @@
     <ProjectReference Include="..\CECode.Branches\CECode.Branches.csproj">
       <Project>{730efdcb-9652-4032-8c05-d323ee1e8b9d}</Project>
       <Name>CECode.Branches</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CECode.BranchVersionHelper\CECode.BranchHelper.csproj">
-      <Project>{a88cf59a-821a-47e6-8035-c0a0530a79d2}</Project>
-      <Name>CECode.BranchHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\CECode.Business\CECode.Business.csproj">
       <Project>{1708a12a-4c35-4875-8e15-4214513d9a44}</Project>
@@ -205,10 +165,16 @@
       <Project>{4ba81a75-6f5a-434f-b3b0-76a4c5d8ec77}</Project>
       <Name>CECode.TeamCity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CECode.WorkItem.Views\CECode.WorkItem.Views.csproj">
+      <Project>{abfd7fc1-8a09-4871-b6a8-2c7c16ec9a3b}</Project>
+      <Name>CECode.WorkItem.Views</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CECode.WorkItem\CECode.WorkItem.csproj">
+      <Project>{0d58a7d8-3a76-4fbc-81e2-a000dccfb555}</Project>
+      <Name>CECode.WorkItem</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Encryption\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

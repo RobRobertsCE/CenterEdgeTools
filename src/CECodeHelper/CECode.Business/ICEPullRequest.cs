@@ -13,7 +13,8 @@ namespace CECode.Business
         int CommentCount { get; set; }
         int CommitCount { get; set; }
         IList<ICECommit> Commits { get; set; }
-        IList<ICEBuild> Builds { get; set; }
+        IList<ICECommitComment> Comments { get; set; }
+        IList<ICEBuildDetails> Builds { get; set; }
         int Deletions { get; set; }
         string DiffUrl { get; set; }
         string HeadRef { get; set; }
@@ -25,6 +26,7 @@ namespace CECode.Business
         bool? IsMergeable { get; set; }
         bool IsMerged { get; set; }
         bool IsReviewed { get; set; }
+        string IssueUrl { get; set; }
         string MergeCommitSha { get; set; }
         DateTime? MergedAt { get; set; }
         string MergedBy { get; set; }
@@ -39,5 +41,7 @@ namespace CECode.Business
         DateTime UpdatedAt { get; set; }
         DateTime CreatedAt { get; set; }
         DateTime? ClosedAt { get; set; }
+
+        IList<string> GetIssueKeys(string projectName);
     }
 }

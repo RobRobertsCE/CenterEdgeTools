@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using CECode.Logging;
+using CECode.TeamCity.Results;
 
 namespace CECode.TeamCity.Service
 {
@@ -12,6 +14,7 @@ namespace CECode.TeamCity.Service
         #region fields
         private readonly string _user;
         private readonly string _password;
+        private readonly bool _verboseLogging = true;
         #endregion
 
         #region ctor
@@ -23,218 +26,160 @@ namespace CECode.TeamCity.Service
         #endregion
 
         #region public methods
-        public Build GetAdvantageBuild()
+        public BuildDetails GetAdvantageBuild()
         {
-            return GetBuildByType("Advantage_Build");
+            return GetBuildByType(Constants.AdvantageBuild);
         }
 
-        public Build GetAdvantagePatches()
+        public BuildDetails GetAdvantagePatchBuild()
         {
-            return GetBuildByType("Advantage_Patches");
+            return GetBuildByType(Constants.PatchBuild);
         }
 
-        public Build GetBuildByType(string buildType)
+        public BuildDetails GetAdvantageAutoMergeBuild()
         {
-            var url = Build.GetListUrl();
-            if (!String.IsNullOrEmpty(buildType))
+            return GetBuildByType(Constants.AutoMergeBuild);
+        }
+
+        public BuildDetails GetBuildByType(string buildType)
+        {
+            var url = BuildDetails.GetTypeUrl(buildType);
+            return GetResponseData<BuildDetails>(url);
+        }
+
+        public IList<BuildDetails> GetBuildsByPullRequest(int mergeNumber)
+        {
+            var url = BuildDetails.GetMergeUrl(mergeNumber);
+            var response = GetResponseData<BuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<BuildDetails>();
+        }
+
+        public BuildDetails GetBuild(long buildId)
+        {
+            var url = BuildDetails.GetItemUrl(buildId);
+            return GetResponseData<BuildDetails>(url);
+        }
+
+        public IList<RunningBuild> GetBuilds(string locator)
+        {
+            var url = BuildDetails.GetListUrl() + String.Format("?{0}", locator);
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<RunningBuild> GetBuilds()
+        {
+            var url = BuildDetails.GetAllBuildsListUrl();
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<RunningBuild> GetBuildTypeBuilds(string buildType)
+        {
+            var url = BuildDetails.GetTypeBuildsUrl(buildType);// +String.Format("?{0}", locator);
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<RunningBuild> GetQueuedBuilds()
+        {
+            var url = BuildDetails.GetQueueURL();
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<RunningBuild> GetRunningBuilds()
+        {
+            var url = BuildDetails.GetRunningUrl();
+            var response = GetResponseData<RunningBuildsRequestResult>(url);
+            return (null != response) ? response.build : new List<RunningBuild>();
+        }
+
+        public IList<Issue> GetBuildRelatedIssues(long buildId)
+        {
+            IList<Issue> result = new List<Issue>();
+            var url = BuildDetails.GetRelatedIssuesUrl(buildId);
+            var response = GetResponseData<BuildIssuesRequestResult>(url);
+            if (null==response || null==response.issueUsage)
             {
-                url += "/" + String.Format("buildType:{0}", buildType);
-            }
-            Console.WriteLine(url);
-            var uri = new Uri(url);
-            return GetResponseData<Build>(uri);
-        }
-
-        public Build GetBuildById(long id)
-        {
-            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);          
-            Console.WriteLine(url);
-            var uri = new Uri(url);
-            return GetResponseData<Build>(uri);
-        }
-
-        public IList<Build> GetBuildsByMergeNumber(int number)
-        {
-            //var url = Build.GetListUrl() +  "/" + String.Format("?locator=number:{0}", number);
-            var url = Build.GetListUrl() + "/" + String.Format("?locator=branch:name:({0}/merge)", number);
-            Console.WriteLine(url);
-            var uri = new Uri(url);
-            var buildRequestResult = GetResponseData<BuildRequestResult>(uri);          
-            return buildRequestResult.build;
-        }
-
-        public IList<RunningBuild.Build> GetBuilds(string locator)
-        {
-            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
-
-            HttpClient client = new HttpClient();
-            //var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any";
-            var url = String.Format("https://teamcity.pfestore.com/httpAuth/app/rest/builds?{0}", locator);
-            Console.WriteLine(url);
-            client.BaseAddress = new Uri(url);
-
-
-            // Add an Accept header for JSON format.
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-            byte[] cred = GetCredentials();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
-
-            // List data response.
-            HttpResponseMessage response = client.GetAsync("").Result;  // Blocking call!
-            if (response.IsSuccessStatusCode)
-            {
-                // Parse the response body. Blocking!
-                var responseData = response.Content.ReadAsAsync<RunningBuild>();
-                // TODO: Check result status
-                if (null != responseData.Result)
-                {
-                    if (responseData.Result.count > 0)
-                    {
-
-                        results = responseData.Result.build;
-
-                        foreach (var runningBuild in results)
-                        {
-                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                return result;
             }
 
-            return results;
-        }
-
-        public IList<RunningBuild.Build> GetRunningBuilds()
-        {
-            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
-
-            HttpClient client = new HttpClient();
-            var url = "https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any";
-            client.BaseAddress = new Uri(url);
-
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-            byte[] cred = GetCredentials();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
-
-            HttpResponseMessage response = client.GetAsync("").Result; 
-            if (response.IsSuccessStatusCode)
+            foreach (var buildIssue in response.issueUsage)
             {
-                var responseData = response.Content.ReadAsAsync<RunningBuild>();
-                
-                if (null != responseData.Result)
-                {
-                    if (responseData.Result.count > 0)
-                    {
-
-                        results = responseData.Result.build;
-
-                        foreach (var runningBuild in results)
-                        {
-                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                result.Add(buildIssue.issue);
             }
 
-            return results;
+            return result;
         }
-        public IList<RunningBuild.Build> GetRunningBuilds(int number)
+
+        public IList<File> GetBuildArtifacts(long buildId)
         {
-            IList<RunningBuild.Build> results = new List<RunningBuild.Build>();
-
-            HttpClient client = new HttpClient();
-            var url = String.Format("https://teamcity.pfestore.com/httpAuth/app/rest/builds?locator=running:true,branch:default:any,number:{0}",number);
-            client.BaseAddress = new Uri(url);
-
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-            byte[] cred = GetCredentials();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(cred));
-
-            HttpResponseMessage response = client.GetAsync("").Result;
-            if (response.IsSuccessStatusCode)
+            IList<File> result = new List<File>();
+            var url = BuildDetails.GetArtifactsUrl(buildId);
+            var response = GetResponseData<BuildArtifactsRequestResult>(url);
+            if (null == response || null == response.file)
             {
-                var responseData = response.Content.ReadAsAsync<RunningBuild>();
-
-                if (null != responseData.Result)
-                {
-                    if (responseData.Result.count > 0)
-                    {
-
-                        results = responseData.Result.build;
-
-                        foreach (var runningBuild in results)
-                        {
-                            Console.WriteLine("{0} {1} {2} {3}", runningBuild.id, runningBuild.number, runningBuild.state, runningBuild.percentageComplete);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                return result;
             }
 
-            return results;
-        }
+            foreach (var buildFile in response.file)
+            {
+                result.Add(buildFile);
+            }
 
-        public BuildDetails GetBuildDetails(Build build)
-        {
-            return GetBuildDetails(build.id);
-        }
-
-        public BuildDetails GetBuildDetails(long id)
-        {
-            var url = Build.GetListUrl() + "/" + String.Format("id:{0}", id);
-            Console.WriteLine(url);
-            var uri = new Uri(url);
-            return GetResponseData<BuildDetails>(uri);
+            return result;
         }
         #endregion
 
         #region protected virtual methods
-        protected  virtual T GetResponseData<T>(Uri uri)
+
+        protected virtual T GetResponseData<T>(string url)
         {
+            T result;
+
+            Logger.Log.Debug(url);
+
+            var uri = new Uri(url);
+
             HttpClient client = GetHttpClient();
 
             HttpResponseMessage response = client.GetAsync(uri).Result;
 
+            if (_verboseLogging)
+            {
+                Logger.Log.Debug(String.Format("Response Status: {0}; Message: {1}; Reason Phrase: {2}", response.StatusCode, response.RequestMessage, response.ReasonPhrase));
+            }
+
             if (response.IsSuccessStatusCode)
             {
-                
                 try
                 {
                     var responseData = response.Content.ReadAsAsync<T>();
                     var dataObject = responseData.Result;
-                    return dataObject;
+                    result = dataObject;
+                    if (_verboseLogging)
+                    {
+                        var readStringTask = response.Content.ReadAsStringAsync();
+                        string contentString = readStringTask.Result;
+                        Logger.Log.Debug(String.Format("Content:\r\n{0}", contentString));
+                    }
                 }
                 catch (Exception ex)
                 {
-
                     var readStringTask = response.Content.ReadAsStringAsync();
                     string contentString = readStringTask.Result;
-                    Console.WriteLine(contentString);
-                    throw;
+                    Logger.Log.Error(String.Format("Exception in TeamCity Response.\r\nContent:{0}", contentString), ex);
+                    result = default(T);
                 }
             }
             else
             {
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return default(T);
+                Logger.Log.Error(String.Format("Response Status: {0}; Message: {1}; Reason Phrase: {2}", response.StatusCode, response.RequestMessage, response.ReasonPhrase));
+                result = default(T);
             }
+
+            return result;
         }
 
         protected virtual HttpClient GetHttpClient()

@@ -2,79 +2,61 @@
 using System.Collections.Generic;
 using System.Globalization;
 using CECode.TeamCity;
+using CECode.TeamCity.Results;
 
 namespace CECode.Business.Adapters
 {
     internal class TeamCityBuildAdapter
     {
         #region public methods
-        public static IList<ICEBuild> Translate(IEnumerable<Build> builds)
-        {
-            IList<ICEBuild> ICEBuilds = new List<ICEBuild>();
-            foreach (var entity in builds)
-            {
-                ICEBuilds.Add(Translate(entity));
-            }
-            return ICEBuilds;
-        }
-
-        public static ICEBuild Translate(Build build)
-        {
-            ICEBuild ceBuild = new CEBuild()
-            {
-                id = build.id,
-                state = build.state,
-                status = build.status,
-                branchName = build.branchName,
-                number = build.number,
-                buildTypeId = build.buildTypeId,
-                href = build.href,
-                webUrl = build.webUrl
-            };
-
-            return ceBuild;
-        }
-
-        public static IList<ICEBuild> Translate(IEnumerable<RunningBuild.Build> builds)
-        {
-            IList<ICEBuild> ICEBuilds = new List<ICEBuild>();
-            foreach (var entity in builds)
-            {
-                ICEBuilds.Add(Translate(entity));
-            }
-            return ICEBuilds;
-        }
-
-        public static ICEBuild Translate(RunningBuild.Build build)
-        {
-            ICEBuild ceBuild = new CEBuild()
-            {
-                id = build.id,
-                state = build.state,
-                status = build.status,
-                branchName = build.branchName,
-                number = build.number,
-                buildTypeId = build.buildTypeId,
-                href = build.href,
-                webUrl = build.webUrl
-            };
-
-            return ceBuild;
-        }
-
         public static IList<ICEBuildDetails> Translate(IEnumerable<BuildDetails> builds)
         {
-            IList<ICEBuildDetails> ceBuildDetails = new List<ICEBuildDetails>();
+            IList<ICEBuildDetails> ICEBuilds = new List<ICEBuildDetails>();
             foreach (var entity in builds)
             {
-                ceBuildDetails.Add(Translate(entity));
+                ICEBuilds.Add(Translate(entity));
             }
-            return ceBuildDetails;
+            return ICEBuilds;
         }
 
         public static ICEBuildDetails Translate(BuildDetails build)
         {
-            ICEBuildDetails details = new CEBuildDetails()
+            if (null == build)
+            {
+                return new CEBuildDetails();
+            }
+
+            ICEBuildDetails ceBuild = new CEBuildDetails()
+            {
+                id = build.id,
+                state = build.state,
+                status = build.status,
+                branchName = build.branchName,
+                number = build.number,
+                buildTypeId = build.buildTypeId,
+                href = build.href,
+                webUrl = build.webUrl
+            };
+
+            return ceBuild;
+        }
+
+        public static IList<ICEBuild> Translate(IEnumerable<RunningBuild> builds)
+        {
+            IList<ICEBuild> ICEBuilds = new List<ICEBuild>();
+            if (null != builds)
+            {
+                foreach (var entity in builds)
+                {
+                    ICEBuilds.Add(Translate(entity));
+                }
+            }
+            return ICEBuilds;
+        }
+
+        public static ICEBuild Translate(RunningBuild build)
+        {
+            ICEBuild ceBuild = new CEBuild()
             {
                 id = build.id,
                 state = build.state,
@@ -84,15 +66,56 @@ namespace CECode.Business.Adapters
                 buildTypeId = build.buildTypeId,
                 href = build.href,
                 webUrl = build.webUrl,
-                artifacts = build.artifacts.href,
-                changes = build.changes.href
+                percentageComplete = build.percentageComplete
             };
-            if (!String.IsNullOrEmpty(build.queuedDate)) details.queuedDate = DateTime.ParseExact(build.queuedDate, "yyyyMMddTHHmmssK", new CultureInfo("en-US"));
-            if (!String.IsNullOrEmpty(build.startDate)) details.startDate = DateTime.ParseExact(build.startDate, "yyyyMMddTHHmmssK", new CultureInfo("en-US"));
-            if (!String.IsNullOrEmpty(build.finishDate)) details.finishDate = DateTime.ParseExact(build.finishDate, "yyyyMMddTHHmmssK", new CultureInfo("en-US"));
 
-            return details;
-        } 
+            return ceBuild;
+        }
+
+        public static IList<ICEBuildArtifact> Translate(IEnumerable<File> buildFiles)
+        {
+            IList<ICEBuildArtifact> ceBuildArtifacts = new List<ICEBuildArtifact>();
+            foreach (var artifact in buildFiles)
+            {
+                ceBuildArtifacts.Add(Translate(artifact));
+            }
+            return ceBuildArtifacts;
+        }
+
+        public static ICEBuildArtifact Translate(File buildFile)
+        {
+            ICEBuildArtifact ceArtifact = new CEBuildArtifact()
+            {
+                name = buildFile.name,
+                size = buildFile.size,
+                modificationTime = DateTime.ParseExact(buildFile.modificationTime, "yyyyMMddTHHmmssK", CultureInfo.InvariantCulture),
+                metadataHref = buildFile.href,
+                contentHref = buildFile.content.href
+            };
+
+            return ceArtifact;
+        }
+
+        public static IList<ICEBuildIssue> Translate(IEnumerable<Issue> buildIssues)
+        {
+            IList<ICEBuildIssue> ceBuildIssues = new List<ICEBuildIssue>();
+            foreach (var buildIssue in buildIssues)
+            {
+                ceBuildIssues.Add(Translate(buildIssue));
+            }
+            return ceBuildIssues;
+        }
+
+        public static ICEBuildIssue Translate(Issue buildIssue)
+        {
+            ICEBuildIssue ceBuildIssue = new CEBuildIssue()
+            {
+                id = buildIssue.id,
+                url = buildIssue.url
+            };
+
+            return ceBuildIssue;
+        }
         #endregion
     }
 }

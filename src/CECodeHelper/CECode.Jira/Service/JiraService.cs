@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Atlassian.Jira;
+using CECode.Logging;
 
 namespace CECode.Jira.Service
 {
@@ -21,41 +22,41 @@ namespace CECode.Jira.Service
         #region public methods
         public Issue GetIssue(string key)
         {
+            Logger.Log.Info(key);
             return _jira.GetIssue(key);
         }
 
         public IList<Issue> GetOpenIssues(IList<string> projects)
         {
             var projectList = String.Join(",", projects);
-            return _jira.GetIssuesFromJql("project in (" + projectList + ") AND issuetype in standardIssueTypes()", 50, 0).ToList();
+            return GetByJql("project in (" + projectList + ") AND issuetype in standardIssueTypes()", 50, 0).ToList();
         }
 
         public IList<Issue> GetIssues(IList<string> projects, int count, int start)
         {
             var projectList = String.Join(",", projects);
-            return _jira.GetIssuesFromJql("project in (" + projectList + ") AND issuetype in standardIssueTypes()", count, start).ToList();
+            return GetByJql("project in (" + projectList + ") AND issuetype in standardIssueTypes()", count, start).ToList();
         }
 
         public IList<Issue> GetRAndDIssues()
         {
-            return _jira.GetIssuesFromJql("project in (WEB, ADVANTAGE, AAC, MOBILETIK, MOBILEINV) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"R&D\" OR type = Epic) ORDER BY Rank ASC", 100, 0).ToList();
+            return GetByJql("project in (WEB, ADVANTAGE, AAC, MOBILETIK, MOBILEINV) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"R&D\" OR type = Epic) ORDER BY Rank ASC", 100, 0).ToList();
          }
 
         public IList<Issue> GetAMSIssues()
         {
-            // var issueList = _jira.GetIssuesFromJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) AND (Updated > -1d) ORDER BY Rank ASC", 100, 0);
-            return _jira.GetIssuesFromJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) ORDER BY Rank ASC", 100, 0).ToList();            
+            return GetByJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) ORDER BY Rank ASC", 100, 0).ToList();            
         }
 
         public IList<Issue> GetInProgressIssues()
         {
-            // var issueList = _jira.GetIssuesFromJql("project in (ADVANTAGE) AND status in (Open, \"In Progress\", Closed, QA, \"QA Approved\") AND (cf[11200] = \"AMS\" OR type = Epic) AND (Updated > -1d) ORDER BY Rank ASC", 100, 0);
-            return _jira.GetIssuesFromJql("project IN (ADVANTAGE) AND sprint IN OpenSprints() AND status IN (\"In Progress\", QA) AND (cf[11200] IN (\"AMS\", \"R&D\")) ORDER BY created DESC", 5, 0).ToList();
+            return GetByJql("project IN (ADVANTAGE) AND sprint IN OpenSprints() AND status IN (\"In Progress\", QA) AND (cf[11200] IN (\"AMS\", \"R&D\")) ORDER BY created DESC", 5, 0).ToList();
         }
 
-        public IList<Issue> GetByJql(string jql)
+        public IList<Issue> GetByJql(string jql, int max, int startAt)
         {
-            return _jira.GetIssuesFromJql(jql, 100, 0).ToList();
+            Logger.Log.Info(jql);
+            return _jira.GetIssuesFromJql(jql, max, startAt).ToList();
         }
 
         public IList<string> GetProjects()

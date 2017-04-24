@@ -9,12 +9,15 @@ namespace CECode.Business.Services
         Task<IList<ICECommit>> GetCommits(string repositoryName, string branchName);
         Task<ICECommit> GetPullRequestCommits(string repositoryName, string sha);
         Task<bool> IsCommitInBranch(string repositoryName, string branchName, string sha);
+        Task<ICEPullRequest> GetPullRequestDetails(string repositoryName, int pullRequestNumber);
         Task<IList<ICEPullRequest>> SearchOpenPullRequests(string repositoryName);
         Task<IList<ICEPullRequest>> SearchPullRequests(string repositoryName);
         Task<IList<ICEPullRequest>> SearchPullRequests(IList<string> repositoryNames);
         Task<IList<ICEPullRequest>> SearchPullRequests(string repositoryName, string branchName);
         Task<IList<ICEPullRequest>> SearchPullRequestsByJiraKey(string repositoryName, string jiraIssueKey);
 
+        Task<IList<ICECommit>> GetPullRequestCommits(string repositoryName, int pullRequestNumber);
+        Task<IList<ICECommitComment>> GetPullRequestComments(string repositoryName, int pullRequestNumber);
 
         Task<IList<ICEPullRequest>> SearchPullRequests(PullRequestSearchArgs e);
     }
